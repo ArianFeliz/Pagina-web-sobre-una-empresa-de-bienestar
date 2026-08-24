@@ -1,0 +1,2300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restore - Recuperación Integral</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            .features-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-detail-item {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-detail-mockup {
+                order: -1;
+            }
+        }
+
+        :root {
+            --primary: #296573;
+            --secondary: #7BA69A;
+            --neutral: #D8D8D8;
+            --light: #F5F7FA;
+            --dark: #1a1a2e;
+            --accent: #7CA676;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: var(--light);
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(90deg, var(--primary) 60%, var(--accent) 90%);
+            color: white;
+            padding: 1rem 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(41, 95, 116, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(90deg, var(--primary) 40%, var(--accent) 50%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-menu a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:hover::before {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 95, 116, 0.3);
+        }
+
+        /* Hero Split Section */
+        .hero-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 85vh;
+            align-items: center;
+        }
+
+        .hero-left {
+            margin-top: -110px;
+            background: linear-gradient(135deg, var(--primary) 40%, var(--accent) 90%);
+            color: white;
+            padding: 5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-left::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-left h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-left p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .hero-right {
+            padding: 5rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+      .phone-showcase {
+            position: relative;
+            width: 320px;
+            height: 570px;
+            background: var(--primary);
+            border-radius: 50px;
+            padding: 9px;
+            margin-top: -50px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4),
+                        0 0 0 2px #2a2a2a,
+                        inset 0 0 10px rgba(255, 255, 255, 0.1);
+            animation: floatPhone 10s ease-in-out infinite;
+        }
+
+        .phone-showcase::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .phone-showcase::after {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 6px;
+            background: #333;
+            border-radius: 10px;
+            z-index: 11;
+        }
+
+        @keyframes floatPhone {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-30px) rotate(2deg); }
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 3rem 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 90px;
+            background: linear-gradient(to bottom, rgba(41, 95, 116, 0.05), transparent);
+        }
+
+        .phone-logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 2rem;
+        }
+
+        .phone-text {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 6rem 5%;
+            background: white;
+        }
+
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .about-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .about-feature {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s;
+        }
+
+        .about-feature:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(123, 166, 154, 0.2);
+        }
+
+        .about-feature-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .about-feature-text h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .about-feature-text p {
+            color: #666;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-card {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 20px 50px rgba(41, 95, 116, 0.2);
+        }
+
+        .about-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-card p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        /* Services Grid */
+        .services-section {
+            padding: 2rem 5%;
+            background: var(--light);
+        }
+
+        .services-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .services-header h2 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .services-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.4s;
+            border: 2px solid transparent;
+            transform: transition 3.3s;
+        }
+
+        .service-card:hover {
+            transform: scale(1,1);
+            border-color: var(--secondary);
+             box-shadow: 0 35px 60px rgba(12, 79, 110, 0.3);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #d8d8d800;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            color: white;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Testimonials Carousel */
+        .testimonials {
+            padding: 6rem 5%;
+            background: white;
+        }
+
+        .testimonials-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(139, 191, 159, 0.1);
+        }
+
+        .testimonial-stars {
+            color: #FFA500;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .testimonial-text {
+            color: #4a5568;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        .author-info h4 {
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .author-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 2000px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            padding: 1.2rem 3rem;
+            border: 2px solid white;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Comments Section */
+        .comments-section {
+            padding: 6rem 5%;
+            background: white;
+        }
+
+        .comments-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .comments-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .comments-header h2 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .comment-form-box {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-field label {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            padding: 1rem;
+            border: 2px solid var(--neutral);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s;
+            background: white;
+        }
+
+        .form-field input:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .form-field textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(41, 95, 116, 0.3);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .comment-item {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.comment-item:hover {
+    box-shadow: 0 4px 16px rgba(41, 95, 116, 0.08);
+    border-color: var(--secondary);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
+}
+
+.comment-date {
+    color: #999;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.comment-text {
+    color: #444;
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 0.8rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.comment-action-btn {
+    background: transparent;
+    border: 1px solid #ddd;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.comment-action-btn:hover {
+    background: var(--light);
+    border-color: var(--secondary);
+    color: var(--primary);
+}
+
+.comment-action-btn.delete {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.comment-action-btn.delete:hover {
+    background: #fff5f5;
+    border-color: #c82333;
+    color: #c82333;
+}
+
+.edit-form {
+    margin-top: 1.5rem;
+    display: none;
+    padding: 1.5rem;
+    background: var(--light);
+    border-radius: 8px;
+}
+
+.edit-form.active {
+    display: block;
+}
+
+.edit-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.edit-textarea:focus {
+    outline: none;
+    border-color: var(--secondary);
+}
+
+.edit-actions {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+}
+
+.edit-save, .edit-cancel {
+    padding: 0.7rem 1.8rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.edit-save {
+    background: var(--primary);
+    color: white;
+}
+
+.edit-save:hover {
+    background: var(--secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(41, 95, 116, 0.2);
+}
+
+.edit-cancel {
+    background: white;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.edit-cancel:hover {
+    background: #f8f9fa;
+    border-color: #999;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+        /* Footer */
+footer {
+    background: var(--primary);
+    margin-top: -70px;
+    color: white;
+    padding: 4rem 5% 2rem;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-brand h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #c4dcde;
+}
+
+.footer-brand p {
+    opacity: 0.8;
+    line-height: 1.7;
+}
+
+.footer-links h4 {
+    color: #b9dbde;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.footer-links ul {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: var(--secondary);
+    padding-left: 5px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    text-align: center;
+}
+
+.upgrade-credit {
+    display: inline-block;
+    background: #1a5663;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 20PX;
+    transition: transform 0.9s;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+ .footer-bottom img  {
+    width: 150px;
+    height: 50px;
+}
+
+ .footer-bottom .upgrade-credit h1 {
+    margin-bottom: 30px;
+}
+
+
+.footer-bottom a {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #e2ecec;
+}
+
+.upgrade-credit:hover {
+    transform: scale(1.09);
+}
+
+/* Responsive Footer */
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .footer-brand p {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+        @media (max-width: 1024px) {
+            .hero-split {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-left, .hero-right {
+                padding: 3rem;
+            }
+
+            .about-container,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-left h1 {
+                font-size: 2.5rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .testimonial-card {
+                min-width: 300px;
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+/* ==================== ABOUT SECTION IMPROVED ==================== */
+.about-section-improved {
+    padding: 6rem 5%;
+    background: white;
+}
+
+.about-improved-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.about-header-center {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.main-title {
+    font-size: 3.5rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.main-subtitle {
+    font-size: 1.3rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.about-two-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+}
+
+.about-highlight-box {
+    background: linear-gradient(135deg, var(--light) 0%, #ffffff 100%);
+    padding: 3rem;
+    border-radius: 20px;
+    border-left: 5px solid var(--secondary);
+    margin-bottom: 3rem;
+    box-shadow: 0 10px 40px rgba(41, 95, 116, 0.08);
+}
+
+.highlight-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-highlight-box h3 {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.about-highlight-box p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #555;
+}
+
+.features-list-clean {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feature-item-clean {
+    display: flex;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.feature-check {
+    width: 40px;
+    height: 40px;
+    background: var(--secondary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.feature-content h4 {
+    font-size: 1.3rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.feature-content p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.stats-card-big {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    padding: 3rem;
+    border-radius: 25px;
+    color: white;
+    box-shadow: 0 20px 60px rgba(41, 95, 116, 0.3);
+    position: sticky;
+    top: 100px;
+}
+
+.stat-icon-large {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.stats-card-big h3 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.stats-card-big p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    opacity: 0.95;
+}
+
+.mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mini-stat {
+    text-align: center;
+}
+
+.mini-stat strong {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.mini-stat span {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.upgrade-badge {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+}
+
+/* ==================== APP SHOWCASE SECTION ==================== */
+.app-showcase-section {
+    padding: 6rem 5%;
+    background: var(--light);
+}
+
+.showcase-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.showcase-header {
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.features-showcase-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.showcase-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+}
+
+.showcase-item.reverse {
+    direction: rtl;
+}
+
+.showcase-item.reverse > * {
+    direction: ltr;
+}
+
+.showcase-content {
+    padding: 2rem 0;
+}
+
+.showcase-badge {
+    display: inline-block;
+    background: var(--secondary);
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.showcase-content h3 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.showcase-content p {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.showcase-features-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.showcase-features-list li {
+    font-size: 1.05rem;
+    color: #666;
+    padding-left: 0;
+}
+
+/* PHONE MOCKUP MINI */
+.phone-mini {
+    width: 300px;
+    height: 600px;
+    background: #1a1a2e;
+    border-radius: 45px;
+    padding: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    margin: 0 auto;
+    position: relative;
+}
+
+.phone-mini::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 5px;
+    background: #0a0a0a;
+    border-radius: 10px;
+    z-index: 10;
+}
+
+.phone-mini-screen {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 35px;
+    overflow: hidden;
+    position: relative;
+}
+
+.screen-content {
+object-fit: fill;
+        height: 100%;
+    width: 100%;
+}
+
+.screen-content img {
+object-fit: fill;
+    height: 100%;
+    width: 100%;
+}
+
+
+
+.mock-header {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.mock-exercise {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.exercise-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--secondary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.exercise-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.exercise-info strong {
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+}
+
+.exercise-info span {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.mock-progress {
+    margin-top: 2rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 10px;
+    transition: width 0.3s ease;
+}
+
+.mock-progress span {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 600;
+}
+
+/* Mood Tracker */
+.mood-tracker {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 15px;
+}
+
+.mood-item {
+    text-align: center;
+    font-size: 2rem;
+}
+
+.mood-item span {
+    display: block;
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 0.5rem;
+}
+
+.session-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.session-card strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.session-card p {
+    margin: 0.5rem 0;
+}
+
+.session-card span {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Chart Mock */
+.chart-mock {
+    margin-bottom: 2rem;
+}
+
+.chart-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 150px;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 15px;
+    margin-bottom: 1rem;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(to top, var(--primary), var(--secondary));
+    border-radius: 8px 8px 0 0;
+}
+
+.chart-label {
+    text-align: center;
+    color: #666;
+    font-weight: 600;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.metric {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 12px;
+}
+
+.metric strong {
+    display: block;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+}
+
+.metric span {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* Community */
+.community-post {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--light);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.post-content {
+    flex: 1;
+}
+
+.post-content strong {
+    display: block;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+}
+
+.post-content p {
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.post-content span {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .about-two-columns,
+    .showcase-item {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .stats-card-big {
+        position: relative;
+        top: 0;
+    }
+
+    .phone-mini {
+        max-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .showcase-content h3 {
+        font-size: 2rem;
+    }
+
+    .mini-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        🎉 Descarga Restore ahora y obtén 30 días de acceso premium gratis
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-container">
+            <div class="logo-text">RESTORE</div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#comentarios">Opiniones</a></li>
+        </ul>
+        <button class="nav-cta">Comenzar Ahora</button>
+    </nav>
+
+    <!-- Hero Split -->
+    <section class="hero-split" id="inicio">
+        <div class="hero-left">
+            <div class="hero-badge">✨ La App #1 en Recuperación</div>
+            <h1>RESTORE</h1>
+            <p>Transforma tu proceso de recuperación con tecnología de vanguardia. Restaura tu bienestar físico y emocional con el apoyo de profesionales certificados, disponible cuando lo necesites.</p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Usuarios Activos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Satisfacción</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Disponibilidad</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="phone-showcase">
+                <div class="phone-screen">
+                    <div class="phone-logo">RESTORE</div>
+                    <div class="phone-text">Tu camino hacia<br>la recuperación completa</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN "QUÉ ES RESTORE" MEJORADA -->
+<section class="about-section-improved" id="nosotros">
+    <div class="about-improved-container">
+        <div class="about-header-center">
+            <h2 class="main-title">¿Qué es Restore?</h2>
+            <p class="main-subtitle">Tu compañero integral en el proceso de recuperación física y emocional</p>
+        </div>
+
+        <div class="about-two-columns">
+            <div class="about-left-content">
+                <div class="about-highlight-box">
+                    <div class="highlight-icon">💙</div>
+                    <h3>Recuperación Integral</h3>
+                    <p>Restore no es solo una app de rehabilitación. Es un ecosistema completo diseñado para acompañarte en cada etapa de tu recuperación, combinando tecnología de vanguardia con el toque humano de profesionales certificados.</p>
+                </div>
+
+                <div class="features-list-clean">
+                    <div class="feature-item-clean">
+                        <div class="feature-check">✓</div>
+                        <div class="feature-content">
+                            <h4>Planes Personalizados</h4>
+                            <p>Cada plan se adapta a tu condición, ritmo y objetivos específicos</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item-clean">
+                        <div class="feature-check">✓</div>
+                        <div class="feature-content">
+                            <h4>Seguimiento en Tiempo Real</h4>
+                            <p>Monitorea tu progreso con métricas precisas y visualizaciones claras</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item-clean">
+                        <div class="feature-check">✓</div>
+                        <div class="feature-content">
+                            <h4>Acceso 24/7</h4>
+                            <p>Tu equipo de recuperación disponible cuando lo necesites</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-right-stats">
+                <div class="stats-card-big">
+                    <div class="stat-icon-large">🎯</div>
+                    <h3>Nuestra Misión</h3>
+                    <p>Empoderar a cada persona en su camino de recuperación, proporcionando herramientas profesionales, apoyo continuo y tecnología innovadora para no solo restaurar, sino mejorar su calidad de vida.</p>
+                    
+                    <div class="mini-stats">
+                        <div class="mini-stat">
+                            <strong>50K+</strong>
+                            <span>Usuarios Activos</span>
+                        </div>
+                        <div class="mini-stat">
+                            <strong>95%</strong>
+                            <span>Satisfacción</span>
+                        </div>
+                        <div class="mini-stat">
+                            <strong>24/7</strong>
+                            <span>Soporte</span>
+                        </div>
+                    </div>
+
+                    <div class="upgrade-badge">
+                        <span>❤️ Creado por UPGRADE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- NUEVA SECCIÓN: SHOWCASE DE PANTALLAS -->
+<section class="app-showcase-section">
+    <div class="showcase-container">
+        <div class="showcase-header">
+            <h2 class="main-title">Explora las Funcionalidades</h2>
+            <p class="main-subtitle">Cada característica diseñada para facilitar tu recuperación</p>
+        </div>
+
+        <div class="features-showcase-grid">
+            <!-- Feature 1 -->
+            <div class="showcase-item">
+                <div class="showcase-content">
+                    <div class="showcase-badge">🏃‍♂️ Rehabilitación</div>
+                    <h3>Ejercicios Personalizados</h3>
+                    <p>Rutinas diseñadas específicamente para tu condición con videos demostrativos, instrucciones paso a paso y ajustes automáticos según tu progreso.</p>
+                    <ul class="showcase-features-list">
+                        <li>✓ Videos en HD con instrucciones</li>
+                        <li>✓ Recordatorios inteligentes</li>
+                        <li>✓ Seguimiento de repeticiones</li>
+                        <li>✓ Recomendaciones adaptativas</li>
+                    </ul>
+                </div>
+                <div class="showcase-mockup">
+                    <div class="phone-mini">
+                        <div class="phone-mini-screen">
+                            <div class="screen-content">
+                                <img src="https://i.ibb.co/F2854BX/RESTORE-3.jpg">
+                                </div>
+                                <div class="mock-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 65%"></div>
+                                    </div>
+                                    <span>65% Completado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="showcase-item reverse">
+                <div class="showcase-content">
+                    <div class="showcase-badge">🧠 Bienestar Mental</div>
+                    <h3>Apoyo Psicológico</h3>
+                    <p>Acceso a sesiones de terapia con psicólogos certificados especializados en trauma, ansiedad y procesos de recuperación emocional.</p>
+                    <ul class="showcase-features-list">
+                        <li>✓ Videoconsultas privadas</li>
+                        <li>✓ Chat confidencial 24/7</li>
+                        <li>✓ Meditaciones guiadas</li>
+                        <li>✓ Diario emocional</li>
+                    </ul>
+                </div>
+                <div class="showcase-mockup">
+                    <div class="phone-mini">
+                        <div class="phone-mini-screen">
+                            <div class="screen-content">
+                               <img src="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="showcase-item">
+                <div class="showcase-content">
+                    <div class="showcase-badge">📊 Seguimiento</div>
+                    <h3>Dashboard Inteligente</h3>
+                    <p>Visualiza tu progreso con gráficos interactivos, métricas detalladas y reportes profesionales que puedes compartir con tu médico.</p>
+                    <ul class="showcase-features-list">
+                        <li>✓ Gráficos de evolución</li>
+                        <li>✓ Estadísticas personales</li>
+                        <li>✓ Reportes exportables</li>
+                        <li>✓ Comparativas semanales</li>
+                    </ul>
+                </div>
+                <div class="showcase-mockup">
+                    <div class="phone-mini">
+                        <div class="phone-mini-screen">
+                            <div class="screen-content">
+                                <img src="https://i.ibb.co/5g3LLMrB/RESTORE-4.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="showcase-item reverse">
+                <div class="showcase-content">
+                    <div class="showcase-badge">👥 Personal</div>
+                    <h3>Perfíl Adaptable</h3>
+                    <p>Manten en cuenta tu progreso, consulta loas diferentes areas y descubre todas nuestras secciones para ayudarte.</p>
+                    <ul class="showcase-features-list">
+                        <li>✓ Historial de herramientas</li>
+                        <li>✓ Visualizar metas semanales</li>
+                        <li>✓ Ver progreso específicos</li>
+                        <li>✓ Acceso a la configuración</li>
+                    </ul>
+                </div>
+                <div class="showcase-mockup">
+                    <div class="phone-mini">
+                        <div class="phone-mini-screen">
+                            <div class="screen-content">
+                               <img src="https://i.ibb.co/pvGFYLKj/RESTORE-2.jpg">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Services -->
+    <section class="services-section" id="servicios">
+        <div class="services-header">
+            <h2>Nuestros Servicios</h2>
+            <p>Todo lo que necesitas para una recuperación exitosa, en un solo lugar</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🏃‍♂</div>
+                <h3>Rehabilitación Física</h3>
+                <p>Programas de ejercicios personalizados con seguimiento en tiempo real y ajustes automáticos según tu progreso.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🧠</div>
+                <h3>Apoyo Psicológico</h3>
+                <p>Sesiones de terapia con psicólogos certificados especializados en trauma y recuperación emocional.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📈</div>
+                <h3>Monitoreo Continuo</h3>
+                <p>Dashboards intuitivos que visualizan tu progreso con métricas detalladas y reportes profesionales.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">🎥</div>
+                <h3>Videoconsultas</h3>
+                <p>Consultas virtuales con especialistas desde la comodidad de tu hogar, sin listas de espera.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">📚</div>
+                <h3>Biblioteca Educativa</h3>
+                <p>Acceso a contenido educativo sobre salud, bienestar y técnicas de recuperación validadas científicamente.</p>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">👥</div>
+                <h3>Comunidad de Apoyo</h3>
+                <p>Conéctate con otras personas en recuperación, comparte experiencias y encuentra motivación mutua.</p>
+            </div>
+        </div>
+    </section>
+
+   <!-- Testimonials -->
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title">Lo Que Dicen <span class="gradient-text">Nuestros Usuarios</span></h2>
+        <p class="section-subtitle">Miles de personas ya están transformando sus vidas con Habitus</p>
+        
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"Habitus cambió completamente mi relación con la comida. El asistente IA me ayuda cuando tengo dudas y lo mejor es que funciona sin internet. Perdí 8 kilos en 3 meses de forma saludable."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">M</div>
+                    <div class="author-info">
+                        <h4>María González</h4>
+                        <p>Usuaria desde hace 4 meses</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★</div>
+                <p class="testimonial-text">"Como deportista necesitaba algo más que contar calorías. Las rutinas personalizadas y el seguimiento de macros me ayudaron a ganar 5 kilos de músculo. La app es increíble."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">C</div>
+                    <div class="author-info">
+                        <h4>Carlos Méndez</h4>
+                        <p>Atleta amateur</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★</div>
+                <p class="testimonial-text">"Lo que más me gusta es que respeta mi privacidad. Todo funciona offline y las recetas son deliciosas. Mi familia también las está usando. ¡100% recomendada!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">L</div>
+                    <div class="author-info">
+                        <h4>Laura Fernández</h4>
+                        <p>Madre de familia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Comienza Tu Viaje de Recuperación Hoy</h2>
+            <p>Únete a miles de personas que ya están restaurando su bienestar con nuestra tecnología y equipo profesional</p>
+            <div class="cta-buttons">
+                <button class="btn-white">Descargar App Gratis</button>
+                <button class="btn-outline">Agendar Demo</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="comments-section" id="comentarios">
+        <div class="comments-container">
+            <div class="comments-header">
+                <h2>Comparte Tu Experiencia</h2>
+                <p>Nos encantaría conocer tu opinión sobre Restore</p>
+            </div>
+
+            <div class="comment-form-box">
+                <form id="commentForm">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="userName">Nombre Completo</label>
+                            <input type="text" id="userName" placeholder="Tu nombre" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="userEmail">Correo Electrónico</label>
+                            <input type="email" id="userEmail" placeholder="tu@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="userComment">Tu Comentario</label>
+                        <textarea id="userComment" placeholder="Cuéntanos sobre tu experiencia con Restore..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Publicar Comentario</button>
+                </form>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <!-- Los comentarios aparecerán aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>RESTORE</h3>
+                <p>Transformando vidas a través de la tecnología y el cuidado profesional. Tu recuperación es nuestra misión, tu bienestar nuestro compromiso.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Producto</h4>
+                <ul>
+                    <li><a href="#">Características</a></li>
+                    <li><a href="#">Precios</a></li>
+                    <li><a href="#">Testimonios</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Compañía</h4>
+                <ul>
+                    <li><a href="Corporacion.html">Sobre Nosotros</a></li>
+                    <li><a href="Servicios.html">Servicios</a></li>
+                    <li><a href="Inicio-UP.html">Inicio</a></li>
+                    <li><a href="Corporacion.html">Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Términos</a></li>
+                    <li><a href="#">Cookies</a></li>
+                    <li><a href="#">Licencias</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p style="opacity: 0.6; margin-top: 1rem;">© 2024 Restore App. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+
+        // CTA buttons functionality
+        document.querySelectorAll('.btn-white, .nav-cta, .btn-outline').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent.includes('Descargar') || this.textContent.includes('Comenzar')) {
+                    alert('🎉 ¡Próximamente disponible en App Store y Google Play!\n\nDéjanos tu email para notificarte cuando esté lista.');
+                } else if (this.textContent.includes('Demo')) {
+                    alert('📅 ¡Perfecto! Un especialista se pondrá en contacto contigo pronto para agendar tu demo personalizada.');
+                }
+            });
+        });
+
+        // Phone animation enhancement
+        const phone = document.querySelector('.phone-showcase');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', function(e) {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+
+      function animatePhone() {
+    if (phone) {
+        phone.style.transform = `perspective(1000px) rotateY(${mouseX}deg) rotateX(${-mouseY}deg)`;
+    }
+    requestAnimationFrame(animatePhone);
+}
+
+animatePhone();
+
+        animatePhone();
+    </script>
+
+<script>
+    // ==================== SISTEMA DE COMENTARIOS ====================
+    let comments = [];
+
+    // Cargar comentarios al iniciar
+    function loadComments() {
+        try {
+            const stored = localStorage.getItem('restore-comments');
+            if (stored) {
+                comments = JSON.parse(stored);
+                console.log('Comentarios cargados:', comments.length);
+            }
+        } catch (error) {
+            console.log('No hay comentarios previos');
+            comments = [];
+        }
+        renderComments();
+    }
+
+    // Guardar comentarios
+    function saveComments() {
+        try {
+            localStorage.setItem('restore-comments', JSON.stringify(comments));
+            console.log('Comentarios guardados correctamente');
+            return true;
+        } catch (error) {
+            console.error('Error al guardar:', error);
+            alert('Error al guardar el comentario. Por favor, intenta de nuevo.');
+            return false;
+        }
+    }
+
+    // Renderizar comentarios
+    function renderComments() {
+        const commentsList = document.getElementById('commentsList');
+        
+        if (!commentsList) {
+            console.error('No se encontró el elemento commentsList');
+            return;
+        }
+        
+        if (comments.length === 0) {
+            commentsList.innerHTML = '<div class="no-comments">Aún no hay comentarios. ¡Sé el primero en compartir tu experiencia!</div>';
+            return;
+        }
+        
+        commentsList.innerHTML = '';
+        
+        comments.forEach((comment, index) => {
+            const commentHTML = `
+                <div class="comment-item" style="animation: slideIn 0.5s ease;" data-index="${index}">
+                    <div class="comment-header">
+                        <div class="comment-author">${escapeHtml(comment.name)}</div>
+                        <div class="comment-date">${comment.date}</div>
+                    </div>
+                    <p class="comment-text" id="comment-text-${index}">${escapeHtml(comment.text)}</p>
+                    
+                    <div class="edit-form" id="edit-form-${index}">
+                        <textarea class="edit-textarea" id="edit-textarea-${index}">${escapeHtml(comment.text)}</textarea>
+                        <div class="edit-actions">
+                            <button class="edit-cancel" onclick="cancelEdit(${index})">Cancelar</button>
+                            <button class="edit-save" onclick="saveEdit(${index})">Guardar Cambios</button>
+                        </div>
+                    </div>
+                    
+                    <div class="comment-actions">
+                        <button class="comment-action-btn edit" onclick="editComment(${index})">
+                            <span>✏️</span> Editar
+                        </button>
+                        <button class="comment-action-btn delete" onclick="deleteComment(${index})">
+                            <span>🗑️</span> Eliminar
+                        </button>
+                    </div>
+                </div>
+            `;
+            commentsList.insertAdjacentHTML('beforeend', commentHTML);
+        });
+    }
+
+    // Función para escapar HTML (seguridad)
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Añadir nuevo comentario
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('userName').value.trim();
+        const email = document.getElementById('userEmail').value.trim();
+        const text = document.getElementById('userComment').value.trim();
+        
+        if (!name || !email || !text) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+        
+        const newComment = {
+            name: name,
+            email: email,
+            text: text,
+            date: new Date().toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }),
+            id: Date.now()
+        };
+        
+        comments.unshift(newComment);
+        const saved = saveComments();
+        
+        if (saved) {
+            renderComments();
+            this.reset();
+            alert('Comentario publicado exitosamente.');
+        }
+    });
+
+    // Editar comentario
+    function editComment(index) {
+        // Cerrar otros formularios de edición abiertos
+        document.querySelectorAll('.edit-form.active').forEach(form => {
+            form.classList.remove('active');
+        });
+        document.querySelectorAll('.comment-text').forEach(text => {
+            text.style.display = 'block';
+        });
+        
+        const editForm = document.getElementById(`edit-form-${index}`);
+        const commentText = document.getElementById(`comment-text-${index}`);
+        
+        editForm.classList.add('active');
+        commentText.style.display = 'none';
+    }
+
+    // Guardar edición
+    function saveEdit(index) {
+        const textarea = document.getElementById(`edit-textarea-${index}`);
+        const newText = textarea.value.trim();
+        
+        if (!newText) {
+            alert('El comentario no puede estar vacío.');
+            return;
+        }
+        
+        comments[index].text = newText;
+        comments[index].date = new Date().toLocaleDateString('es-ES', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }) + ' (editado)';
+        
+        const saved = saveComments();
+        
+        if (saved) {
+            renderComments();
+            alert('Comentario actualizado exitosamente.');
+        }
+    }
+
+    // Cancelar edición
+    function cancelEdit(index) {
+        const editForm = document.getElementById(`edit-form-${index}`);
+        const commentText = document.getElementById(`comment-text-${index}`);
+        const textarea = document.getElementById(`edit-textarea-${index}`);
+        
+        editForm.classList.remove('active');
+        commentText.style.display = 'block';
+        textarea.value = comments[index].text;
+    }
+
+    // Eliminar comentario
+    function deleteComment(index) {
+        if (confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
+            comments.splice(index, 1);
+            const saved = saveComments();
+            
+            if (saved) {
+                renderComments();
+                alert('Comentario eliminado exitosamente.');
+            }
+        }
+    }
+
+    // ==================== INICIALIZACIÓN ====================
+    // Cargar comentarios cuando la página esté lista
+    window.addEventListener('DOMContentLoaded', function() {
+        loadComments();
+    });
+
+    // ==================== RESTO DE FUNCIONALIDADES ====================
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Navbar shadow on scroll
+    let lastScroll = 0;
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('nav');
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 50) {
+            nav.style.boxShadow = '0 4px 20px rgba(41, 95, 116, 0.15)';
+        } else {
+            nav.style.boxShadow = '0 2px 15px rgba(41, 95, 116, 0.1)';
+        }
+        
+        lastScroll = currentScroll;
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all service cards and testimonials
+    document.querySelectorAll('.service-card, .testimonial-card, .about-feature').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // CTA buttons functionality
+    document.querySelectorAll('.btn-white, .nav-cta, .btn-outline').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.textContent.includes('Descargar') || this.textContent.includes('Comenzar')) {
+                alert('🎉 ¡Próximamente disponible en App Store y Google Play!\n\nDéjanos tu email para notificarte cuando esté lista.');
+            } else if (this.textContent.includes('Demo')) {
+                alert('📅 ¡Perfecto! Un especialista se pondrá en contacto contigo pronto para agendar tu demo personalizada.');
+            }
+        });
+    });
+
+    // Phone animation enhancement
+    (function() {
+        const phone = document.querySelector('.phone-showcase');
+        if (!phone) return;
+        
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', function(e) {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+
+        function animatePhone() {
+            phone.style.transform = `perspective(1000px) rotateY(${mouseX}deg) rotateX(${-mouseY}deg)`;
+            requestAnimationFrame(animatePhone);
+        }
+
+        animatePhone();
+    })();
+</script>
+
+</body>
+</html>

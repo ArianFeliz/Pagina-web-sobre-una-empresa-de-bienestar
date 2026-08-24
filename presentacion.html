@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade — Hola 👋</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%; height: 100%;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden; color: #fff;
+        }
+
+        /* ══ FOTOS DE FONDO ══════════════════════════════════════
+           📸 CÓMO USAR:
+           En el CSS de cada #bg-qX, descomenta url(...) y pon tu foto.
+           O pon el style directo en el HTML del div.
+        ══════════════════════════════════════════════════════════ */
+        .bg-photo {
+            position: fixed; inset: 0; z-index: 0;
+            background-size: cover; background-position: center;
+            opacity: 0; transition: opacity 1s ease;
+        }
+        .bg-photo.visible { opacity: 1; }
+
+        /* Foto Q1 - Bienvenida */
+        #bg-q1 {
+            /* background-image: url('Assets/foto-bienvenida.jpg'); */
+            background: linear-gradient(135deg, #0a3040 0%, #1a5a6a 100%);
+        }
+        /* Foto Q2 - Ejercicio */
+        #bg-q2 {
+            /* background-image: url('Assets/foto-ejercicio.jpg'); */
+            background: linear-gradient(135deg, #0d2a1a 0%, #1a4a30 100%);
+        }
+        /* Foto Q3 - Objetivo */
+        #bg-q3 {
+            /* background-image: url('Assets/foto-objetivo.jpg'); */
+            background: linear-gradient(135deg, #1a2a0a 0%, #2a4518 100%);
+        }
+        /* Foto Q4 - Comunidad */
+        #bg-q4 {
+            /* background-image: url('Assets/foto-comunidad.jpg'); */
+            background: linear-gradient(135deg, #0a1a3a 0%, #1a2a58 100%);
+        }
+        /* Foto Finish */
+        #bg-finish {
+            /* background-image: url('Assets/foto-final.jpg'); */
+            background: linear-gradient(135deg, #0a2a1a 0%, #1a4a35 100%);
+        }
+
+        /* Overlay para legibilidad del texto */
+        .bg-overlay {
+            position: fixed; inset: 0; z-index: 1;
+            background: linear-gradient(
+                105deg,
+                rgba(4,18,26,.85) 0%,
+                rgba(4,18,26,.55) 48%,
+                rgba(4,18,26,.22) 100%
+            );
+        }
+
+        /* ══ BARRA PROGRESO ══════════════════════════════════════ */
+        .progress-track {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: 3px; background: rgba(255,255,255,.1); z-index: 200;
+        }
+        .progress-fill {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, #3f8aa3, #6edab1);
+            box-shadow: 0 0 10px rgba(110,218,177,.5);
+            border-radius: 0 3px 3px 0;
+            transition: width .6s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* ══ HEADER ══════════════════════════════════════════════ */
+        .top-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            padding: 16px 30px;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 100;
+        }
+        .logo { display: flex; align-items: center; gap: 9px; }
+        .logo img { width: 26px; height: 34px; object-fit: contain; }
+        .logo span {
+            font-size: 17px; font-weight: 700; letter-spacing: 2px;
+            background: linear-gradient(135deg, #a8e6b8, #fff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .step-badge {
+            font-size: 11px; letter-spacing: 2px;
+            color: rgba(255,255,255,.45); text-transform: uppercase;
+            background: rgba(255,255,255,.08); padding: 5px 14px;
+            border-radius: 20px; border: 1px solid rgba(255,255,255,.12);
+            backdrop-filter: blur(6px); transition: opacity .4s ease;
+        }
+
+        /* ══ SKIP ════════════════════════════════════════════════ */
+        .skip-btn {
+            position: fixed; bottom: 28px; right: 28px;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.18);
+            color: rgba(255,255,255,.45);
+            font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+            padding: 8px 18px; border-radius: 30px; cursor: pointer;
+            backdrop-filter: blur(8px); transition: all .3s ease;
+            z-index: 200; font-family: inherit;
+        }
+        .skip-btn:hover { border-color: rgba(255,255,255,.4); color: #fff; background: rgba(255,255,255,.14); }
+
+        /* ══ STAGE ═══════════════════════════════════════════════ */
+        .stage {
+            position: relative; z-index: 10;
+            width: 100%; height: 100vh;
+            display: flex; align-items: center;
+            padding: 0 8% 0 7%;
+        }
+
+        /* ══ QUESTION CARD ═══════════════════════════════════════ */
+        .q-card {
+            position: absolute;
+            width: 100%; max-width: 520px;
+            display: flex; flex-direction: column;
+            align-items: flex-start; gap: 22px;
+            opacity: 0; transform: translateY(44px);
+            pointer-events: none;
+            transition: opacity .52s ease, transform .52s cubic-bezier(.175,.885,.32,1.275);
+        }
+        .q-card.active  { opacity: 1; transform: none; pointer-events: all; }
+        .q-card.exit-up { opacity: 0; transform: translateY(-44px); pointer-events: none; }
+
+        .q-label {
+            font-size: 10px; letter-spacing: 3px;
+            color: rgba(168,230,184,.75); text-transform: uppercase;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .q-label::before {
+            content: ''; display: inline-block;
+            width: 14px; height: 1.5px; background: rgba(168,230,184,.75);
+        }
+        .q-title {
+            font-size: clamp(24px, 3.8vw, 40px);
+            font-weight: 800; line-height: 1.2; color: #fff;
+            letter-spacing: -.4px; text-shadow: 0 2px 20px rgba(0,0,0,.4);
+        }
+        .q-title em {
+            font-style: normal;
+            background: linear-gradient(90deg, #6edab1, #A8E6B8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .q-sub { font-size: 14px; color: rgba(255,255,255,.48); margin-top: -12px; }
+
+        /* ══ OPCIONES ════════════════════════════════════════════ */
+        .options-list { display: flex; flex-direction: column; gap: 9px; width: 100%; }
+
+        .opt {
+            display: flex; align-items: center; gap: 13px;
+            background: rgba(255,255,255,.07);
+            border: 1.5px solid rgba(255,255,255,.14);
+            border-radius: 14px; padding: 14px 18px;
+            cursor: pointer; width: 100%;
+            color: rgba(255,255,255,.78);
+            font-size: 14.5px; font-family: inherit; text-align: left;
+            backdrop-filter: blur(12px);
+            transition: border-color .22s, background .22s, transform .2s, color .22s;
+        }
+        .opt:hover { border-color: rgba(110,218,177,.6); background: rgba(110,218,177,.12); color: #fff; transform: translateX(6px); }
+        .opt.selected { background: rgba(110,218,177,.18); border-color: #6edab1; color: #fff; box-shadow: 0 0 20px rgba(110,218,177,.15); }
+        .opt.selected .opt-key { background: #6edab1; color: #071e28; border-color: #6edab1; }
+
+        .opt-key {
+            width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+            background: rgba(255,255,255,.1); border: 1.5px solid rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700; color: rgba(255,255,255,.6);
+            transition: all .22s;
+        }
+        .opt-emoji { font-size: 17px; flex-shrink: 0; }
+
+        /* ══ BOTÓN SIGUIENTE ═════════════════════════════════════ */
+        .next-btn {
+            background: linear-gradient(135deg, #3f8aa3, #6edab1);
+            border: none; border-radius: 12px; padding: 14px 30px;
+            color: #071e28; font-size: 13.5px; font-weight: 800;
+            font-family: inherit; letter-spacing: .8px; text-transform: uppercase;
+            cursor: pointer; display: flex; align-items: center; gap: 9px;
+            opacity: .3; pointer-events: none; transition: all .3s ease;
+            box-shadow: 0 6px 22px rgba(0,0,0,.3);
+        }
+        .next-btn.ready { opacity: 1; pointer-events: all; }
+        .next-btn.ready:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(110,218,177,.35); }
+        .next-arrow { font-size: 16px; transition: transform .3s; }
+        .next-btn:hover .next-arrow { transform: translateX(4px); }
+
+        .key-hint { font-size: 10px; color: rgba(255,255,255,.25); letter-spacing: .8px; margin-top: -12px; }
+        .key-hint kbd {
+            background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+            border-radius: 4px; padding: 1px 5px;
+            font-family: inherit; font-size: 9px; color: rgba(255,255,255,.35);
+        }
+
+        /* ══ FINISH ══════════════════════════════════════════════ */
+        .finish-card {
+            position: absolute; width: 100%; max-width: 500px;
+            display: flex; flex-direction: column;
+            align-items: flex-start; gap: 18px;
+            opacity: 0; transform: translateY(44px);
+            pointer-events: none;
+            transition: opacity .6s ease, transform .6s cubic-bezier(.175,.885,.32,1.275);
+        }
+        .finish-card.active { opacity: 1; transform: none; pointer-events: all; }
+
+        .finish-icon { font-size: 52px; line-height: 1; }
+        .finish-title {
+            font-size: clamp(28px, 4.5vw, 46px); font-weight: 800;
+            line-height: 1.15; color: #fff; letter-spacing: -.5px;
+            text-shadow: 0 2px 20px rgba(0,0,0,.4);
+        }
+        .finish-title em {
+            font-style: normal;
+            background: linear-gradient(90deg, #6edab1, #A8E6B8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .finish-sub { font-size: 15px; color: rgba(255,255,255,.55); line-height: 1.65; max-width: 420px; }
+        .enter-btn {
+            margin-top: 8px;
+            background: linear-gradient(135deg, #3f8aa3, #6edab1);
+            border: none; border-radius: 13px; padding: 16px 48px;
+            color: #071e28; font-size: 14px; font-weight: 800;
+            font-family: inherit; letter-spacing: 1.2px; text-transform: uppercase;
+            cursor: pointer; box-shadow: 0 8px 30px rgba(0,0,0,.35); transition: all .3s ease;
+        }
+        .enter-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(110,218,177,.4); }
+    </style>
+</head>
+<body>
+
+<!-- ══ FOTOS GRANDES DE FONDO ═══════════════════════════════════
+     Una por pregunta. Para poner tus fotos, edita el style="..." de cada div:
+     style="background-image: url('Assets/TU-FOTO.jpg')"
+════════════════════════════════════════════════════════════════ -->
+<div id="bg-q1"     class="bg-photo visible"
+     style="/* background-image: url('Assets/foto-bienvenida.jpg') */"></div>
+
+<div id="bg-q2"     class="bg-photo"
+     style="/* background-image: url('Assets/foto-ejercicio.jpg') */"></div>
+
+<div id="bg-q3"     class="bg-photo"
+     style="/* background-image: url('Assets/foto-objetivo.jpg') */"></div>
+
+<div id="bg-q4"     class="bg-photo"
+     style="/* background-image: url('Assets/foto-comunidad.jpg') */"></div>
+
+<div id="bg-finish" class="bg-photo"
+     style="/* background-image: url('Assets/foto-final.jpg') */"></div>
+
+<div class="bg-overlay"></div>
+
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="top-bar">
+    <div class="logo">
+        <img src="Assets/Icono-empresa-Png.png" alt="UpGrade" onerror="this.style.display='none'">
+        <span>UpGrade</span>
+    </div>
+    <div class="step-badge" id="stepBadge">1 de 4</div>
+</div>
+
+<button class="skip-btn" id="skipBtn">Saltar →</button>
+
+<!-- ══ PREGUNTAS ════════════════════════════════════════════════ -->
+<div class="stage">
+
+    <!-- Q1 -->
+    <div class="q-card active" id="q1">
+        <div class="q-label">Antes de empezar</div>
+        <div class="q-title">Hola 👋 ¿es tu <em>primera vez</em> por aquí?</div>
+        <p class="q-sub">Sin presión, solo queremos conocerte un poco.</p>
+        <div class="options-list">
+            <button class="opt" data-q="1" data-v="nuevo">
+                <span class="opt-key">A</span><span class="opt-emoji">🌱</span>
+                Sí, soy completamente nuevo/a
+            </button>
+            <button class="opt" data-q="1" data-v="regreso">
+                <span class="opt-key">B</span><span class="opt-emoji">👀</span>
+                Ya vi algo antes, pero quiero explorar más
+            </button>
+            <button class="opt" data-q="1" data-v="usuario">
+                <span class="opt-key">C</span><span class="opt-emoji">⭐</span>
+                Soy usuario frecuente, me encanta UpGrade
+            </button>
+        </div>
+        <button class="next-btn" id="next1">Seguimos <span class="next-arrow">→</span></button>
+        <div class="key-hint">Teclea <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> o presiona <kbd>Enter</kbd></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" id="q2">
+        <div class="q-label">Tu estilo de vida</div>
+        <div class="q-title">¿Cuánto <em>movimiento</em> hay en tu día a día?</div>
+        <p class="q-sub">No hay respuesta mala, ¡prometido!</p>
+        <div class="options-list">
+            <button class="opt" data-q="2" data-v="inicio">
+                <span class="opt-key">A</span><span class="opt-emoji">🛋️</span>
+                Casi nada, quiero empezar a moverme
+            </button>
+            <button class="opt" data-q="2" data-v="suave">
+                <span class="opt-key">B</span><span class="opt-emoji">🚶</span>
+                Caminatas y algo suave, 1–2 veces/semana
+            </button>
+            <button class="opt" data-q="2" data-v="regular">
+                <span class="opt-key">C</span><span class="opt-emoji">🏋️</span>
+                Gym o cardio, 3–4 veces/semana
+            </button>
+            <button class="opt" data-q="2" data-v="atleta">
+                <span class="opt-key">D</span><span class="opt-emoji">🔥</span>
+                Todos los días, soy muy activo/a
+            </button>
+        </div>
+        <button class="next-btn" id="next2">Seguimos <span class="next-arrow">→</span></button>
+        <div class="key-hint">Teclea <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> o presiona <kbd>Enter</kbd></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card" id="q3">
+        <div class="q-label">Lo más importante</div>
+        <div class="q-title">¿Qué quieres <em>lograr</em> con UpGrade?</div>
+        <p class="q-sub">Te mostraremos exactamente lo que necesitas.</p>
+        <div class="options-list">
+            <button class="opt" data-q="3" data-v="salud">
+                <span class="opt-key">A</span><span class="opt-emoji">🥗</span>
+                Comer mejor y cuidar mi salud
+            </button>
+            <button class="opt" data-q="3" data-v="recuperacion">
+                <span class="opt-key">B</span><span class="opt-emoji">🩺</span>
+                Recuperarme de una lesión o accidente
+            </button>
+            <button class="opt" data-q="3" data-v="habitos">
+                <span class="opt-key">C</span><span class="opt-emoji">🧠</span>
+                Construir hábitos que de verdad duren
+            </button>
+            <button class="opt" data-q="3" data-v="curiosidad">
+                <span class="opt-key">D</span><span class="opt-emoji">🔍</span>
+                Estoy explorando, a ver qué encuentro
+            </button>
+        </div>
+        <button class="next-btn" id="next3">Seguimos <span class="next-arrow">→</span></button>
+        <div class="key-hint">Teclea <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> o presiona <kbd>Enter</kbd></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card" id="q4">
+        <div class="q-label">Última pregunta, lo juro 😄</div>
+        <div class="q-title">¿Cómo llegaste <em>hasta aquí</em>?</div>
+        <p class="q-sub">Nos ayuda a saber dónde estamos llegando.</p>
+        <div class="options-list">
+            <button class="opt" data-q="4" data-v="redes">
+                <span class="opt-key">A</span><span class="opt-emoji">📱</span>
+                Lo vi en redes (Instagram, TikTok…)
+            </button>
+            <button class="opt" data-q="4" data-v="amigo">
+                <span class="opt-key">B</span><span class="opt-emoji">🗣️</span>
+                Alguien de confianza me lo recomendó
+            </button>
+            <button class="opt" data-q="4" data-v="busqueda">
+                <span class="opt-key">C</span><span class="opt-emoji">🔎</span>
+                Lo encontré buscando en Google
+            </button>
+            <button class="opt" data-q="4" data-v="otro">
+                <span class="opt-key">D</span><span class="opt-emoji">✨</span>
+                Por otro medio
+            </button>
+        </div>
+        <button class="next-btn" id="next4">¡Ya casi! <span class="next-arrow">→</span></button>
+        <div class="key-hint">Teclea <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> o presiona <kbd>Enter</kbd></div>
+    </div>
+
+    <!-- FINISH -->
+    <div class="finish-card" id="finish">
+        <div class="finish-icon" id="finishIcon">🌿</div>
+        <div class="finish-title" id="finishTitle">¡Bienvenido/a<br>a <em>UpGrade</em>!</div>
+        <p class="finish-sub" id="finishSub">Tu experiencia personalizada está lista.</p>
+        <button class="enter-btn" id="enterBtn">Entrar a UpGrade →</button>
+    </div>
+
+</div>
+
+<script>
+const TOTAL = 4;
+let current = 1;
+const answers = {};
+const fill  = document.getElementById('progressFill');
+const badge = document.getElementById('stepBadge');
+
+function setProgress(step) {
+    fill.style.width  = ((step - 1) / TOTAL * 100) + '%';
+    badge.textContent = step <= TOTAL ? `${step} de ${TOTAL}` : '';
+}
+
+function switchBg(key) {
+    const ids = { 1:'bg-q1', 2:'bg-q2', 3:'bg-q3', 4:'bg-q4', finish:'bg-finish' };
+    document.querySelectorAll('.bg-photo').forEach(el => el.classList.remove('visible'));
+    const el = document.getElementById(ids[key]);
+    if (el) el.classList.add('visible');
+}
+
+document.querySelectorAll('.opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const q = btn.dataset.q;
+        document.querySelectorAll(`.opt[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        answers[q] = btn.dataset.v;
+        document.getElementById('next' + q).classList.add('ready');
+    });
+});
+
+document.addEventListener('keydown', e => {
+    if (current > TOTAL) return;
+    const map = { A:0, B:1, C:2, D:3 };
+    const key = e.key.toUpperCase();
+    if (key in map) {
+        const opts = [...document.querySelectorAll(`.opt[data-q="${current}"]`)];
+        if (opts[map[key]]) { opts[map[key]].click(); return; }
+    }
+    if (e.key === 'Enter') {
+        const nb = document.getElementById('next' + current);
+        if (nb && nb.classList.contains('ready')) nb.click();
+    }
+});
+
+function advance(from) {
+    if (!answers[from]) return;
+    const fromCard = document.getElementById('q' + from);
+    fromCard.classList.remove('active');
+    fromCard.classList.add('exit-up');
+    setTimeout(() => fromCard.classList.remove('exit-up'), 600);
+
+    if (from < TOTAL) {
+        current = from + 1;
+        setProgress(current);
+        switchBg(current);
+        document.getElementById('q' + current).classList.add('active');
+    } else {
+        fill.style.width = '100%';
+        badge.style.opacity = '0';
+        switchBg('finish');
+        setTimeout(showFinish, 350);
+    }
+}
+
+for (let i = 1; i <= TOTAL; i++) {
+    document.getElementById('next' + i).addEventListener('click', () => advance(i));
+}
+
+function showFinish() {
+    document.getElementById('finish').classList.add('active');
+    badge.style.display = 'none';
+    const goal = answers[3], who = answers[1];
+    const icons  = { salud:'🥗', recuperacion:'🩺', habitos:'🧠', curiosidad:'✨' };
+    const titles = { nuevo:'¡Me alegra que<br>estés <em>aquí</em>! 🙌', regreso:'¡Qué bueno que<br><em>volviste</em>! 👋', usuario:'¡Siempre un<br>placer <em>verte</em>! 🔥' };
+    const subs   = {
+        salud:       'Habitus va a transformar tu relación con la comida y el movimiento. ¡Vas a amar lo que viene!',
+        recuperacion:'Restore está diseñado exactamente para acompañarte en cada paso de tu recuperación.',
+        habitos:     'Con Habitus vas a construir esos hábitos que siempre quisiste tener y que realmente duran.',
+        curiosidad:  '¡Perfecto! Hay mucho por explorar. Te va a sorprender todo lo que UpGrade tiene para ti.'
+    };
+    document.getElementById('finishIcon').textContent  = icons[goal]  || '🌿';
+    document.getElementById('finishTitle').innerHTML   = titles[who]  || '¡Bienvenido/a<br>a <em>UpGrade</em>!';
+    document.getElementById('finishSub').textContent   = subs[goal]   || 'Tu experiencia personalizada está lista.';
+    localStorage.setItem('upgrade_onboarding', JSON.stringify(answers));
+    localStorage.setItem('upgrade_onboarding_done', 'true');
+}
+
+function goHome() {
+    document.body.style.transition = 'opacity .6s ease';
+    document.body.style.opacity = '0';
+    setTimeout(() => { window.location.href = 'Inicio-UP.html'; }, 650);
+}
+document.getElementById('enterBtn').addEventListener('click', goHome);
+document.getElementById('skipBtn').addEventListener('click', goHome);
+
+// Descomenta para mostrar solo una vez:
+// if (localStorage.getItem('upgrade_onboarding_done')) window.location.href = 'Inicio-UP.html';
+
+setProgress(1);
+</script>
+</body>
+</html>

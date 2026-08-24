@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="Estilo-Index.css">
+    
+    <style>
+         /* ==================== CSS PARA CONFIGURACIÓN ==================== */
+
+        /* Botón de configuración flotante */
+    
+
+        .settings-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 30px rgba(45, 95, 93, 0.6);
+        }
+
+        @keyframes pulse-settings {
+            0%, 100% { box-shadow: 0 4px 20px rgba(45, 95, 93, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(107, 197, 184, 0.6); }
+        }
+
+        /* Panel de configuración */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow-y: auto;
+        }
+
+        .settings-panel.active {
+            right: 0;
+        }
+
+        /* Overlay */
+       /* ==================== SETTINGS PANEL ==================== */
+    .settings-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1000; opacity: 0; visibility: hidden;
+        transition: all .3s ease;
+    }
+    .settings-overlay.active { opacity: 1; visibility: visible; }
+
+    .settings-panel {
+        background: #f0f0f0;
+        position: fixed; top: 0; right: -400px;
+        width: 380px; height: 100vh;
+        box-shadow: -5px 0 30px rgba(0,0,0,.3);
+        z-index: 1001;
+        transition: right .4s cubic-bezier(.68,-.55,.265,1.55);
+        overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+    .settings-panel.active { right: 0; }
+
+    .settings-header {
+        background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+        color: #fff; padding: 24px 26px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-shrink: 0;
+    }
+    .settings-header h4 {
+        font-family: BebasNeue, 'Bebas Neue', sans-serif;
+        font-size: 40px; color: #fff;
+        letter-spacing: 1px; margin: 10;
+    }
+    .settings-close {
+        background: rgba(255,255,255,.2); border: none; color: #fff;
+        width: 33px; height: 33px; border-radius: 50%;
+        cursor: pointer; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .3s ease, transform .3s ease;
+    }
+    .settings-close:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+
+    .settings-content { padding: 24px 20px; flex: 1; }
+
+    .settings-group {
+        margin-bottom: 24px;
+        animation: slideIn .45s ease both;
+        opacity: 0;
+    }
+    .settings-group:nth-child(1){animation-delay:.08s}
+    .settings-group:nth-child(2){animation-delay:.16s}
+    .settings-group:nth-child(3){animation-delay:.24s}
+    .settings-group:nth-child(4){animation-delay:.32s}
+    @keyframes slideIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+    .settings-group-title {
+        font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+        font-size: 11px; font-weight: 700; color: #2D5F5D;
+        text-transform: uppercase; letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        display: flex; align-items: center; gap: 7px;
+    }
+    .settings-group-icon { font-size: 16px; }
+
+    .settings-option {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 14px; background: #f5f7f8;
+        border-radius: 11px; margin-bottom: 9px;
+        transition: background .2s ease, transform .2s ease;
+    }
+    .settings-option:hover { background: #eaecee; transform: translateX(4px); }
+    .settings-option-label { font-size: 14px; color: #666; font-weight: 500; }
+
+    .toggle-switch {
+        position: relative; width: 50px; height: 26px;
+        background: #ccc; border-radius: 30px; cursor: pointer;
+        transition: background .3s ease;
+    }
+    .toggle-switch.active { background: #3D9B8F; }
+    .toggle-slider {
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; background: #fff; border-radius: 50%;
+        transition: transform .3s ease; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
+
+    .custom-select { position: relative; width: 130px; }
+    .custom-select select {
+        width: 100%; padding: 7px 30px 7px 11px;
+        border: 2px solid #ddd; border-radius: 8px;
+        font-size: 13px; font-weight: 500; color: #333;
+        background: #fff; cursor: pointer;
+        transition: border-color .3s ease; appearance: none;
+    }
+    .custom-select select:hover { border-color: #3D9B8F; }
+    .custom-select select:focus { outline: none; border-color: #2D5F5D; box-shadow: 0 0 0 3px rgba(61,155,143,.1); }
+    .custom-select::after {
+        content: '▼'; position: absolute;
+        right: 10px; top: 50%; transform: translateY(-50%);
+        pointer-events: none; font-size: 10px; color: #888;
+    }
+
+        /* Notificación flotante */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            z-index: 999;
+            transform: translateX(-500px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3D9B8F 0%, #6BC5B8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            letter-spacing: 0.5;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D5F5D;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .notification-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* Modo oscuro */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode header {
+            background: #2a2a2a;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode .settings-panel {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .settings-option {
+            background: #333;
+        }
+
+        body.dark-mode .settings-option:hover {
+            background: #3a3a3a;
+        }
+
+        body.dark-mode .custom-select select {
+            background: #333;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+
+        body.dark-mode .notification-toast {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .notification-title {
+            color: #6BC5B8;
+        }
+
+        body.dark-mode .notification-message {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .about-section,
+        body.dark-mode .download-area,
+        body.dark-mode footer {
+            background: #1a1a1a;
+        }
+
+    
+        body.dark-mode .download-area {
+            background: #181818;
+        }
+
+        body.dark-mode .about-card,
+        body.dark-mode .card {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        /* Tamaños de fuente */
+        body.font-small {
+            font-size: 5px;
+        }
+
+        body.font-medium {
+            font-size: 5px;
+        }
+
+        body.font-large {
+            font-size: 5px;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .notification-toast {
+                left: 15px;
+                right: 15px;
+                max-width: calc(100% - 30px);
+            }
+            
+        }
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .dropbtn {
+    .dropdown .dropbtn {
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #108d91;  /* ✅ MISMO COLOR QUE LOS DEMÁS LINKS */
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+}
+
+.dropdown .dropbtn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+    transition: width 0.3s ease;
+}
+
+.dropdown:hover .dropbtn {
+    color: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+}
+
+.dropdown:hover .dropbtn::after {
+    width: 100%;
+}
+
+/* Contenido desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0a2f3d;
+    min-width: 100%;  /* ✅ SE AJUSTA AL ANCHO DEL CONTENIDO */
+    width: max-content;  /* ✅ SE EXPANDE SEGÚN EL TEXTO */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 1000;
+    margin-top: 10px;
+    padding: 10px 0;
+    border: 1px solid rgba(63, 138, 163, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-content a {
+    color: #A8E6B8;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    white-space: nowrap;  /* ✅ EVITA QUE EL TEXTO SE PARTA */
+}
+
+.dropdown-content a:hover {
+    background: rgba(63, 138, 163, 0.2);
+    color: #92C7A3;
+    border-left: 3px solid #92C7A3;
+    padding-left: 25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border: none;
+        margin-top: 5px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        white-space: normal;  /* ✅ EN MÓVIL PERMITE SALTOS DE LÍNEA */
+    }
+}
+
+        
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"      data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"      data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"      data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+
+    <div class="Container">
+        <div class="container-info">
+            <h1>UpGrade</h1>
+            <p data-es="Transformar con inclusión, Innovar con propósito." data-en="Transform with inclusion, Innovate with purpose.">
+                Transformar con inclusión, Innovar con propósito.
+            </p>
+            <div class="container-buttons">
+                <a href="Servicios.html" class="container-btn" data-es="Ver Servicios" data-en="View Services">Ver Servicios</a>
+                <a href="Corporacion.html" class="container-btn alt" data-es="Sobre Nosotros" data-en="About Us">Sobre Nosotros</a>
+            </div>
+        </div>
+
+        <img src="Assets/image-3.png" alt="Phone">
+    </div>
+
+    <section class="about-section">
+        <h2 class="about-title" data-es="Nuestra Esencia" data-en="OUR ESSENCE">Nuestra Escencia</h2>
+
+        <div class="about-cards">
+            <div class="about-card">
+                <div class="about-image">
+                    <img src="Assets/1 MISION.png" alt="Misión">
+                </div>
+                <h3 data-es="Misión" data-en="Mission">Misión</h3>
+                <p data-es="Somos una empresa de desarrollo de software que promueve un estilo de vida saludable mediante aplicaciones integrales, intuitivas e inclusivas." data-en="We are a software development company that promotes a healthy lifestyle through comprehensive, intuitive and inclusive applications.">
+                    Somos una empresa de desarrollo de software que promueve un estilo de vida saludable mediante aplicaciones integrales, intuitivas e inclusivas.
+                </p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-image">
+                    <img src="Assets/3 VISION.png" alt="Visión">
+                </div>
+                <h3 data-es="Visión" data-en="Vision">Visión</h3>
+                <p data-es="Posicionarnos como empresa líder en desarrollo de software, enfocada en la calidad de vida de las personas, transformando sus rutinas y fomentando hábitos saludables." data-en="Position ourselves as a leading software development company, focused on people's quality of life, transforming their routines and promoting healthy habits.">
+                   Posicionarnos como empresa líder en desarrollo de software, enfocada en la calidad de vida de las personas, transformando sus rutinas y fomentando hábitos saludables.
+                </p>
+            </div>
+
+            <div class="about-card">
+                <div class="about-image">
+                    <img src="Assets/2 VALORES.png" alt="Valores">
+                </div>
+                <h3 data-es="Valores" data-en="Values">Valores</h3>
+                <p data-es="Empatía, Ética, Compromiso, Solidaridad, Integridad. Creemos en el poder de la tecnología como medio para elevar la calidad de vida y el desarrollo humano." data-en="Empathy, Ethics, Commitment, Solidarity, Integrity. We believe in the power of technology as a means to elevate quality of life and human development.">
+                    Empatía, Ética, Compromiso, Solidaridad, Integridad. Creemos en el poder de la tecnología 
+                    como medio para elevar la calidad de vida y el desarrollo humano.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <br><br><br>
+    <h2 class="CAROUSEL-PQL" data-es="¿Por qué elegirnos?" data-en="WHY CHOOSE US?">¿Por qué Elegirnos?</h2>
+    <div class="carousel-container">
+        <div class="card">
+            <div class="card-image">
+                <img src="Assets/Atencion personalizada.png">
+            </div>
+            <div class="card-content">
+                <h3 data-es="Atención personalizada" data-en="Personalized attention">Atención personalizada</h3>
+                <p data-es="Nuestro equipo y tecnología están enfocados en acompañarte de manera cercana, adaptando cada herramienta a tus necesidades específicas." data-en="Our team and technology are focused on accompanying you closely, adapting each tool to your specific needs.">Nuestro equipo y tecnología están enfocados en acompañarte de manera cercana, adaptando cada herramienta a tus necesidades específicas.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-image">
+                <img class="lugar" src="Assets/cualquier lugar.png">
+            </div>
+            <div class="card-content">
+                <h3 data-es="Accesible desde cualquier lugar" data-en="Accessible from anywhere">Accesible desde cualquier lugar</h3>
+                <p data-es="No importa dónde estés ni el dispositivo que uses, nuestras plataformas están diseñadas para acompañarte a donde vayas." data-en="No matter where you are or what device you use, our platforms are designed to go with you wherever you go.">No importa dónde estés ni el dispositivo que uses, nuestras plataformas están diseñadas para acompañarte a donde vayas.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-image">
+                <img class="reales" src="Assets/reales.png">
+            </div>
+            <div class="card-content">
+                <h3 data-es="Resultados reales y medibles" data-en="Real and measurable results">Resultados reales y medibles</h3>
+                <p data-es="Queremos que veas tu progreso. Cada paso, cada cambio y cada mejora queda registrado de forma visual y comprensible." data-en="We want you to see your progress. Every step, every change and every improvement is recorded in a visual and understandable way.">Queremos que veas tu progreso. Cada paso, cada cambio y cada mejora queda registrado de forma visual y comprensible.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-image">
+                <img class="trans" src="Assets/transformar.png">
+            </div>
+            <div class="card-content">
+                <h3 data-es="Resultados que transforman" data-en="Results that transform">Resultados que transforman</h3>
+                <p data-es="Lo que hacemos tiene impacto real. Te ayudamos a crear hábitos sólidos y sostenibles que te cambiarán." data-en="What we do has real impact. We help you create solid and sustainable habits that will change you.">Lo que hacemos tiene impacto real. Te ayudamos a crear hábitos sólidos y sostenibles que te cambiarán.</p>
+            </div>
+        </div>
+    </div>
+    <br><br><br>
+
+    <section class="download-area">
+        <h2 class="download-DWT" data-es="Descarga Nuestras Apps" data-en="Download Our Apps">Descarga Nuestras Apps</h2> 
+        <h2 class="download-STT" data-es="y mejora tu salud con nosotros" data-en="and improve your health with us">y mejora tu salud con nosotros</h2>
+
+        <div class="download-sections-wrapper">
+            <div class="download-section">
+                <div class="download-content">
+                    <h4 class="download-title">HABITUS</h4>
+                    <p class="download-description" data-es="Habitus es una aplicación de apoyo personal y atención médica primaria, con chat interactivo, recuperación, frases motivadoras y perfiles personalizados." data-en="Habitus is a personal support and primary care application, with interactive chat, recovery, motivational phrases and personalized profiles.">
+                        Habitus es una aplicación de apoyo personal y atención médica primaria, con chat interactivo, recuperación, frases motivadoras y perfiles personalizados.
+                    </p>
+                    <div class="download-buttons">
+                        <div class="app-badge-image">
+                            <img src="Assets/Goole Play.png" alt="Disponible en Google Play">
+                        </div>
+                        <a href="Inicio-HB.html" class="ver-mas-btn" data-es="Ver más" data-en="See more">Ver más</a>
+                    </div>
+                </div>
+                <div class="download-image">
+                    <img src="Assets/cellphone download.png" alt="Phone App">
+                </div>
+            </div>
+
+            <div class="download-section">
+                <div class="download-content">
+                    <h4 class="download-title">RESTORE</h4>
+                    <p class="download-description" data-es="Su propósito es brindar una herramienta integral que combine tecnología, empatía y acompañamiento digital, orientada a mejorar el bienestar del usuario mediante un sistema de seguimiento, orientación y apoyo personal." data-en="Its purpose is to provide a comprehensive tool that combines technology, empathy and digital support, aimed at improving user well-being through a system of monitoring, guidance and personal support.">
+                        Su propósito es brindar una herramienta integral que combine tecnología, empatía y acompañamiento digital, orientada a mejorar el bienestar del usuario mediante un sistema de seguimiento, orientación y apoyo personal.
+                    </p>
+                    <div class="download-buttons">
+                        <div class="app-badge-image">
+                            <img src="Assets/Goole Play.png" alt="Disponible en Google Play">
+                        </div>
+                        <a href="Inicio-RS.html" class="ver-mas-btn" data-es="Ver más" data-en="See more">Ver más</a>
+                    </div>
+                </div>
+                <div class="download-image">
+                    <img src="Assets/cellphone download.png" alt="Phone App">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-column">
+            <div class="footer-logo">
+                <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+                <span>UpGrade</span>
+            </div>
+            <p style="max-width:300px; line-height:1.4; font-size:15px;" data-es="Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral." data-en="We believe that wellbeing should be accessible to everyone, which is why we use technology as a bridge to inclusion and comprehensive development.">
+                Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la
+    tecnología como puente hacia la inclusión y el desarrollo integral.
+            </p>
+            <div class="footer-socials">
+                <span>💚</span>
+                <span>🍎</span>
+                <span>🏋️‍♂️</span>
+                <span>🌿</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Servicios" data-en="Services">Servicios</h4>
+            <ul>
+                <li><a href="#" data-es="Software Innovadores" data-en="Innovative Software">Software Innovadores</a></li>
+                <li><a href="#" data-es="Innovación" data-en="Innovation">Innovación</a></li>
+                <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Intuición" data-en="Intuition">Intuición</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Corporación" data-en="Corporation">Corporación</h4>
+            <ul>
+                <li><a href="#" data-es="Nosotros" data-en="About Us">Nosotros</a></li>
+                <li><a href="#" data-es="Misión y Visión" data-en="Mission and Vision">Misión y Visión</a></li>
+                <li><a href="#" data-es="Equipo" data-en="Team">Equipo</a></li>
+                <li><a href="#" data-es="Contacto" data-en="Contact">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Bienestar" data-en="Wellbeing">Bienestar</h4>
+            <ul>
+                <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Nutrición" data-en="Nutrition">Nutrición</a></li>
+                <li><a href="#" data-es="Ejercicio" data-en="Exercise">Ejercicio</a></li>
+                <li><a href="#" data-es="Salud Digital" data-en="Digital Health">Salud Digital</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-bottom" data-es="© 2025 UpGrade. Promoviendo innovación y bienestar." data-en="© 2025 UpGrade. Promoting innovation and wellbeing.">
+            © 2025 UpGrade. Promoviendo innovación y bienestar.
+        </div>
+    </footer>
+
+    <div class="settings-overlay" id="settingsOverlay"></div>
+
+<!-- Panel de configuración -->
+<div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+        <h4><span data-es="Configuración" data-en="Settings">Configuración</span></h4>
+        <button class="settings-close" id="settingsCloseBtn" aria-label="Cerrar">
+            ✕
+        </button>
+    </div>
+
+    <div class="settings-content">
+        <!-- Modo oscuro -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌙</span>
+                <span data-es="Apariencia" data-en="Appearance">Apariencia</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                <div class="toggle-switch" id="darkModeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tamaño de letra -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔤</span>
+                <span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                <div class="custom-select">
+                    <select id="fontSizeSelect">
+                        <option value="small" data-es="Pequeño" data-en="Small">Pequeño</option>
+                        <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                        <option value="large" data-es="Grande" data-en="Large">Grande</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Idioma -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌐</span>
+                <span data-es="Idioma" data-en="Language">Idioma</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                <div class="custom-select">
+                    <select id="languageSelect">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔔</span>
+                <span data-es="Notificaciones" data-en="Notifications">Notificaciones</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                <div class="toggle-switch active" id="notificationsToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor de notificación -->
+<div class="notification-toast" id="notificationToast">
+    <div class="notification-icon">💚</div>
+    <div class="notification-content">
+        <div class="notification-title">¡Hola!</div>
+        <div class="notification-message">Bienvenido a UpGrade</div>
+    </div>
+    <button class="notification-close" id="notificationClose" aria-label="Cerrar">✕</button>
+</div>
+<!-- JavaScript de configuración GLOBAL -->
+
+    <script>
+    // Función para detectar cuando un elemento entra en la vista
+    function revealOnScroll() {
+        const elements = document.querySelectorAll('.scroll-animate, .scroll-fade-left, .scroll-fade-right, .scroll-scale, .card, .about-card, .download-section');
+        
+        const windowHeight = window.innerHeight;
+        const revealPoint = 100;
+        
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            
+            if (elementTop < windowHeight - revealPoint) {
+                element.classList.add('show');
+            }
+        });
+    }
+
+    window.addEventListener('load', revealOnScroll);
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // ==================== SISTEMA DE CONFIGURACIÓN ====================
+
+    function initializeSettings() {
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const languageSelect = document.getElementById('languageSelect');
+        const notificationsToggle = document.getElementById('notificationsToggle');
+
+        // Cargar configuraciones guardadas
+        loadSettings();
+
+        // Abrir panel
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
+        });
+
+        // Cerrar panel
+        function closePanel() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        }
+
+        settingsCloseBtn.addEventListener('click', closePanel);
+        settingsOverlay.addEventListener('click', closePanel);
+
+        // Modo oscuro
+        darkModeToggle.addEventListener('click', () => {
+            darkModeToggle.classList.toggle('active');
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Tamaño de fuente
+        fontSizeSelect.addEventListener('change', (e) => {
+            document.body.classList.remove('font-small', 'font-medium', 'font-large');
+            document.body.classList.add(`font-${e.target.value}`);
+            localStorage.setItem('fontSize', e.target.value);
+        });
+
+        // Cambio de idioma
+        languageSelect.addEventListener('change', (e) => {
+            changeLanguage(e.target.value);
+            localStorage.setItem('language', e.target.value);
+        });
+
+        // Notificaciones
+        notificationsToggle.addEventListener('click', () => {
+            notificationsToggle.classList.toggle('active');
+            const isActive = notificationsToggle.classList.contains('active');
+            localStorage.setItem('notifications', isActive);
+            
+            if (isActive) {
+                startNotifications();
+            } else {
+                stopNotifications();
+            }
+        });
+
+        // Cerrar notificación
+        const notificationClose = document.getElementById('notificationClose');
+        notificationClose.addEventListener('click', hideNotification);
+    }
+
+    // Cargar configuraciones guardadas
+    function loadSettings() {
+        const darkMode = localStorage.getItem('darkMode') === 'true';
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').classList.add('active');
+        }
+
+        const fontSize = localStorage.getItem('fontSize') || 'medium';
+        document.body.classList.add(`font-${fontSize}`);
+        document.getElementById('fontSizeSelect').value = fontSize;
+
+        const language = localStorage.getItem('language') || 'es';
+        document.getElementById('languageSelect').value = language;
+        changeLanguage(language);
+
+        const notifications = localStorage.getItem('notifications') !== 'false';
+        if (notifications) {
+            document.getElementById('notificationsToggle').classList.add('active');
+            startNotifications();
+        } else {
+            document.getElementById('notificationsToggle').classList.remove('active');
+        }
+    }
+
+    // Cambiar idioma
+    function changeLanguage(lang) {
+        const elements = document.querySelectorAll('[data-es][data-en]');
+        elements.forEach(element => {
+            if (lang === 'es') {
+                element.textContent = element.getAttribute('data-es');
+            } else {
+                element.textContent = element.getAttribute('data-en');
+            }
+        });
+
+        const fontOptions = document.querySelectorAll('#fontSizeSelect option');
+        fontOptions.forEach(option => {
+            if (option.hasAttribute(`data-${lang}`)) {
+                option.textContent = option.getAttribute(`data-${lang}`);
+            }
+        });
+    }
+
+    // Sistema de notificaciones
+    let notificationInterval;
+    const notifications = {
+        es: [
+            { icon: '💚', title: '¡Mantente activo!', message: 'Recuerda hacer una pausa y estirarte' },
+            { icon: '💧', title: 'Hidratación', message: 'Es hora de tomar agua. Tu cuerpo te lo agradecerá' },
+            { icon: '🏋️', title: 'Tip de salud', message: 'El ejercicio regular mejora tu bienestar' },
+            { icon: '🥗', title: 'Alimentación saludable', message: 'Una buena nutrición es clave para tu salud' },
+            { icon: '😴', title: 'Descanso', message: 'Dormir bien es fundamental para tu salud' },
+            { icon: '🧘', title: 'Relájate', message: 'Toma un momento para respirar profundamente' },
+            { icon: '📱', title: 'UpGrade te recuerda', message: 'Cuida tu postura mientras usas dispositivos' },
+            { icon: '🌟', title: '¡Sigue así!', message: 'Cada pequeño paso cuenta hacia un estilo de vida saludable' }
+        ],
+        en: [
+            { icon: '💚', title: 'Stay active!', message: 'Remember to take a break and stretch' },
+            { icon: '💧', title: 'Hydration', message: "It's time to drink water. Your body will thank you" },
+            { icon: '🏋️', title: 'Health tip', message: 'Regular exercise improves your wellbeing' },
+            { icon: '🥗', title: 'Healthy eating', message: 'Good nutrition is key to your health' },
+            { icon: '😴', title: 'Rest', message: 'Sleeping well is essential for your health' },
+            { icon: '🧘', title: 'Relax', message: 'Take a moment to breathe deeply' },
+            { icon: '📱', title: 'UpGrade reminds you', message: 'Take care of your posture while using devices' },
+            { icon: '🌟', title: 'Keep it up!', message: 'Every small step counts towards a healthy lifestyle' }
+        ]
+    };
+
+    function showNotification() {
+        const isActive = document.getElementById('notificationsToggle').classList.contains('active');
+        if (!isActive) return;
+
+        const language = localStorage.getItem('language') || 'es';
+        const notificationList = notifications[language];
+        const randomNotification = notificationList[Math.floor(Math.random() * notificationList.length)];
+
+        const toast = document.getElementById('notificationToast');
+        const icon = toast.querySelector('.notification-icon');
+        const title = toast.querySelector('.notification-title');
+        const message = toast.querySelector('.notification-message');
+
+        icon.textContent = randomNotification.icon;
+        title.textContent = randomNotification.title;
+        message.textContent = randomNotification.message;
+
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            hideNotification();
+        }, 5000);
+    }
+
+    function hideNotification() {
+        const toast = document.getElementById('notificationToast');
+        toast.classList.remove('show');
+    }
+
+    function startNotifications() {
+        if (notificationInterval) {
+            clearInterval(notificationInterval);
+        }
+
+        setTimeout(showNotification, 5000);
+        notificationInterval = setInterval(showNotification, 120000);
+    }
+
+    function stopNotifications() {
+        if (notificationInterval) {
+            clearInterval(notificationInterval);
+            notificationInterval = null;
+        }
+        hideNotification();
+    }
+
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const settingsPanel = document.getElementById('settingsPanel');
+            if (settingsPanel && settingsPanel.classList.contains('active')) {
+                settingsPanel.classList.remove('active');
+                document.getElementById('settingsOverlay').classList.remove('active');
+            }
+        }
+        
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('settingsPanel').classList.add('active');
+            document.getElementById('settingsOverlay').classList.add('active');
+        }
+    });
+
+    // Inicializar configuraciones
+    initializeSettings();
+    </script>
+
+</body>
+</html>

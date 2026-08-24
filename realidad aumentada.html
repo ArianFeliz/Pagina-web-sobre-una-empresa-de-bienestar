@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade - Tecnología 3D y RA</title>
+
+    <style>
+        /* ==================== FUENTES ==================== */
+        @font-face { font-family: Gildeon;  src: url(Gildeon.otf); }
+        @font-face { font-family: BebasNeue; src: url(BebasNeue-Regular.otf); }
+        @font-face { font-family: Nexa;     src: url(Nexa-Heavy.ttf); }
+
+        /* ==================== VARIABLES ==================== */
+        :root {
+            --c-primary:   #3f8aa3;
+            --c-accent:    #A8E6B8;
+            --c-accent2:   #92C7A3;
+            --c-green:     #6edab1;
+            --c-bg:        #1a6179;
+            --c-header:    #0f3d50;
+            --c-mid:       #0e4a5a;
+            --c-text:      #e0f2f1;
+            --c-muted:     rgba(255,255,255,0.75);
+            --radius:      20px;
+            --shadow:      0 20px 60px rgba(0,0,0,0.45);
+            --transition:  0.35s cubic-bezier(0.4,0,0.2,1);
+
+            /* Font sizes — controlados por settings */
+            --fs-h1: 80px;
+            --fs-h2: 56px;
+            --fs-h3: 22px;
+            --fs-p:  16px;
+            --fs-nav:15.5px;
+        }
+
+        body.font-small  { --fs-h1:56px; --fs-h2:40px; --fs-h3:17px; --fs-p:13px; --fs-nav:14px; }
+        body.font-medium { --fs-h1:80px; --fs-h2:56px; --fs-h3:22px; --fs-p:16px; --fs-nav:17.5px; }
+        body.font-large  { --fs-h1:96px; --fs-h2:68px; --fs-h3:27px; --fs-p:19px; --fs-nav:17px; }
+
+        /* ==================== RESET ==================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+        html::-webkit-scrollbar { display: none; }
+
+        body {
+            background: var(--c-bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--c-text);
+            overflow-x: hidden;
+        }
+
+        /* ==================== DARK MODE ==================== */
+        body.dark-mode {
+            --c-bg:#121212; --c-header:#1a1a1a;
+            --c-accent:#cacaca; --c-accent2:#aaa; --c-green:#777;
+        }
+        body.dark-mode header                 { background:#1a1a1a; }
+        body.dark-mode header nav a,
+        body.dark-mode .dropdown .dropbtn     { color:#777; }
+        body.dark-mode .brand-name            { background:linear-gradient(135deg,#888,#bbb); -webkit-background-clip:text; background-clip:text; }
+        body.dark-mode .section-3d            { background:linear-gradient(100deg,#1a2a38,#0e3a40); }
+        body.dark-mode .section-ra            { background:linear-gradient(80deg,#162030,#1e3530); }
+        body.dark-mode .section-benefits      { background:linear-gradient(100deg,#1a2a38,#0e3a40); }
+        /* app section elements */
+        body.dark-mode .app-tag               { background:rgba(180,180,180,.07); border-color:rgba(180,180,180,.18); color:#999; }
+        body.dark-mode .app-title             { color:#c0c0c0; text-shadow:none; }
+        body.dark-mode .app-title::after      { background:linear-gradient(90deg,#555,transparent); }
+        body.dark-mode .app-description       { border-left-color:#555; color:rgba(255,255,255,.6); }
+        body.dark-mode .benefit-dot           { background:#666; box-shadow:none; }
+        body.dark-mode .benefit-item          { border-color:rgba(255,255,255,.05); }
+        body.dark-mode .benefit-item:hover    { background:rgba(255,255,255,.05); }
+        body.dark-mode .screenshot-card       { background:linear-gradient(145deg,#1e1e1e,#282828); border-color:rgba(255,255,255,.1); }
+        body.dark-mode .screenshot-label      { color:rgba(255,255,255,.35); }
+        body.dark-mode .benefits-title        { color:#c0c0c0; text-shadow:none; }
+        body.dark-mode .benefit-card          { background:linear-gradient(145deg,rgba(28,28,28,.9),rgba(38,38,38,.7)); border-color:rgba(255,255,255,.07); }
+        body.dark-mode .benefit-card h3       { color:#aaa; }
+        body.dark-mode .benefits-summary      { border-color:rgba(255,255,255,.07); }
+        /* settings */
+        body.dark-mode .settings-panel        { background:#222; }
+        body.dark-mode .settings-group-title  { color:#777; }
+        body.dark-mode .settings-option       { background:#2e2e2e; }
+        body.dark-mode .settings-option:hover { background:#383838; }
+        body.dark-mode .custom-select select  { background:#2e2e2e; color:#e0e0e0; border-color:#444; }
+        /* toast */
+        body.dark-mode .notification-toast    { background:#222; }
+        body.dark-mode .notification-title    { color:#999; }
+        body.dark-mode .notification-message  { color:#b0b0b0; }
+        /* footer */
+        body.dark-mode footer                 { background:linear-gradient(135deg,#0d0d0d,#181818); }
+        body.dark-mode .footer-logo span      { background:linear-gradient(135deg,#666,#999); -webkit-background-clip:text; background-clip:text; }
+        body.dark-mode .footer-column h4      { color:#777; }
+        body.dark-mode .footer-column ul li a { color:#666; }
+        body.dark-mode .footer-bottom         { color:#555; }
+
+        /* ==================== HEADER ==================== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background: var(--c-header);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .logo-container { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+        .logo-container a { text-decoration:none; }
+        header img { width:58px; height:75px; object-fit:contain; }
+
+        .brand-name {
+            font-family: Gildeon, sans-serif;
+            font-size: 34px;
+            background: linear-gradient(135deg,#3f8aa3 20%,#A8E6B8 55%,#8fc5d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            font-weight: bold;
+            position: relative;
+        }
+        .brand-name::after {
+            content:'';
+            position:absolute; bottom:-4px; left:0;
+            width:100%; height:2px;
+            background: linear-gradient(30deg,transparent,#00BCD4,transparent);
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%,100% { opacity:.5; filter:blur(1px); }
+            50%      { opacity:1; filter:blur(0); }
+        }
+
+        header nav {
+            display:flex; align-items:center; gap:30px;
+            position:absolute; left:50%; transform:translateX(-50%);
+        }
+        header nav a, .dropdown .dropbtn {
+            text-decoration:none; color:var(--c-primary);
+            font-weight:500; font-size:var(--fs-nav);
+            font-family:'Segoe UI',sans-serif;
+            transition:color var(--transition);
+            position:relative; cursor:pointer;
+        }
+        header nav a::after, .dropdown .dropbtn::after {
+            content:''; position:absolute; bottom:-4px; left:0;
+            width:0; height:2px; background:var(--c-primary);
+            transition:width var(--transition);
+        }
+        header nav a:hover, .dropdown:hover .dropbtn { color:var(--c-accent2); }
+        header nav a:hover::after, .dropdown:hover .dropbtn::after { width:100%; }
+
+        .dropdown { position:relative; display:inline-block; }
+        .dropdown-content {
+            display:none; position:absolute;
+            top:calc(100% + 10px); left:0;
+            background:#0a2f3d; width:max-content; min-width:100%;
+            box-shadow:0 8px 25px rgba(0,0,0,0.35);
+            border-radius:10px; z-index:1000;
+            padding:8px 0; border:1px solid rgba(63,138,163,0.3);
+            animation:slideDown .25s ease both;
+        }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:none} }
+        .dropdown-content a {
+            color:var(--c-accent); padding:11px 20px; display:block;
+            font-size:14px; white-space:nowrap; transition:all .2s ease;
+            border-left:3px solid transparent; text-decoration:none;
+        }
+        .dropdown-content a:hover { background:rgba(63,138,163,.2); color:var(--c-accent2); border-left-color:var(--c-accent2); padding-left:26px; }
+        .dropdown:hover .dropdown-content { display:block; }
+
+        .settings-btn-menu {
+            background:transparent; border:none; cursor:pointer;
+            width:42px; height:42px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:22px; transition:transform .3s ease; flex-shrink:0;
+        }
+        .settings-btn-menu:hover { transform:scale(1.1) rotate(90deg); }
+
+        /* ==================== HERO BANNER ==================== */
+        .hero {
+            width:100%; height:280px;
+            background: linear-gradient(100deg,#1b5a72 0%,#256377 50%,#1b5a72 100%);
+            display:flex; align-items:center; justify-content:center;
+            position:relative; overflow:hidden;
+        }
+        .hero::before {
+            content:'';
+            position:absolute; inset:0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(168,230,184,.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(107,197,184,.08) 0%, transparent 50%);
+        }
+        .deco {
+            position:absolute; border-radius:50%;
+            background:linear-gradient(135deg,#3f8aa3,#92C7A3);
+            opacity:.18; pointer-events:none;
+        }
+        .deco-1 { width:280px; height:280px; top:-140px; left:-140px; animation:floatDeco 6s ease-in-out infinite; }
+        .deco-2 { width:200px; height:200px; bottom:-100px; right:-100px; animation:floatDeco 8s ease-in-out infinite reverse; }
+        @keyframes floatDeco {
+            0%,100% { transform:translateY(0) scale(1); }
+            50%      { transform:translateY(-25px) scale(1.08); }
+        }
+        .particle-dot {
+            position:absolute; border-radius:50%;
+            background:radial-gradient(circle,#A8E6B8,#6edab1);
+            box-shadow:0 0 15px rgba(168,230,184,.7);
+            animation:particleFloat 8s ease-in-out infinite;
+            pointer-events:none; z-index:5;
+        }
+        .p1 { width:12px; height:12px; top:35%; left:15%; animation-delay:3s; }
+        .p2 { width:12px; height:12px; top:35%; right:15%; animation-delay:3s; }
+        @keyframes particleFloat {
+            0%,100% { transform:translateY(0) scale(1); opacity:.6; }
+            50%      { transform:translateY(-30px) scale(1.2); opacity:.9; }
+        }
+
+        .banner-content { position:relative; z-index:10; text-align:center; line-height:1.1; }
+        .banner-question {
+            font-family: Gildeon, sans-serif;
+            font-size: var(--fs-h1);
+            color:#fff;
+            text-shadow:1px 1px 20px rgba(226,240,239,.9);
+            letter-spacing:-1px;
+            animation:fadeInDown .9s ease-out both;
+        }
+        .banner-subtitle {
+            font-family: Gildeon, sans-serif;
+            font-size: clamp(32px, 5vw, 62px);
+            background:linear-gradient(135deg,#A8E6B8,#92C7A3);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text;
+            letter-spacing:2px;
+            animation:fadeInUp .9s ease-out .25s both;
+        }
+        @keyframes fadeInDown { from{opacity:0;transform:translateY(-24px)} to{opacity:1;transform:none} }
+        @keyframes fadeInUp   { from{opacity:0;transform:translateY(24px)}  to{opacity:1;transform:none} }
+
+        /* ==================== APP SECTIONS ==================== */
+        .app-section {
+            padding: 80px 60px;
+            position: relative;
+            /* SIN overflow:hidden — no corta el contenido */
+        }
+        .section-3d {
+            background: linear-gradient(100deg,#213659 0%,#0e5a62 100%);
+        }
+        .section-ra {
+            background: linear-gradient(80deg,#1a3d4f 0%,#2a5a50 100%);
+        }
+        .section-benefits {
+            background: linear-gradient(100deg,#213659 0%,#0e5a62 100%);
+            padding: 80px 60px;
+        }
+
+        /* Glow ambient de fondo */
+        .app-section::before {
+            content:'';
+            position:absolute; inset:0; pointer-events:none; z-index:0;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(168,230,184,.06) 0%, transparent 45%),
+                radial-gradient(circle at 85% 50%, rgba(107,197,184,.06) 0%, transparent 45%);
+        }
+
+        /* ==================== LAYOUT PRINCIPAL ==================== */
+        .content-wrapper {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+            flex-wrap: nowrap !important;
+        }
+
+        /* Reverse para alternar lado del teléfono */
+        .content-wrapper.reverse { flex-direction: row-reverse !important; }
+
+        /* ==================== PHONE MOCKUP ==================== */
+        .phone-mockup {
+            flex: 0 0 300px !important;
+            width: 300px !important;
+            height: 580px;
+            background: linear-gradient(145deg,#1a1a1a,#2d2d2d);
+            border-radius: 36px;
+            padding: 12px;
+            box-shadow:
+                0 40px 80px rgba(0,0,0,0.65),
+                inset 0 1px 3px rgba(255,255,255,.12),
+                0 0 50px rgba(168,230,184,.15);
+            border: 2.5px solid rgba(255,255,255,.09);
+            position: relative;
+            animation: phoneFloat 6s ease-in-out infinite;
+            align-self: center;
+        }
+        @keyframes phoneFloat {
+            0%,100% { transform:translateY(0) rotateZ(-1.5deg); }
+            50%      { transform:translateY(-14px) rotateZ(1.5deg); }
+        }
+        .phone-mockup:hover {
+            transform:translateY(-16px) rotateY(6deg) !important;
+            box-shadow:0 55px 100px rgba(0,0,0,.75), 0 0 60px rgba(168,230,184,.35);
+            transition: transform .4s ease, box-shadow .4s ease;
+        }
+        .phone-screen {
+            width:100%; height:100%;
+            background:linear-gradient(135deg,#0e5c73,#1a7d9a,#0e5c73);
+            border-radius:26px;
+            position:relative; overflow:hidden;
+            box-shadow:inset 0 0 40px rgba(0,0,0,.5);
+            animation:screenGlow 4s ease-in-out infinite;
+        }
+        @keyframes screenGlow {
+            0%,100% { box-shadow:inset 0 0 30px rgba(168,230,184,.25); }
+            50%      { box-shadow:inset 0 0 50px rgba(168,230,184,.45); }
+        }
+        .phone-notch {
+            width:90px; height:20px;
+            background:#0a0a0a; border-radius:0 0 16px 16px;
+            position:absolute; top:0; left:50%; transform:translateX(-50%);
+            z-index:20; box-shadow:0 4px 12px rgba(0,0,0,.8);
+        }
+        /* Ícono central en pantalla */
+        .phone-screen-icon {
+            position:absolute; top:50%; left:50%;
+            transform:translate(-50%,-50%);
+            font-size:52px; opacity:.4;
+            animation:iconPulse 3s ease-in-out infinite;
+        }
+        @keyframes iconPulse {
+            0%,100% { transform:translate(-50%,-50%) scale(1); opacity:.4; }
+            50%      { transform:translate(-50%,-50%) scale(1.12); opacity:.65; }
+        }
+
+        /* ==================== APP INFO ==================== */
+        .app-info {
+            flex: 1 1 0% !important;
+            min-width: 0;
+            max-width: 680px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .app-tag {
+            display:inline-flex; align-items:center; gap:8px;
+            background:rgba(168,230,184,.12);
+            border:1px solid rgba(168,230,184,.3);
+            border-radius:50px;
+            padding:6px 16px;
+            font-size:12px; font-weight:600;
+            color:var(--c-accent); letter-spacing:1.2px;
+            text-transform:uppercase;
+            width:fit-content;
+        }
+
+        .app-title {
+            font-family: BebasNeue, sans-serif;
+            font-size: var(--fs-h2);
+            font-weight:700;
+            letter-spacing: 4px;
+            line-height: 1;
+            color: var(--c-accent);
+            text-shadow:
+                0 0 40px rgba(168,230,184,.3),
+                0 2px 4px rgba(0,0,0,.4);
+            position:relative;
+        }
+        .app-title::after {
+            content:'';
+            display:block;
+            width:60px; height:3px;
+            background:linear-gradient(90deg,var(--c-green),transparent);
+            border-radius:2px;
+            margin-top:12px;
+        }
+
+        .app-description {
+            font-size: var(--fs-p);
+            font-weight:400; line-height:1.75;
+            color:var(--c-muted);
+            text-align:justify;
+            padding:20px 22px;
+            background:rgba(255,255,255,.04);
+            border-radius:14px;
+            border-left:3px solid var(--c-green);
+            backdrop-filter:blur(6px);
+        }
+
+        .benefits-list {
+            display:flex; flex-direction:column; gap:10px;
+        }
+        .benefit-item {
+            display:flex; align-items:center; gap:12px;
+            padding:10px 16px;
+            background:rgba(255,255,255,.04);
+            border-radius:10px;
+            font-size:clamp(13px,1.1vw,15px);
+            color:rgba(255,255,255,.88);
+            transition:background var(--transition), transform var(--transition);
+            border:1px solid rgba(168,230,184,.08);
+        }
+        .benefit-item:hover { background:rgba(168,230,184,.08); transform:translateX(5px); }
+        .benefit-dot {
+            width:8px; height:8px; border-radius:50%;
+            background:var(--c-green); flex-shrink:0;
+            box-shadow:0 0 8px rgba(110,218,177,.6);
+        }
+
+        /* ==================== SCREENSHOTS GRID ==================== */
+        .screenshots-grid {
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:12px;
+            margin-top:4px;
+        }
+
+        .screenshot-card {
+            background:linear-gradient(145deg,#0e5c73,#1a7d9a);
+            border-radius:12px;
+            aspect-ratio: 9/16;
+            display:flex; flex-direction:column;
+            align-items:center; justify-content:center; gap:8px;
+            box-shadow:0 10px 30px rgba(0,0,0,.55);
+            border:1.5px solid rgba(168,230,184,.25);
+            cursor:pointer;
+            transition:transform .4s cubic-bezier(.175,.885,.32,1.275), box-shadow .4s ease, border-color .4s ease;
+            position:relative; overflow:hidden;
+        }
+        .screenshot-card::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(circle at 50% 30%, rgba(255,255,255,.18), transparent 65%);
+            opacity:0; transition:opacity .4s ease;
+            pointer-events:none;
+        }
+        .screenshot-card:hover { transform:translateY(-10px) scale(1.05); box-shadow:0 20px 50px rgba(0,0,0,.7), 0 0 25px rgba(168,230,184,.4); border-color:rgba(168,230,184,.6); }
+        .screenshot-card:hover::before { opacity:1; }
+        .screenshot-icon { font-size:28px; filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)); }
+        .screenshot-label { font-size:10px; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.8px; }
+
+        /* ==================== BENEFITS SECTION ==================== */
+        .benefits-title {
+            font-family: BebasNeue, sans-serif;
+            font-size:var(--fs-h2);
+            color:var(--c-accent);
+            letter-spacing:4px;
+            text-align:center;
+            margin-bottom:50px;
+            text-shadow:0 0 30px rgba(168,230,184,.25);
+        }
+
+        .benefits-grid {
+            display:grid;
+            grid-template-columns:repeat(3,1fr);
+            gap:24px;
+            max-width:900px;
+            margin:0 auto 50px;
+        }
+
+        .benefit-card {
+            background:linear-gradient(145deg,rgba(14,92,115,.7),rgba(26,125,154,.5));
+            border-radius:var(--radius);
+            padding:36px 28px;
+            text-align:center;
+            border:1.5px solid rgba(168,230,184,.2);
+            box-shadow:0 12px 35px rgba(0,0,0,.4);
+            transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            backdrop-filter:blur(6px);
+        }
+        .benefit-card:hover { transform:translateY(-10px); box-shadow:0 20px 55px rgba(0,0,0,.55), 0 0 20px rgba(168,230,184,.15); border-color:rgba(168,230,184,.45); }
+        .benefit-card-icon { font-size:48px; margin-bottom:16px; display:block; }
+        .benefit-card h3 { font-family:'Segoe UI',sans-serif; font-size:var(--fs-h3); color:var(--c-accent); margin-bottom:10px; font-weight:700; }
+        .benefit-card p { font-size:clamp(13px,1vw,15px); color:var(--c-muted); line-height:1.6; }
+
+        .benefits-summary {
+            max-width:780px; margin:0 auto;
+            font-size:var(--fs-p); line-height:1.75;
+            color:var(--c-muted); text-align:center;
+            padding:24px 28px;
+            background:rgba(255,255,255,.04);
+            border-radius:var(--radius);
+            border:1px solid rgba(168,230,184,.12);
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background:linear-gradient(135deg,#0e3e4f,#1a6179);
+            color:var(--c-text);
+            font-family:'Gill Sans',Calibri,'Trebuchet MS',sans-serif;
+            padding:50px 70px 30px;
+            display:flex; justify-content:space-between;
+            align-items:flex-start; flex-wrap:wrap; gap:30px;
+            border-top:2px solid rgba(146,199,163,.25);
+            box-shadow:0 -8px 35px rgba(0,0,0,.35);
+            border-top-left-radius:28px; border-top-right-radius:28px;
+            position:relative; overflow:hidden;
+        }
+        footer::before {
+            content:''; position:absolute; inset:-50%;
+            background:radial-gradient(circle at center,rgba(63,138,163,.12),transparent 65%);
+            animation:footerGlow 12s ease-in-out infinite alternate;
+            pointer-events:none;
+        }
+        @keyframes footerGlow { from{transform:scale(1);opacity:.7} to{transform:scale(1.2);opacity:.35} }
+
+        .footer-column { flex:1; min-width:200px; z-index:2; }
+        .footer-logo { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+        .footer-logo img { width:50px; height:62px; object-fit:contain; }
+        .footer-logo span {
+            font-family:Gildeon,sans-serif; font-size:30px;
+            background:linear-gradient(135deg,#3f8aa3 20%,#A8E6B8 80%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text; font-weight:bold; letter-spacing:2px;
+        }
+        .footer-column > p { max-width:280px; line-height:1.55; font-size:14px; color:#c0dce3; }
+        .footer-socials { display:flex; gap:16px; margin-top:14px; font-size:22px; }
+        .footer-socials span { cursor:default; transition:transform .3s ease; }
+        .footer-socials span:hover { transform:scale(1.2); }
+        .footer-column h4 { font-size:18px; color:var(--c-accent2); margin-bottom:12px; letter-spacing:1px; }
+        .footer-column ul { list-style:none; }
+        .footer-column ul li { margin-bottom:6px; }
+        .footer-column ul li a { text-decoration:none; color:var(--c-text); font-size:14px; transition:color .3s ease, padding-left .3s ease; }
+        .footer-column ul li a:hover { color:var(--c-accent); padding-left:5px; }
+        .footer-bottom { width:100%; text-align:center; padding-top:16px; border-top:1px solid rgba(255,255,255,.12); font-size:14px; color:#b8e6c3; letter-spacing:.4px; }
+
+        /* ==================== SETTINGS PANEL ==================== */
+        /* ==================== SETTINGS PANEL ==================== */
+    .settings-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1000; opacity: 0; visibility: hidden;
+        transition: all .3s ease;
+    }
+    .settings-overlay.active { opacity: 1; visibility: visible; }
+
+    .settings-panel {
+        background: #f0f0f0;
+        position: fixed; top: 0; right: -400px;
+        width: 380px; height: 100vh;
+        box-shadow: -5px 0 30px rgba(0,0,0,.3);
+        z-index: 1001;
+        transition: right .4s cubic-bezier(.68,-.55,.265,1.55);
+        overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+    .settings-panel.active { right: 0; }
+
+    .settings-header {
+        background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+        color: #fff; padding: 24px 26px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-shrink: 0;
+    }
+    .settings-header h4 {
+        font-family: BebasNeue, 'Bebas Neue', sans-serif;
+        font-size: 40px; color: #fff;
+        letter-spacing: 1px; margin: 10;
+    }
+    .settings-close {
+        background: rgba(255,255,255,.2); border: none; color: #fff;
+        width: 33px; height: 33px; border-radius: 50%;
+        cursor: pointer; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .3s ease, transform .3s ease;
+    }
+    .settings-close:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+
+    .settings-content { padding: 24px 20px; flex: 1; }
+
+    .settings-group {
+        margin-bottom: 24px;
+        animation: slideIn .45s ease both;
+        opacity: 0;
+    }
+    .settings-group:nth-child(1){animation-delay:.08s}
+    .settings-group:nth-child(2){animation-delay:.16s}
+    .settings-group:nth-child(3){animation-delay:.24s}
+    .settings-group:nth-child(4){animation-delay:.32s}
+    @keyframes slideIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+    .settings-group-title {
+        font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+        font-size: 11px; font-weight: 700; color: #2D5F5D;
+        text-transform: uppercase; letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        display: flex; align-items: center; gap: 7px;
+    }
+    .settings-group-icon { font-size: 16px; }
+
+    .settings-option {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 14px; background: #f5f7f8;
+        border-radius: 11px; margin-bottom: 9px;
+        transition: background .2s ease, transform .2s ease;
+    }
+    .settings-option:hover { background: #eaecee; transform: translateX(4px); }
+    .settings-option-label { font-size: 14px; color: #666; font-weight: 500; }
+
+    .toggle-switch {
+        position: relative; width: 50px; height: 26px;
+        background: #ccc; border-radius: 30px; cursor: pointer;
+        transition: background .3s ease;
+    }
+    .toggle-switch.active { background: #3D9B8F; }
+    .toggle-slider {
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; background: #fff; border-radius: 50%;
+        transition: transform .3s ease; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
+
+    .custom-select { position: relative; width: 130px; }
+    .custom-select select {
+        width: 100%; padding: 7px 30px 7px 11px;
+        border: 2px solid #ddd; border-radius: 8px;
+        font-size: 13px; font-weight: 500; color: #333;
+        background: #fff; cursor: pointer;
+        transition: border-color .3s ease; appearance: none;
+    }
+    .custom-select select:hover { border-color: #3D9B8F; }
+    .custom-select select:focus { outline: none; border-color: #2D5F5D; box-shadow: 0 0 0 3px rgba(61,155,143,.1); }
+    .custom-select::after {
+        content: '▼'; position: absolute;
+        right: 10px; top: 50%; transform: translateY(-50%);
+        pointer-events: none; font-size: 10px; color: #888;
+    }
+        /* ==================== NOTIFICATION TOAST ==================== */
+        .notification-toast {
+            position:fixed; bottom:28px; left:28px; max-width:340px;
+            background:#fff; border-radius:14px;
+            box-shadow:0 8px 30px rgba(0,0,0,.18);
+            padding:18px 18px 18px 16px;
+            display:flex; align-items:flex-start; gap:14px;
+            z-index:999;
+            transform:translateX(-400px); opacity:0;
+            transition:transform .45s cubic-bezier(.68,-.55,.265,1.55), opacity .45s ease;
+            border-left:4px solid #3D9B8F;
+        }
+        .notification-toast.show { transform:none; opacity:1; }
+        .notification-icon { width:40px; height:40px; background:linear-gradient(135deg,#3D9B8F,#6BC5B8); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+        .notification-content { flex:1; }
+        .notification-title { font-size:14px; font-weight:700; color:#2D5F5D; margin-bottom:3px; }
+        .notification-message { font-size:13px; color:#666; line-height:1.4; }
+        .notification-close { background:transparent; border:none; color:#aaa; cursor:pointer; font-size:17px; width:22px; height:22px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:all .2s ease; flex-shrink:0; }
+        .notification-close:hover { background:#f0f0f0; color:#333; }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1100px) {
+            .app-section { padding:70px 40px; }
+            .content-wrapper { gap:45px; }
+        }
+        @media (max-width: 700px) {
+            .content-wrapper,
+            .content-wrapper.reverse {
+                flex-direction: column !important;
+                align-items: center;
+                gap: 40px;
+            }
+            .phone-mockup { flex: 0 0 160px !important; width:160px !important; height:320px; }
+            .screenshots-grid { grid-template-columns:repeat(2,1fr); }
+        }
+        @media (max-width: 768px) {
+            header { flex-wrap:wrap; position:relative; }
+            header nav { position:static; transform:none; width:100%; justify-content:center; margin-top:12px; flex-wrap:wrap; gap:16px; }
+            .settings-btn-menu { position:absolute; right:16px; top:16px; }
+            .settings-panel { width:100%; right:-100%; }
+            .notification-toast { left:14px; right:14px; max-width:none; }
+            .benefits-grid { grid-template-columns:1fr; max-width:400px; }
+            .app-section { padding:50px 24px; }
+            .hero { height:220px; }
+            footer { padding:40px 28px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"      data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"      data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"      data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+
+    <!-- ==================== HERO ==================== -->
+    <div class="hero">
+        <div class="deco deco-1"></div>
+        <div class="deco deco-2"></div>
+        <div class="particle-dot p1"></div>
+        <div class="particle-dot p2"></div>
+        <div class="banner-content">
+            <div class="banner-question" data-es="Tecnología Inmersiva" data-en="Immersive Technology">Tecnología Inmersiva</div>
+            <div class="banner-subtitle" data-es="3D & Realidad Aumentada" data-en="3D & Augmented Reality">3D & Realidad Aumentada</div>
+        </div>
+    </div>
+
+    <!-- ==================== SECCIÓN VISIÓN 3D ==================== -->
+    <section class="app-section section-3d">
+        <div class="content-wrapper">
+
+            <!-- TELÉFONO izquierda -->
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen-icon">🔬</div>
+                </div>
+            </div>
+
+            <!-- INFO derecha -->
+            <div class="app-info">
+                <span class="app-tag">✦ &nbsp;Modelado Tridimensional</span>
+
+                <h2 class="app-title" data-es="VISIÓN 3D" data-en="3D VISION">VISIÓN 3D</h2>
+
+                <p class="app-description"
+                   data-es="Hemos implementado tecnología de modelado tridimensional en todos nuestros software de bienestar. Esta innovación permite visualizar procesos fisiológicos, estructuras anatómicas y rutinas de ejercicio con un realismo sin precedentes. Los usuarios ahora pueden explorar modelos 3D interactivos del cuerpo humano, entender su funcionamiento y seguir planes de recuperación con mayor claridad y precisión."
+                   data-en="We have implemented 3D modeling technology in all our wellness software. This innovation allows visualizing physiological processes, anatomical structures and exercise routines with unprecedented realism. Users can now explore interactive 3D models of the human body, understand its functioning and follow recovery plans with greater clarity and precision.">
+                    Hemos implementado tecnología de modelado tridimensional en todos nuestros software de bienestar. Esta innovación permite visualizar procesos fisiológicos, estructuras anatómicas y rutinas de ejercicio con un realismo sin precedentes.
+                </p>
+
+                <div class="benefits-list">
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Mayor comprensión de procesos de salud" data-en="Better understanding of health processes">Mayor comprensión de procesos de salud</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Visualización detallada de anatomía" data-en="Detailed anatomy visualization">Visualización detallada de anatomía</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Rutinas de ejercicio más efectivas" data-en="More effective exercise routines">Rutinas de ejercicio más efectivas</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Seguimiento preciso de progreso" data-en="Precise progress tracking">Seguimiento preciso de progreso</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Reducción de errores en interpretación" data-en="Reduced interpretation errors">Reducción de errores en interpretación</span></div>
+                </div>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card"><div class="screenshot-icon">🔬</div><div class="screenshot-label" data-es="Anatomía" data-en="Anatomy">Anatomía</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">💪</div><div class="screenshot-label" data-es="Músculo" data-en="Muscle">Músculo</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">🏃</div><div class="screenshot-label" data-es="Rutina" data-en="Routine">Rutina</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">📈</div><div class="screenshot-label" data-es="Progreso" data-en="Progress">Progreso</div></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== SECCIÓN REALIDAD AUMENTADA ==================== -->
+    <section class="app-section section-ra">
+        <div class="content-wrapper reverse">
+
+            <!-- TELÉFONO derecha (por el reverse) -->
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen-icon">👁️</div>
+                </div>
+            </div>
+
+            <!-- INFO izquierda -->
+            <div class="app-info">
+                <span class="app-tag">✦ &nbsp;Realidad Aumentada</span>
+
+                <h2 class="app-title" data-es="REALIDAD AUMENTADA" data-en="AUGMENTED REALITY">REALIDAD AUMENTADA</h2>
+
+                <p class="app-description"
+                   data-es="Nuestra tecnología de Realidad Aumentada transforma la experiencia de bienestar. Superponiendo información digital sobre el mundo real, los usuarios pueden ver guías de ejercicio correctas, recibir instrucciones paso a paso para rehabilitación y monitorear sus progresos en tiempo real."
+                   data-en="Our Augmented Reality technology transforms the wellness experience. By overlaying digital information on the real world, users can see correct exercise guides, receive step-by-step rehabilitation instructions and monitor their progress in real time.">
+                    Nuestra tecnología de Realidad Aumentada transforma la experiencia de bienestar. Superponiendo información digital sobre el mundo real, los usuarios pueden ver guías de ejercicio correctas, recibir instrucciones paso a paso para rehabilitación y monitorear sus progresos en tiempo real.
+                </p>
+
+                <div class="benefits-list">
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Ejercicios guiados en tiempo real" data-en="Real-time guided exercises">Ejercicios guiados en tiempo real</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Rehabilitación más segura y precisa" data-en="Safer and more precise rehabilitation">Rehabilitación más segura y precisa</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Motivación aumentada con gamificación" data-en="Increased motivation with gamification">Motivación aumentada con gamificación</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Supervisión remota de profesionales" data-en="Remote professional supervision">Supervisión remota de profesionales</span></div>
+                    <div class="benefit-item"><div class="benefit-dot"></div><span data-es="Adaptación personalizada a cada usuario" data-en="Personalized adaptation for each user">Adaptación personalizada a cada usuario</span></div>
+                </div>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card"><div class="screenshot-icon">👁️</div><div class="screenshot-label" data-es="Visión AR" data-en="AR Vision">Visión AR</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">🎯</div><div class="screenshot-label" data-es="Precisión" data-en="Precision">Precisión</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">🏆</div><div class="screenshot-label" data-es="Logros" data-en="Achievements">Logros</div></div>
+                    <div class="screenshot-card"><div class="screenshot-icon">🔄</div><div class="screenshot-label" data-es="Progreso" data-en="Progress">Progreso</div></div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== SECCIÓN BENEFICIOS ==================== -->
+    <section class="app-section section-benefits">
+        <h2 class="benefits-title" data-es="VENTAJAS DE NUESTRA TECNOLOGÍA" data-en="ADVANTAGES OF OUR TECHNOLOGY">VENTAJAS DE NUESTRA TECNOLOGÍA</h2>
+
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <span class="benefit-card-icon">📱</span>
+                <h3 data-es="Interactividad" data-en="Interactivity">Interactividad</h3>
+                <p data-es="Experiencias de usuario más inmersivas y atractivas que transforman la forma de aprender sobre salud." data-en="More immersive and engaging user experiences that transform the way people learn about health.">Experiencias de usuario más inmersivas y atractivas que transforman la forma de aprender sobre salud.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-card-icon">🎯</span>
+                <h3 data-es="Precisión" data-en="Precision">Precisión</h3>
+                <p data-es="Mayor exactitud en seguimiento y resultados gracias a modelos digitales calibrados y en constante actualización." data-en="Greater accuracy in tracking and results thanks to calibrated and constantly updated digital models.">Mayor exactitud en seguimiento y resultados gracias a modelos digitales calibrados y en constante actualización.</p>
+            </div>
+            <div class="benefit-card">
+                <span class="benefit-card-icon">🚀</span>
+                <h3 data-es="Innovación" data-en="Innovation">Innovación</h3>
+                <p data-es="Liderando el futuro del bienestar digital con tecnologías que rompen los límites de lo posible." data-en="Leading the future of digital wellness with technologies that push the boundaries of what's possible.">Liderando el futuro del bienestar digital con tecnologías que rompen los límites de lo posible.</p>
+            </div>
+        </div>
+
+        <p class="benefits-summary"
+           data-es="La combinación de modelado 3D y realidad aumentada en nuestros softwares de bienestar representa un salto cuántico en la experiencia del usuario. No solo mejoramos la comprensión de conceptos complejos, sino que transformamos la manera en que las personas interactúan con su salud, haciéndola más accesible, personalizada y efectiva."
+           data-en="The combination of 3D modeling and augmented reality in our wellness software represents a quantum leap in user experience. We not only improve the understanding of complex concepts, but transform how people interact with their health, making it more accessible, personalized and effective.">
+            La combinación de modelado 3D y realidad aumentada en nuestros softwares de bienestar representa un salto cuántico en la experiencia del usuario. No solo mejoramos la comprensión de conceptos complejos, sino que transformamos la manera en que las personas interactúan con su salud.
+        </p>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="footer-column">
+            <div class="footer-logo">
+                <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+                <span>UpGrade</span>
+            </div>
+            <p data-es="Implementamos tecnologías inmersivas 3D y realidad aumentada para revolucionar la experiencia de bienestar digital."
+               data-en="We implement immersive 3D and augmented reality technologies to revolutionize the digital wellness experience.">
+                Implementamos tecnologías inmersivas 3D y realidad aumentada para revolucionar la experiencia de bienestar digital.
+            </p>
+            <div class="footer-socials">
+                <span title="AR">👁️</span><span title="Mobile">📱</span><span title="Tech">💻</span><span title="Launch">🚀</span>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h4 data-es="Tecnologías" data-en="Technologies">Tecnologías</h4>
+            <ul>
+                <li><a href="#" data-es="Modelado 3D"       data-en="3D Modeling">Modelado 3D</a></li>
+                <li><a href="#" data-es="Realidad Aumentada" data-en="Augmented Reality">Realidad Aumentada</a></li>
+                <li><a href="#" data-es="Software de Bienestar" data-en="Wellness Software">Software de Bienestar</a></li>
+                <li><a href="#" data-es="Innovación"        data-en="Innovation">Innovación</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4 data-es="Beneficios" data-en="Benefits">Beneficios</h4>
+            <ul>
+                <li><a href="#" data-es="Interactividad" data-en="Interactivity">Interactividad</a></li>
+                <li><a href="#" data-es="Precisión"      data-en="Precision">Precisión</a></li>
+                <li><a href="#" data-es="Motivación"     data-en="Motivation">Motivación</a></li>
+                <li><a href="#" data-es="Resultados"     data-en="Results">Resultados</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4 data-es="Aplicaciones" data-en="Applications">Aplicaciones</h4>
+            <ul>
+                <li><a href="#" data-es="Salud Digital"    data-en="Digital Health">Salud Digital</a></li>
+                <li><a href="#" data-es="Rehabilitación"   data-en="Rehabilitation">Rehabilitación</a></li>
+                <li><a href="#" data-es="Ejercicio Guiado" data-en="Guided Exercise">Ejercicio Guiado</a></li>
+                <li><a href="#" data-es="Bienestar Mental" data-en="Mental Wellness">Bienestar Mental</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom"
+             data-es="© 2025 UpGrade. Revolucionando el bienestar con tecnología 3D y RA."
+             data-en="© 2025 UpGrade. Revolutionizing wellness with 3D and AR technology.">
+            © 2025 UpGrade. Revolucionando el bienestar con tecnología 3D y RA.
+        </div>
+    </footer>
+
+    <!-- ==================== SETTINGS PANEL ==================== -->
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Panel de configuración">
+        <div class="settings-header">
+            <h4><span data-es="Configuración" data-en="Settings">Configuración</span></h4>
+            <button class="settings-close" id="settingsCloseBtn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🌙</span><span data-es="Apariencia" data-en="Appearance">Apariencia</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                    <div class="toggle-switch" id="darkModeToggle" role="switch" aria-checked="false"><div class="toggle-slider"></div></div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🔤</span><span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                    <div class="custom-select">
+                        <select id="fontSizeSelect">
+                            <option value="small"  data-es="Pequeño" data-en="Small">Pequeño</option>
+                            <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                            <option value="large"  data-es="Grande"  data-en="Large">Grande</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🌐</span><span data-es="Idioma" data-en="Language">Idioma</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                    <div class="custom-select">
+                        <select id="languageSelect">
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="en">🇺🇸 English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🔔</span><span data-es="Notificaciones" data-en="Notifications">Notificaciones</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                    <div class="toggle-switch active" id="notificationsToggle" role="switch" aria-checked="true"><div class="toggle-slider"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NOTIFICATION TOAST ==================== -->
+    <div class="notification-toast" id="notificationToast" role="status" aria-live="polite">
+        <div class="notification-icon">👁️</div>
+        <div class="notification-content">
+            <div class="notification-title">¡Nueva Tecnología!</div>
+            <div class="notification-message" data-es="Explora nuestras innovaciones 3D y RA" data-en="Explore our 3D and AR innovations">Explora nuestras innovaciones 3D y RA</div>
+        </div>
+        <button class="notification-close" id="notificationClose" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+    /* ---------- Settings ---------- */
+    function initSettings() {
+        const btn     = document.getElementById('settingsBtn');
+        const panel   = document.getElementById('settingsPanel');
+        const overlay = document.getElementById('settingsOverlay');
+        const closeB  = document.getElementById('settingsCloseBtn');
+        const darkT   = document.getElementById('darkModeToggle');
+        const fontS   = document.getElementById('fontSizeSelect');
+        const langS   = document.getElementById('languageSelect');
+        const notifT  = document.getElementById('notificationsToggle');
+
+        loadSettings();
+
+        btn.addEventListener('click',    () => { panel.classList.add('active'); overlay.classList.add('active'); });
+        closeB.addEventListener('click', closePanel);
+        overlay.addEventListener('click',closePanel);
+
+        function closePanel() { panel.classList.remove('active'); overlay.classList.remove('active'); }
+
+        darkT.addEventListener('click', () => {
+            const on = darkT.classList.toggle('active');
+            darkT.setAttribute('aria-checked', on);
+            document.body.classList.toggle('dark-mode', on);
+            localStorage.setItem('darkMode', on);
+        });
+
+        fontS.addEventListener('change', e => {
+            document.body.classList.remove('font-small','font-medium','font-large');
+            document.body.classList.add('font-' + e.target.value);
+            localStorage.setItem('fontSize', e.target.value);
+        });
+
+        langS.addEventListener('change', e => {
+            applyLang(e.target.value);
+            localStorage.setItem('language', e.target.value);
+        });
+
+        notifT.addEventListener('click', () => {
+            const on = notifT.classList.toggle('active');
+            notifT.setAttribute('aria-checked', on);
+            localStorage.setItem('notifications', on);
+            on ? startNotifs() : stopNotifs();
+        });
+
+        document.getElementById('notificationClose').addEventListener('click', hideNotif);
+    }
+
+    function loadSettings() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            const t = document.getElementById('darkModeToggle');
+            t.classList.add('active'); t.setAttribute('aria-checked','true');
+        }
+        const fs = localStorage.getItem('fontSize') || 'medium';
+        document.body.classList.add('font-' + fs);
+        document.getElementById('fontSizeSelect').value = fs;
+
+        const lang = localStorage.getItem('language') || 'es';
+        document.getElementById('languageSelect').value = lang;
+        applyLang(lang);
+
+        const notifOn = localStorage.getItem('notifications') !== 'false';
+        const nt = document.getElementById('notificationsToggle');
+        if (notifOn) { nt.classList.add('active'); nt.setAttribute('aria-checked','true'); startNotifs(); }
+        else          { nt.classList.remove('active'); nt.setAttribute('aria-checked','false'); }
+    }
+
+    function applyLang(lang) {
+        document.querySelectorAll('[data-es][data-en]').forEach(el => {
+            el.innerHTML = el.getAttribute('data-' + lang);
+        });
+        document.querySelectorAll('#fontSizeSelect option').forEach(opt => {
+            if (opt.hasAttribute('data-' + lang)) opt.textContent = opt.getAttribute('data-' + lang);
+        });
+    }
+
+    /* ---------- Notifications ---------- */
+    let notifInterval;
+    const NOTIFS = {
+        es: [
+            { icon:'👁️', title:'¡Visión 3D Activada!', message:'Explora modelos anatómicos en 3D interactivos' },
+            { icon:'🎯', title:'RA en Acción', message:'Ejercicios guiados con realidad aumentada disponibles' },
+            { icon:'💪', title:'Entrenamiento Inteligente', message:'Nuestro software 3D mejora tu técnica de ejercicio' },
+            { icon:'🏃', title:'Progreso Visual', message:'Mira tu evolución con nuestros modelos 3D' },
+            { icon:'🌟', title:'Innovación Constante', message:'Seguimos implementando nuevas tecnologías para tu bienestar' }
+        ],
+        en: [
+            { icon:'👁️', title:'3D Vision Activated!', message:'Explore interactive 3D anatomical models' },
+            { icon:'🎯', title:'AR in Action', message:'Guided exercises with augmented reality available' },
+            { icon:'💪', title:'Smart Training', message:'Our 3D software improves your exercise technique' },
+            { icon:'🏃', title:'Visual Progress', message:'See your evolution with our 3D models' },
+            { icon:'🌟', title:'Constant Innovation', message:'We continue implementing new technologies for your wellbeing' }
+        ]
+    };
+
+    function showNotif() {
+        if (!document.getElementById('notificationsToggle').classList.contains('active')) return;
+        const lang = localStorage.getItem('language') || 'es';
+        const n = NOTIFS[lang][Math.floor(Math.random() * NOTIFS[lang].length)];
+        const toast = document.getElementById('notificationToast');
+        toast.querySelector('.notification-icon').textContent    = n.icon;
+        toast.querySelector('.notification-title').textContent   = n.title;
+        toast.querySelector('.notification-message').textContent = n.message;
+        toast.classList.add('show');
+        setTimeout(hideNotif, 5000);
+    }
+    function hideNotif()   { document.getElementById('notificationToast').classList.remove('show'); }
+    function startNotifs() { clearInterval(notifInterval); setTimeout(showNotif,5000); notifInterval = setInterval(showNotif,120000); }
+    function stopNotifs()  { clearInterval(notifInterval); notifInterval = null; hideNotif(); }
+
+    /* ---------- Keyboard ---------- */
+    document.addEventListener('keydown', e => {
+        const p = document.getElementById('settingsPanel');
+        if (e.key === 'Escape' && p.classList.contains('active')) {
+            p.classList.remove('active');
+            document.getElementById('settingsOverlay').classList.remove('active');
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            p.classList.add('active');
+            document.getElementById('settingsOverlay').classList.add('active');
+        }
+    });
+
+    /* ---------- Screenshot card 3D effect ---------- */
+    document.querySelectorAll('.screenshot-card').forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const r = this.getBoundingClientRect();
+            const x = e.clientX - r.left, y = e.clientY - r.top;
+            const rx = (y - r.height/2) / 10;
+            const ry = (r.width/2  - x) / 10;
+            this.style.transform = `translateY(-10px) scale(1.05) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+
+    /* ---------- Init ---------- */
+    initSettings();
+    </script>
+
+</body>
+</html>

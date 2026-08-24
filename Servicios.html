@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade - Servicios</title>
+    <link rel="stylesheet" href="Estilo-Servicios.css">
+    <style>
+    /* ==================== SETTINGS PANEL ==================== */
+    .settings-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1000; opacity: 0; visibility: hidden;
+        transition: all .3s ease;
+    }
+    .settings-overlay.active { opacity: 1; visibility: visible; }
+
+    .settings-panel {
+        background: #f0f0f0;
+        position: fixed; top: 0; right: -400px;
+        width: 380px; height: 100vh;
+        box-shadow: -5px 0 30px rgba(0,0,0,.3);
+        z-index: 1001;
+        transition: right .4s cubic-bezier(.68,-.55,.265,1.55);
+        overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+    .settings-panel.active { right: 0; }
+
+    .settings-header {
+        background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+        color: #fff; padding: 24px 26px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-shrink: 0;
+    }
+    .settings-header h4 {
+        font-family: BebasNeue, 'Bebas Neue', sans-serif;
+        font-size: 40px; color: #fff;
+        letter-spacing: 1px; margin: 10;
+    }
+    .settings-close {
+        background: rgba(255,255,255,.2); border: none; color: #fff;
+        width: 33px; height: 33px; border-radius: 50%;
+        cursor: pointer; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .3s ease, transform .3s ease;
+    }
+    .settings-close:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+
+    .settings-content { padding: 24px 20px; flex: 1; }
+
+    .settings-group {
+        margin-bottom: 24px;
+        animation: slideIn .45s ease both;
+        opacity: 0;
+    }
+    .settings-group:nth-child(1){animation-delay:.08s}
+    .settings-group:nth-child(2){animation-delay:.16s}
+    .settings-group:nth-child(3){animation-delay:.24s}
+    .settings-group:nth-child(4){animation-delay:.32s}
+    @keyframes slideIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+    .settings-group-title {
+        font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+        font-size: 11px; font-weight: 700; color: #2D5F5D;
+        text-transform: uppercase; letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        display: flex; align-items: center; gap: 7px;
+    }
+    .settings-group-icon { font-size: 16px; }
+
+    .settings-option {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 14px; background: #f5f7f8;
+        border-radius: 11px; margin-bottom: 9px;
+        transition: background .2s ease, transform .2s ease;
+    }
+    .settings-option:hover { background: #eaecee; transform: translateX(4px); }
+    .settings-option-label { font-size: 14px; color: #666; font-weight: 500; }
+
+    .toggle-switch {
+        position: relative; width: 50px; height: 26px;
+        background: #ccc; border-radius: 30px; cursor: pointer;
+        transition: background .3s ease;
+    }
+    .toggle-switch.active { background: #3D9B8F; }
+    .toggle-slider {
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; background: #fff; border-radius: 50%;
+        transition: transform .3s ease; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
+
+    .custom-select { position: relative; width: 130px; }
+    .custom-select select {
+        width: 100%; padding: 7px 30px 7px 11px;
+        border: 2px solid #ddd; border-radius: 8px;
+        font-size: 13px; font-weight: 500; color: #333;
+        background: #fff; cursor: pointer;
+        transition: border-color .3s ease; appearance: none;
+    }
+    .custom-select select:hover { border-color: #3D9B8F; }
+    .custom-select select:focus { outline: none; border-color: #2D5F5D; box-shadow: 0 0 0 3px rgba(61,155,143,.1); }
+    .custom-select::after {
+        content: '▼'; position: absolute;
+        right: 10px; top: 50%; transform: translateY(-50%);
+        pointer-events: none; font-size: 10px; color: #888;
+    }
+
+    /* ==================== NOTIFICATION TOAST ==================== */
+    .notification-toast {
+        position: fixed; bottom: 26px; left: 26px; max-width: 330px;
+        background: #fff; border-radius: 13px;
+        box-shadow: 0 8px 28px rgba(0,0,0,.18);
+        padding: 16px 16px 16px 14px;
+        display: flex; align-items: flex-start; gap: 13px;
+        z-index: 999;
+        transform: translateX(-420px); opacity: 0;
+        transition: transform .45s cubic-bezier(.68,-.55,.265,1.55), opacity .45s ease;
+        border-left: 4px solid #3D9B8F;
+    }
+    .notification-toast.show { transform: none; opacity: 1; }
+    .notification-icon {
+        width: 38px; height: 38px;
+        background: linear-gradient(135deg, #3D9B8F, #6BC5B8);
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-size: 18px; flex-shrink: 0;
+    }
+    .notification-content { flex: 1; }
+    .notification-title { font-size: 13px; font-weight: 700; color: #2D5F5D; margin-bottom: 3px; }
+    .notification-message { font-size: 12px; color: #777; line-height: 1.4; }
+    .notification-close {
+        background: transparent; border: none; color: #bbb;
+        cursor: pointer; font-size: 16px;
+        width: 20px; height: 20px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 50%; transition: all .2s ease; flex-shrink: 0;
+    }
+    .notification-close:hover { background: #f0f0f0; color: #555; }
+
+    /* ==================== DARK MODE ==================== */
+    body.dark-mode { background: #121212; color: #e0e0e0; }
+    body.dark-mode header { background: #1a1a1a; }
+    body.dark-mode header nav a,
+    body.dark-mode .dropdown .dropbtn { color: #666; }
+    body.dark-mode .app-section-section-habitus { background: linear-gradient(100deg,#1a2a38,#0e3a40); }
+    body.dark-mode .app-section-section-restore  { background: linear-gradient(80deg,#162030,#1e3530); }
+    body.dark-mode .Container  { background: linear-gradient(90deg, #1a1a1a, #222); }
+    body.dark-mode .settings-panel  { background: #222; }
+    body.dark-mode .settings-group-title { color: #888; }
+    body.dark-mode .settings-option { background: #2e2e2e; }
+    body.dark-mode .settings-option:hover { background: #383838; }
+    body.dark-mode .settings-option-label { color: #aaa; }
+    body.dark-mode .custom-select select { background: #2e2e2e; color: #e0e0e0; border-color: #444; }
+    body.dark-mode .notification-toast { background: #222; border-left-color: #555; }
+    body.dark-mode .notification-title { color: #999; }
+    body.dark-mode .notification-message { color: #aaa; }
+    body.dark-mode footer { background: linear-gradient(135deg,#0d0d0d,#181818); }
+
+    /* ==================== FONT SIZES ==================== */
+    :root {
+        --fs-h1: 68px; --fs-h2: 52px; --fs-p: 15px;
+    }
+    body.font-small  { --fs-h1:50px; --fs-h2:38px; --fs-p:13px; }
+    body.font-medium { --fs-h1:68px; --fs-h2:52px; --fs-p:15px; }
+    body.font-large  { --fs-h1:84px; --fs-h2:64px; --fs-p:18px; }
+
+    body.font-small  .app-title { font-size: 44px; }
+    body.font-medium .app-title { font-size: 58px; }
+    body.font-large  .app-title { font-size: 72px; }
+    body.font-small  .app-description { font-size: 13px; }
+    body.font-large  .app-description { font-size: 18px; }
+    body.font-small  .banner-question { font-size: 40px; }
+    body.font-large  .banner-question { font-size: 78px; }
+    body.font-small  .banner-subtitle { font-size: 30px; }
+    body.font-large  .banner-subtitle { font-size: 58px; }
+
+    @media (max-width: 768px) {
+        .settings-panel { width: 100%; right: -100%; }
+        .notification-toast { left: 14px; right: 14px; max-width: none; }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"          data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"          data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"          data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+
+    <!-- ==================== HERO BANNER ==================== -->
+    <div class="Container">
+        <div class="deco deco-1"></div>
+        <div class="deco deco-2"></div>
+
+        <div class="banner-content">
+            <div class="banner-question" data-es="Descubre lo que tenemos" data-en="Discover what we have">
+                Descubre lo que tenemos
+            </div>
+            <div class="banner-subtitle" data-es="Para tí" data-en="For you">
+                Para tí
+            </div>
+        </div>
+
+        <img src="Assets/servicios.png" alt="Servicios UpGrade">
+    </div>
+
+    <!-- ==================== SECCIÓN HABITUS ==================== -->
+    <section class="app-section-section-habitus">
+        <div class="particle-dot particle-1"></div>
+        <div class="particle-dot particle-2"></div>
+        <div class="particle-dot particle-3"></div>
+        <div class="particle-dot particle-4"></div>
+
+        <div class="content-wrapper">
+            <!-- Info izquierda -->
+            <div class="app-info">
+                <h2 class="app-title" data-es="HABITUS" data-en="HABITUS">HABITUS</h2>
+
+                <p class="app-description"
+                   data-es="Aplicación que busca transformar la manera en que las personas cuidan su salud. No se trata solo de contar calorías o seguir dietas, sino de ofrecer una experiencia integral que combine nutrición, bienestar físico y equilibrio mental."
+                   data-en="Application that seeks to transform the way people take care of their health. It's not just about counting calories or following diets, but offering a comprehensive experience combining nutrition, physical wellbeing and mental balance.">
+                    Aplicación que busca transformar la manera en que las personas cuidan su salud. No se trata solo de contar calorías o seguir dietas, sino de ofrecer una experiencia integral que combine nutrición, bienestar físico y equilibrio mental.
+                </p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <img src="Assets/Alura 1.png" alt="Habitus 1">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/HABITUS 4.jpg" alt="Habitus 2">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/HABITUS 2.jpg" alt="Habitus 3">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/HABITUS 3.jpg" alt="Habitus 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teléfono derecha -->
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+                    <img src="Assets/HABITUS 1.jpg" alt="Habitus pantalla principal">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECCIÓN RESTORE ==================== -->
+    <section class="app-section-section-restore">
+        <div class="particle-dot particle-5"></div>
+        <div class="particle-dot particle-6"></div>
+        <div class="particle-dot particle-7"></div>
+        <div class="particle-dot particle-8"></div>
+
+        <div class="content-wrapper">
+            <!-- Info izquierda (reverse en CSS para restore) -->
+            <div class="app-info">
+                <h2 class="app-title" data-es="RESTORE" data-en="RESTORE">RESTORE</h2>
+
+                <p class="app-description"
+                   data-es="Restore es una aplicación móvil desarrollada para acompañar el proceso de recuperación física y emocional de personas que han sufrido un accidente. Brinda una herramienta integral que combina tecnología, empatía y acompañamiento digital."
+                   data-en="Restore is a mobile application developed to accompany the physical and emotional recovery of accident survivors. It provides a comprehensive tool combining technology, empathy and digital support for monitoring, guidance and personal care.">
+                    Restore es una aplicación móvil desarrollada para acompañar el proceso de recuperación física y emocional de personas que han sufrido un accidente. Brinda una herramienta integral que combina tecnología, empatía y acompañamiento digital.
+                </p>
+
+                <div class="screenshots-grid">
+                    <div class="screenshot-card">
+                        <img src="Assets/WOODO/RESTORE 2.jpg" alt="Restore 1">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/WOODO/RESTORE 4.jpg" alt="Restore 2">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/WOODO/RESTORE 5.jpg" alt="Restore 3">
+                    </div>
+                    <div class="screenshot-card">
+                        <img src="Assets/WOODO/RESTORE 7.jpg" alt="Restore 4">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="phone-notch"></div>
+                    <img src="Assets/WOODO/RESTORE 1.jpg" alt="Restore pantalla principal">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="footer-column">
+            <div class="footer-logo">
+                <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+                <span>UpGrade</span>
+            </div>
+            <p data-es="Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral."
+               data-en="We believe wellbeing should be accessible to everyone, using technology as a bridge to inclusion and comprehensive development.">
+                Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral.
+            </p>
+            <div class="footer-socials">
+                <span>💚</span><span>🍎</span><span>🏋️‍♂️</span><span>🌿</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Servicios" data-en="Services">Servicios</h4>
+            <ul>
+                <li><a href="#" data-es="Software Innovadores" data-en="Innovative Software">Software Innovadores</a></li>
+                <li><a href="#" data-es="Innovación"           data-en="Innovation">Innovación</a></li>
+                <li><a href="#" data-es="Hábitos Saludables"   data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Intuición"            data-en="Intuition">Intuición</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Corporación" data-en="Corporation">Corporación</h4>
+            <ul>
+                <li><a href="#" data-es="Nosotros"       data-en="About Us">Nosotros</a></li>
+                <li><a href="#" data-es="Misión y Visión" data-en="Mission and Vision">Misión y Visión</a></li>
+                <li><a href="#" data-es="Equipo"          data-en="Team">Equipo</a></li>
+                <li><a href="#" data-es="Contacto"        data-en="Contact">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4 data-es="Bienestar" data-en="Wellbeing">Bienestar</h4>
+            <ul>
+                <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Nutrición"          data-en="Nutrition">Nutrición</a></li>
+                <li><a href="#" data-es="Ejercicio"          data-en="Exercise">Ejercicio</a></li>
+                <li><a href="#" data-es="Salud Digital"      data-en="Digital Health">Salud Digital</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-bottom"
+             data-es="© 2025 UpGrade. Promoviendo innovación y bienestar."
+             data-en="© 2025 UpGrade. Promoting innovation and wellbeing.">
+            © 2025 UpGrade. Promoviendo innovación y bienestar.
+        </div>
+    </footer>
+
+    <!-- ==================== SETTINGS PANEL ==================== -->
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Panel de configuración">
+        <div class="settings-header">
+            <h4><span data-es="Configuración" data-en="Settings">Configuración</span></h4>
+            <button class="settings-close" id="settingsCloseBtn" aria-label="Cerrar">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🌙</span><span data-es="Apariencia" data-en="Appearance">Apariencia</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                    <div class="toggle-switch" id="darkModeToggle"><div class="toggle-slider"></div></div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🔤</span><span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                    <div class="custom-select">
+                        <select id="fontSizeSelect">
+                            <option value="small"  data-es="Pequeño" data-en="Small">Pequeño</option>
+                            <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                            <option value="large"  data-es="Grande"  data-en="Large">Grande</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🌐</span><span data-es="Idioma" data-en="Language">Idioma</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                    <div class="custom-select">
+                        <select id="languageSelect">
+                            <option value="es">🇪🇸 Español</option>
+                            <option value="en">🇺🇸 English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-group">
+                <div class="settings-group-title"><span class="settings-group-icon">🔔</span><span data-es="Notificaciones" data-en="Notifications">Notificaciones</span></div>
+                <div class="settings-option">
+                    <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                    <div class="toggle-switch active" id="notificationsToggle"><div class="toggle-slider"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NOTIFICATION TOAST ==================== -->
+    <div class="notification-toast" id="notificationToast" role="status" aria-live="polite">
+        <div class="notification-icon">💚</div>
+        <div class="notification-content">
+            <div class="notification-title">¡Hola!</div>
+            <div class="notification-message">Bienvenido a UpGrade</div>
+        </div>
+        <button class="notification-close" id="notificationClose" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+    /* ---------- Settings ---------- */
+    function initSettings() {
+        const btn     = document.getElementById('settingsBtn');
+        const panel   = document.getElementById('settingsPanel');
+        const overlay = document.getElementById('settingsOverlay');
+        const closeB  = document.getElementById('settingsCloseBtn');
+        const darkT   = document.getElementById('darkModeToggle');
+        const fontS   = document.getElementById('fontSizeSelect');
+        const langS   = document.getElementById('languageSelect');
+        const notifT  = document.getElementById('notificationsToggle');
+
+        loadSettings();
+
+        btn.addEventListener('click',     () => { panel.classList.add('active'); overlay.classList.add('active'); });
+        closeB.addEventListener('click',  closePanel);
+        overlay.addEventListener('click', closePanel);
+        function closePanel() { panel.classList.remove('active'); overlay.classList.remove('active'); }
+
+        darkT.addEventListener('click', () => {
+            const on = darkT.classList.toggle('active');
+            document.body.classList.toggle('dark-mode', on);
+            localStorage.setItem('darkMode', on);
+        });
+
+        fontS.addEventListener('change', e => {
+            document.body.classList.remove('font-small','font-medium','font-large');
+            document.body.classList.add('font-' + e.target.value);
+            localStorage.setItem('fontSize', e.target.value);
+        });
+
+        langS.addEventListener('change', e => {
+            applyLang(e.target.value);
+            localStorage.setItem('language', e.target.value);
+        });
+
+        notifT.addEventListener('click', () => {
+            const on = notifT.classList.toggle('active');
+            localStorage.setItem('notifications', on);
+            on ? startNotifs() : stopNotifs();
+        });
+
+        document.getElementById('notificationClose').addEventListener('click', hideNotif);
+    }
+
+    function loadSettings() {
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').classList.add('active');
+        }
+        const fs = localStorage.getItem('fontSize') || 'medium';
+        document.body.classList.add('font-' + fs);
+        document.getElementById('fontSizeSelect').value = fs;
+
+        const lang = localStorage.getItem('language') || 'es';
+        document.getElementById('languageSelect').value = lang;
+        applyLang(lang);
+
+        const notifOn = localStorage.getItem('notifications') !== 'false';
+        const nt = document.getElementById('notificationsToggle');
+        if (notifOn) { nt.classList.add('active'); startNotifs(); }
+        else          { nt.classList.remove('active'); }
+    }
+
+    function applyLang(lang) {
+        document.querySelectorAll('[data-es][data-en]').forEach(el => {
+            el.innerHTML = el.getAttribute('data-' + lang);
+        });
+        document.querySelectorAll('#fontSizeSelect option').forEach(opt => {
+            if (opt.hasAttribute('data-' + lang)) opt.textContent = opt.getAttribute('data-' + lang);
+        });
+    }
+
+    /* ---------- Notifications ---------- */
+    let notifInterval;
+    const NOTIFS = {
+        es: [
+            { icon:'💚', title:'¡Mantente activo!',      message:'Recuerda hacer una pausa y estirarte' },
+            { icon:'💧', title:'Hidratación',             message:'Es hora de tomar agua. Tu cuerpo te lo agradecerá' },
+            { icon:'🏋️', title:'Tip de salud',           message:'El ejercicio regular mejora tu bienestar' },
+            { icon:'🥗', title:'Alimentación saludable', message:'Una buena nutrición es clave para tu salud' },
+            { icon:'😴', title:'Descanso',               message:'Dormir bien es fundamental para tu salud' },
+            { icon:'🧘', title:'Relájate',               message:'Toma un momento para respirar profundamente' },
+            { icon:'🌟', title:'¡Sigue así!',            message:'Cada pequeño paso cuenta hacia un estilo de vida saludable' }
+        ],
+        en: [
+            { icon:'💚', title:'Stay active!',       message:'Remember to take a break and stretch' },
+            { icon:'💧', title:'Hydration',          message:"It's time to drink water. Your body will thank you" },
+            { icon:'🏋️', title:'Health tip',        message:'Regular exercise improves your wellbeing' },
+            { icon:'🥗', title:'Healthy eating',    message:'Good nutrition is key to your health' },
+            { icon:'😴', title:'Rest',              message:'Sleeping well is essential for your health' },
+            { icon:'🧘', title:'Relax',             message:'Take a moment to breathe deeply' },
+            { icon:'🌟', title:'Keep it up!',       message:'Every small step counts towards a healthy lifestyle' }
+        ]
+    };
+
+    function showNotif() {
+        if (!document.getElementById('notificationsToggle').classList.contains('active')) return;
+        const lang = localStorage.getItem('language') || 'es';
+        const n = NOTIFS[lang][Math.floor(Math.random() * NOTIFS[lang].length)];
+        const toast = document.getElementById('notificationToast');
+        toast.querySelector('.notification-icon').textContent    = n.icon;
+        toast.querySelector('.notification-title').textContent   = n.title;
+        toast.querySelector('.notification-message').textContent = n.message;
+        toast.classList.add('show');
+        setTimeout(hideNotif, 5000);
+    }
+    function hideNotif()   { document.getElementById('notificationToast').classList.remove('show'); }
+    function startNotifs() { clearInterval(notifInterval); setTimeout(showNotif,5000); notifInterval = setInterval(showNotif,120000); }
+    function stopNotifs()  { clearInterval(notifInterval); notifInterval = null; hideNotif(); }
+
+    /* ---------- Keyboard shortcuts ---------- */
+    document.addEventListener('keydown', e => {
+        const p = document.getElementById('settingsPanel');
+        if (e.key === 'Escape' && p.classList.contains('active')) {
+            p.classList.remove('active');
+            document.getElementById('settingsOverlay').classList.remove('active');
+        }
+        if ((e.ctrlKey||e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            p.classList.add('active');
+            document.getElementById('settingsOverlay').classList.add('active');
+        }
+    });
+
+    /* ---------- Screenshot card 3D hover ---------- */
+    document.querySelectorAll('.screenshot-card').forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const r = this.getBoundingClientRect();
+            const rx = (e.clientY - r.top  - r.height/2) / 10;
+            const ry = (r.width/2 - (e.clientX - r.left)) / 10;
+            this.style.transform = `translateY(-10px) scale(1.06) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        });
+        card.addEventListener('mouseleave', function() { this.style.transform = ''; });
+    });
+
+    /* ---------- Init ---------- */
+    initSettings();
+    </script>
+
+    <!-- ==================== MODAL CARRUSEL ==================== -->
+    <script>
+    (function() {
+        let idx = 0, section = null, imgs = [];
+
+        const modalHTML = `
+            <div class="modal-overlay" id="imageModal">
+                <div class="modal-content">
+                    <button class="modal-close" id="modalClose" aria-label="Cerrar">✕</button>
+                    <button class="modal-arrow modal-arrow-left"  id="modalPrev">‹</button>
+                    <div class="modal-image-container">
+                        <img id="modalImage" src="" alt="Screenshot">
+                    </div>
+                    <button class="modal-arrow modal-arrow-right" id="modalNext">›</button>
+                    <div class="modal-counter" id="modalCounter">1 / 4</div>
+                </div>
+            </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        const modal   = document.getElementById('imageModal');
+        const mImg    = document.getElementById('modalImage');
+        const mClose  = document.getElementById('modalClose');
+        const mPrev   = document.getElementById('modalPrev');
+        const mNext   = document.getElementById('modalNext');
+        const mCount  = document.getElementById('modalCounter');
+
+        function open(sec, i) {
+            section = sec; idx = i;
+            imgs = Array.from(sec.querySelectorAll('.screenshot-card img')).map(x => x.src);
+            update();
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function close() { modal.classList.remove('active'); document.body.style.overflow = ''; }
+        function update() { mImg.src = imgs[idx]; mCount.textContent = `${idx+1} / ${imgs.length}`; }
+        function prev()  { idx = (idx - 1 + imgs.length) % imgs.length; update(); }
+        function next()  { idx = (idx + 1) % imgs.length; update(); }
+
+        mClose.addEventListener('click', close);
+        mPrev.addEventListener('click',  prev);
+        mNext.addEventListener('click',  next);
+        modal.addEventListener('click',  e => { if (e.target === modal) close(); });
+        document.addEventListener('keydown', e => {
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'Escape') close();
+            if (e.key === 'ArrowLeft')  prev();
+            if (e.key === 'ArrowRight') next();
+        });
+
+        function init() {
+            document.querySelectorAll('.app-section-section-habitus, .app-section-section-restore').forEach(sec => {
+                sec.querySelectorAll('.screenshot-card').forEach((card, i) => {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => open(sec, i));
+                });
+            });
+        }
+        document.readyState === 'loading'
+            ? document.addEventListener('DOMContentLoaded', init)
+            : init();
+    })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normas y Políticas - UpGrade</title>
+    
+    <style>
+        @font-face {
+            font-family: Gildeon;
+            src: url(Gildeon.otf);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f8fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #0f3d50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header img {
+            width: 70px;
+            height: 90px;
+        }
+
+         .brand-name {
+            font-family: Gildeon, sans-serif;
+            font-size: 36px;
+            background: linear-gradient(135deg, #3f8aa3 20%, #A8E6B8 50%, #8fc5d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.5);
+            position: relative;
+        }
+
+        .brand-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(30deg, transparent, #00BCD4, transparent);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+          header nav {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+header nav a {
+    text-decoration: none;
+    color: #3f8aa3;
+    font-weight: 500;
+    font-size: 15.5px;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+header nav a:hover {
+    color: #3D9B8F;
+}
+
+header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;
+    transition: width 0.3s ease;
+}
+
+header nav a:hover::after {
+    width: 100%;
+}
+
+   nav {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+}
+
+nav a {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #3D9B8F;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #4A90A4;
+    transition: width 0.3s ease;
+}
+
+nav a:hover {
+    color: #4A90A4;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+
+        /* DROPDOWN */
+      .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .dropbtn {
+    .dropdown .dropbtn {
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #108d91;  /* ✅ MISMO COLOR QUE LOS DEMÁS LINKS */
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+}
+
+.dropdown .dropbtn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+    transition: width 0.3s ease;
+}
+
+.dropdown:hover .dropbtn {
+    color: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+}
+
+.dropdown:hover .dropbtn::after {
+    width: 100%;
+}
+
+/* Contenido desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0a2f3d;
+    min-width: 100%;  /* ✅ SE AJUSTA AL ANCHO DEL CONTENIDO */
+    width: max-content;  /* ✅ SE EXPANDE SEGÚN EL TEXTO */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 1000;
+    margin-top: 10px;
+    padding: 10px 0;
+    border: 1px solid rgba(63, 138, 163, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-content a {
+    color: #A8E6B8;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    white-space: nowrap;  /* ✅ EVITA QUE EL TEXTO SE PARTA */
+}
+
+.dropdown-content a:hover {
+    background: rgba(63, 138, 163, 0.2);
+    color: #92C7A3;
+    border-left: 3px solid #92C7A3;
+    padding-left: 25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border: none;
+        margin-top: 5px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        white-space: normal;  /* ✅ EN MÓVIL PERMITE SALTOS DE LÍNEA */
+    }
+}
+
+
+        .settings-btn-menu {
+            background: #ffffff00;
+            border: none;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-btn-menu:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            background: linear-gradient(135deg, #0e3e4f 0%, #1a6179 100%);
+            color: white;
+            padding: 80px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 230, 184, 0.1), transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-family: Gildeon, sans-serif;
+            font-size: 56px;
+            color: #A8E6B8;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(168, 230, 184, 0.4);
+        }
+
+        .hero-subtitle {
+            font-size: 22px;
+            color: #e0f2f1;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            max-width: 1200px;
+            margin: -50px auto 0;
+            padding: 0 50px 80px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-family: Gildeon, sans-serif;
+            font-size: 36px;
+            color: #0e3e4f;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #A8E6B8;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-icon {
+            font-size: 40px;
+        }
+
+        .policy-section {
+            margin-bottom: 50px;
+        }
+
+        .policy-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .policy-subtitle {
+            font-size: 24px;
+            color: #1a6179;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .policy-text {
+            font-size: 17px;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .policy-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .policy-list li {
+            font-size: 17px;
+            color: #555;
+            margin-bottom: 15px;
+            padding-left: 35px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .policy-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #3D9B8F;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f4 100%);
+            border-left: 4px solid #3D9B8F;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-size: 17px;
+            color: #2c5f5d;
+            font-weight: 500;
+        }
+
+        /* FOOTER */
+        footer {
+            background: linear-gradient(135deg, #0e3e4f 0%, #1a6179 100%);
+            color: #e0f2f1;
+            padding: 60px 70px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            border-top: 2px solid rgba(146, 199, 163, 0.3);
+            position: relative;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 240px;
+            margin-bottom: 30px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer-logo img {
+            width: 60px;
+            height: 70px;
+        }
+
+        .footer-logo span {
+            font-family: Gildeon, sans-serif;
+            font-size: 34px;
+            background: linear-gradient(135deg, #3f8aa3 20%, #A8E6B8 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .footer-column h4 {
+            font-size: 20px;
+            color: #92C7A3;
+            margin-bottom: 15px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            text-decoration: none;
+            color: #e0f2f1;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: #A8E6B8;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            font-size: 15px;
+            color: #b8e6c3;
+        }
+
+        /* ==================== CONFIGURACIÓN (integrada del primer código) ==================== */
+        
+        /* Panel de configuración */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .settings-panel.active {
+            right: 0;
+        }
+
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .settings-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-header {
+            background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-header h4 {
+            letter-spacing: 0.9px;
+            font-family: Bebas Neue;
+            color: #074a54;
+            margin-top: 15px;
+            font-size: 45px;
+            font-weight: 600;
+        }
+
+        .settings-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .settings-content {
+            padding: 30px 25px;
+        }
+
+        .settings-group {
+            margin-bottom: 35px;
+        }
+
+        .settings-group-title {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 19px;
+            font-weight: 600;
+            color: #2D5F5D;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1px;
+        }
+
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-option-label {
+            font-size: 15px;
+            color: #656565;
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 55px;
+            height: 28px;
+            background: #ccc;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #3D9B8F;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(27px);
+        }
+
+        .custom-select {
+            position: relative;
+            width: 140px;
+        }
+
+        .custom-select select {
+            width: 100%;
+            padding: 8px 35px 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+        }
+
+        .custom-select::after {
+            content: '▼';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        /* Notificación flotante */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            z-index: 999;
+            transform: translateX(-500px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3D9B8F 0%, #6BC5B8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            letter-spacing: 0.5;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D5F5D;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .notification-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* ==================== ESTILOS PARA TAMAÑOS DE FUENTE ==================== */
+        body.font-small h1 { font-size: 45px; }
+        body.font-medium h1 { font-size: 55px; }
+        body.font-large h1 { font-size: 65px; }
+
+        body.font-small h2 { font-size: 45px; }
+        body.font-medium h2 { font-size: 60px; }
+        body.font-large h2 { font-size: 55px; }
+
+        body.font-small h3 { font-size: 25px; }
+        body.font-medium h3 { font-size: 30px; }
+        body.font-large h3 { font-size: 40px; }
+
+        body.font-small a { font-size: 10px; }
+        body.font-medium a { font-size: 17px; }
+        body.font-large a { font-size: 21px; }
+
+        body.font-small p { font-size: 12px; }
+        body.font-medium p { font-size: 18px; }
+        body.font-large p { font-size: 25px; }
+
+        body.font-small li { font-size: 14px; }
+        body.font-medium li { font-size: 17px; }
+        body.font-large li { font-size: 22px; }
+
+        body.font-small .hero-subtitle { font-size: 18px; }
+        body.font-medium .hero-subtitle { font-size: 22px; }
+        body.font-large .hero-subtitle { font-size: 26px; }
+
+        /* ==================== MODO OSCURO ==================== */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode header {
+            background: #2a2a2a;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode nav a {
+            color: #fff;
+        }
+
+        body.dark-mode .hero-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+
+        body.dark-mode .content-card {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .section-title {
+            color: #A8E6B8;
+        }
+
+        body.dark-mode .policy-subtitle {
+            color: #92C7A3;
+        }
+
+        body.dark-mode .policy-text {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .policy-list li {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .highlight-box {
+            background: #1a1a1a;
+            border-left: 4px solid #3D9B8F;
+        }
+
+        body.dark-mode .highlight-box p {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+
+        body.dark-mode .settings-panel {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .settings-option {
+            background: #333;
+        }
+
+        body.dark-mode .notification-toast {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .notification-title {
+            color: #6BC5B8;
+        }
+
+        body.dark-mode .notification-message {
+            color: #b0b0b0;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            header {
+                flex-wrap: wrap;
+                padding: 20px;
+            }
+
+            nav {
+                width: 100%;
+                justify-content: center;
+                margin-top: 15px;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .hero-title {
+                font-size: 40px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .main-content {
+                padding: 0 20px 50px;
+            }
+
+            .content-card {
+                padding: 30px 25px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .policy-subtitle {
+                font-size: 20px;
+            }
+
+            footer {
+                padding: 40px 30px 20px;
+            }
+
+            /* Panel de configuración en móviles */
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        .logo-container a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"      data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"      data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"      data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title" data-es="Normas y Políticas Corporativas" data-en="Corporate Rules and Policies">Normas y Políticas Corporativas</h1>
+            <p class="hero-subtitle" data-es="En UpGrade, nos comprometemos con la transparencia, la ética y el profesionalismo en todas nuestras operaciones. Estas políticas guían nuestro comportamiento y establecen los estándares que nos permiten ofrecer servicios de calidad excepcional." data-en="At UpGrade, we are committed to transparency, ethics and professionalism in all our operations. These policies guide our behavior and establish the standards that allow us to deliver exceptional quality services.">
+                En UpGrade, nos comprometemos con la transparencia, la ética y el profesionalismo en todas nuestras operaciones. Estas políticas guían nuestro comportamiento y establecen los estándares que nos permiten ofrecer servicios de calidad excepcional.
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="content-card">
+            
+            <!-- SECCIÓN 1: CÓDIGO DE CONDUCTA -->
+            <div class="policy-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    <span data-es="Código de Conducta Profesional" data-en="Professional Code of Conduct">Código de Conducta Profesional</span>
+                </h2>
+                
+                <p class="policy-text" data-es="Todos los miembros del equipo UpGrade están comprometidos a mantener los más altos estándares de integridad, respeto y profesionalismo en el entorno laboral." data-en="All UpGrade team members are committed to maintaining the highest standards of integrity, respect and professionalism in the workplace.">
+                    Todos los miembros del equipo UpGrade están comprometidos a mantener los más altos estándares de integridad, respeto y profesionalismo en el entorno laboral.
+                </p>
+
+                <ul class="policy-list">
+                    <li data-es="Tratamos a todos con dignidad y respeto, independientemente de su cargo, origen o condición." data-en="We treat everyone with dignity and respect, regardless of their position, origin or condition.">Tratamos a todos con dignidad y respeto, independientemente de su cargo, origen o condición.</li>
+                    <li data-es="Promovemos un ambiente de trabajo inclusivo y libre de discriminación." data-en="We promote an inclusive and discrimination-free work environment.">Promovemos un ambiente de trabajo inclusivo y libre de discriminación.</li>
+                    <li data-es="Mantenemos la confidencialidad de información sensible de clientes y colaboradores." data-en="We maintain the confidentiality of sensitive information from clients and collaborators.">Mantenemos la confidencialidad de información sensible de clientes y colaboradores.</li>
+                    <li data-es="Actuamos con honestidad y transparencia en todas nuestras comunicaciones." data-en="We act with honesty and transparency in all our communications.">Actuamos con honestidad y transparencia en todas nuestras comunicaciones.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <p data-es="💡 Nuestro compromiso es crear un entorno donde cada persona se sienta valorada, escuchada y motivada a dar lo mejor de sí misma." data-en="💡 Our commitment is to create an environment where each person feels valued, heard and motivated to give their best.">
+                        💡 Nuestro compromiso es crear un entorno donde cada persona se sienta valorada, escuchada y motivada a dar lo mejor de sí misma.
+                    </p>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: PRIVACIDAD Y DATOS -->
+            <div class="policy-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🔒</span>
+                    <span data-es="Políticas de Privacidad y Protección de Datos" data-en="Privacy and Data Protection Policies">Políticas de Privacidad y Protección de Datos</span>
+                </h2>
+                
+                <h3 class="policy-subtitle" data-es="🛡️ Seguridad de la Información" data-en="🛡️ Information Security">🛡️ Seguridad de la Información</h3>
+                <p class="policy-text" data-es="La protección de datos personales y corporativos es una prioridad absoluta. Implementamos medidas técnicas y organizativas para garantizar la seguridad de toda la información que manejamos." data-en="The protection of personal and corporate data is an absolute priority. We implement technical and organizational measures to ensure the security of all information we handle.">
+                    La protección de datos personales y corporativos es una prioridad absoluta. Implementamos medidas técnicas y organizativas para garantizar la seguridad de toda la información que manejamos.
+                </p>
+
+                <ul class="policy-list">
+                    <li data-es="Utilizamos cifrado de datos para proteger información sensible." data-en="We use data encryption to protect sensitive information.">Utilizamos cifrado de datos para proteger información sensible.</li>
+                    <li data-es="Acceso restringido a información confidencial solo para personal autorizado." data-en="Restricted access to confidential information only for authorized personnel.">Acceso restringido a información confidencial solo para personal autorizado.</li>
+                    <li data-es="Capacitación continua sobre buenas prácticas de seguridad informática." data-en="Continuous training on good computer security practices.">Capacitación continua sobre buenas prácticas de seguridad informática.</li>
+                    <li data-es="Cumplimiento con normativas internacionales de protección de datos (GDPR, CCPA)." data-en="Compliance with international data protection regulations (GDPR, CCPA).">Cumplimiento con normativas internacionales de protección de datos (GDPR, CCPA).</li>
+                </ul>
+            </div>
+
+            <!-- SECCIÓN 3: CALIDAD Y SERVICIO -->
+            <div class="policy-section">
+                <h2 class="section-title">
+                    <span class="section-icon">⭐</span>
+                    <span data-es="Estándares de Calidad y Servicio al Cliente" data-en="Quality Standards and Customer Service">Estándares de Calidad y Servicio al Cliente</span>
+                </h2>
+                
+                <p class="policy-text" data-es="Nos comprometemos a ofrecer productos y servicios que superen las expectativas de nuestros usuarios, con un enfoque centrado en la experiencia del cliente." data-en="We are committed to offering products and services that exceed our users' expectations, with a focus on customer experience.">
+                    Nos comprometemos a ofrecer productos y servicios que superen las expectativas de nuestros usuarios, con un enfoque centrado en la experiencia del cliente.
+                </p>
+
+                <ul class="policy-list">
+                    <li data-es="Desarrollo iterativo con pruebas exhaustivas de calidad antes de cada lanzamiento." data-en="Iterative development with comprehensive quality testing before each release.">Desarrollo iterativo con pruebas exhaustivas de calidad antes de cada lanzamiento.</li>
+                    <li data-es="Soporte técnico disponible 24/7 para resolver dudas y problemas de usuarios." data-en="Technical support available 24/7 to resolve user questions and problems.">Soporte técnico disponible 24/7 para resolver dudas y problemas de usuarios.</li>
+                    <li data-es="Actualizaciones regulares basadas en feedback de la comunidad." data-en="Regular updates based on community feedback.">Actualizaciones regulares basadas en feedback de la comunidad.</li>
+                    <li data-es="Documentación clara y accesible para facilitar el uso de nuestras aplicaciones." data-en="Clear and accessible documentation to facilitate the use of our applications.">Documentación clara y accesible para facilitar el uso de nuestras aplicaciones.</li>
+                </ul>
+            </div>
+
+            <!-- SECCIÓN 4: RESPONSABILIDAD SOCIAL -->
+            <div class="policy-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🌍</span>
+                    <span data-es="Responsabilidad Social Corporativa" data-en="Corporate Social Responsibility">Responsabilidad Social Corporativa</span>
+                </h2>
+                
+                <h3 class="policy-subtitle" data-es="🌱 Compromiso con la Salud y el Bienestar" data-en="🌱 Commitment to Health and Wellbeing">🌱 Compromiso con la Salud y el Bienestar</h3>
+                <p class="policy-text" data-es="Como empresa dedicada a promover estilos de vida saludables, asumimos la responsabilidad de practicar lo que predicamos, tanto interna como externamente." data-en="As a company dedicated to promoting healthy lifestyles, we take responsibility to practice what we preach, both internally and externally.">
+                    Como empresa dedicada a promover estilos de vida saludables, asumimos la responsabilidad de practicar lo que predicamos, tanto interna como externamente.
+                </p>
+
+                <ul class="policy-list">
+                    <li data-es="Programas de bienestar para empleados con acceso gratuito a nuestras aplicaciones." data-en="Employee wellness programs with free access to our applications.">Programas de bienestar para empleados con acceso gratuito a nuestras aplicaciones.</li>
+                    <li data-es="Colaboraciones con organizaciones de salud pública y ONGs." data-en="Collaborations with public health organizations and NGOs.">Colaboraciones con organizaciones de salud pública y ONGs.</li>
+                    <li data-es="Iniciativas educativas sobre salud mental, nutrición y actividad física." data-en="Educational initiatives on mental health, nutrition and physical activity.">Iniciativas educativas sobre salud mental, nutrición y actividad física.</li>
+                    <li data-es="Donaciones y acceso gratuito a comunidades vulnerables." data-en="Donations and free access to vulnerable communities.">Donaciones y acceso gratuito a comunidades vulnerables.</li>
+</ul>
+
+            <div class="highlight-box">
+                <p data-es="🤝 Creemos que la tecnología debe ser una fuerza para el bien, accesible para todos y orientada a mejorar la calidad de vida de las personas." data-en="🤝 We believe that technology should be a force for good, accessible to all and aimed at improving people's quality of life.">
+                    🤝 Creemos que la tecnología debe ser una fuerza para el bien, accesible para todos y orientada a mejorar la calidad de vida de las personas.
+                </p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 5: INNOVACIÓN Y MEJORA CONTINUA -->
+        <div class="policy-section">
+            <h2 class="section-title">
+                <span class="section-icon">🚀</span>
+                <span data-es="Innovación y Mejora Continua" data-en="Innovation and Continuous Improvement">Innovación y Mejora Continua</span>
+            </h2>
+            
+            <p class="policy-text" data-es="En UpGrade, la innovación no es un objetivo, es una mentalidad. Fomentamos la creatividad, el aprendizaje constante y la búsqueda de soluciones que realmente marquen la diferencia." data-en="At UpGrade, innovation is not a goal, it's a mindset. We encourage creativity, constant learning and the search for solutions that really make a difference.">
+                En UpGrade, la innovación no es un objetivo, es una mentalidad. Fomentamos la creatividad, el aprendizaje constante y la búsqueda de soluciones que realmente marquen la diferencia.
+            </p>
+
+            <ul class="policy-list">
+                <li data-es="Inversión continua en investigación y desarrollo de nuevas tecnologías." data-en="Continuous investment in research and development of new technologies.">Inversión continua en investigación y desarrollo de nuevas tecnologías.</li>
+                <li data-es="Espacios de colaboración donde el equipo puede proponer y experimentar ideas." data-en="Collaboration spaces where the team can propose and experiment with ideas.">Espacios de colaboración donde el equipo puede proponer y experimentar ideas.</li>
+                <li data-es="Capacitación y actualización constante en tendencias tecnológicas y de salud." data-en="Constant training and updating on technological and health trends.">Capacitación y actualización constante en tendencias tecnológicas y de salud.</li>
+                <li data-es="Evaluación y mejora continua de procesos internos y externos." data-en="Continuous evaluation and improvement of internal and external processes.">Evaluación y mejora continua de procesos internos y externos.</li>
+            </ul>
+        </div>
+
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-column">
+        <div class="footer-logo">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+            <span>UpGrade</span>
+        </div>
+        <p style="max-width:300px; line-height:1.6; font-size:15px;" data-es="Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral." data-en="We believe that wellbeing should be accessible to everyone, which is why we use technology as a bridge to inclusion and comprehensive development.">
+            Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral.
+        </p>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Servicios" data-en="Services">Servicios</h4>
+        <ul>
+            <li><a href="#" data-es="Software Innovadores" data-en="Innovative Software">Software Innovadores</a></li>
+            <li><a href="#" data-es="Innovación" data-en="Innovation">Innovación</a></li>
+            <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+            <li><a href="#" data-es="Intuición" data-en="Intuition">Intuición</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Corporación" data-en="Corporation">Corporación</h4>
+        <ul>
+            <li><a href="#" data-es="Nosotros" data-en="About Us">Nosotros</a></li>
+            <li><a href="#" data-es="Misión y Visión" data-en="Mission and Vision">Misión y Visión</a></li>
+            <li><a href="#" data-es="Equipo" data-en="Team">Equipo</a></li>
+            <li><a href="#" data-es="Contacto" data-en="Contact">Contacto</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Bienestar" data-en="Wellbeing">Bienestar</h4>
+        <ul>
+            <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+            <li><a href="#" data-es="Nutrición" data-en="Nutrition">Nutrición</a></li>
+            <li><a href="#" data-es="Ejercicio" data-en="Exercise">Ejercicio</a></li>
+            <li><a href="#" data-es="Salud Digital" data-en="Digital Health">Salud Digital</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-bottom" data-es="© 2025 UpGrade. Promoviendo innovación y bienestar." data-en="© 2025 UpGrade. Promoting innovation and wellbeing.">
+        © 2025 UpGrade. Promoviendo innovación y bienestar.
+    </div>
+</footer>
+
+<!-- ==================== PANEL DE CONFIGURACIÓN ==================== -->
+<div class="settings-overlay" id="settingsOverlay"></div>
+
+<div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+        <h4><span data-es="Configuración" data-en="Settings">Configuración</span></h4>
+        <button class="settings-close" id="settingsCloseBtn" aria-label="Cerrar">
+            ✕
+        </button>
+    </div>
+
+    <div class="settings-content">
+        <!-- Modo oscuro -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌙</span>
+                <span data-es="Apariencia" data-en="Appearance">Apariencia</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                <div class="toggle-switch" id="darkModeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tamaño de letra -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔤</span>
+                <span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                <div class="custom-select">
+                    <select id="fontSizeSelect">
+                        <option value="small" data-es="Pequeño" data-en="Small">Pequeño</option>
+                        <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                        <option value="large" data-es="Grande" data-en="Large">Grande</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Idioma -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌐</span>
+                <span data-es="Idioma" data-en="Language">Idioma</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                <div class="custom-select">
+                    <select id="languageSelect">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔔</span>
+                <span data-es="Notificaciones" data-en="Notifications">Notificaciones</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                <div class="toggle-switch active" id="notificationsToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor de notificación -->
+<div class="notification-toast" id="notificationToast">
+    <div class="notification-icon">💚</div>
+    <div class="notification-content">
+        <div class="notification-title">¡Hola!</div>
+        <div class="notification-message">Bienvenido a UpGrade</div>
+    </div>
+    <button class="notification-close" id="notificationClose" aria-label="Cerrar">✕</button>
+</div>
+
+<!-- JavaScript de configuración -->
+<script>
+// ==================== SISTEMA DE CONFIGURACIÓN ====================
+
+function initializeSettings() {
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const fontSizeSelect = document.getElementById('fontSizeSelect');
+    const languageSelect = document.getElementById('languageSelect');
+    const notificationsToggle = document.getElementById('notificationsToggle');
+
+    // Cargar configuraciones guardadas
+    loadSettings();
+
+    // Abrir panel
+    settingsBtn.addEventListener('click', () => {
+        settingsPanel.classList.add('active');
+        settingsOverlay.classList.add('active');
+    });
+
+    // Cerrar panel
+    function closePanel() {
+        settingsPanel.classList.remove('active');
+        settingsOverlay.classList.remove('active');
+    }
+
+    settingsCloseBtn.addEventListener('click', closePanel);
+    settingsOverlay.addEventListener('click', closePanel);
+
+    // Modo oscuro
+    darkModeToggle.addEventListener('click', () => {
+        darkModeToggle.classList.toggle('active');
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    });
+
+    // Tamaño de fuente
+    fontSizeSelect.addEventListener('change', (e) => {
+        document.body.classList.remove('font-small', 'font-medium', 'font-large');
+        document.body.classList.add(`font-${e.target.value}`);
+        localStorage.setItem('fontSize', e.target.value);
+    });
+
+    // Cambio de idioma
+    languageSelect.addEventListener('change', (e) => {
+        changeLanguage(e.target.value);
+        localStorage.setItem('language', e.target.value);
+    });
+
+    // Notificaciones
+    notificationsToggle.addEventListener('click', () => {
+        notificationsToggle.classList.toggle('active');
+        const isActive = notificationsToggle.classList.contains('active');
+        localStorage.setItem('notifications', isActive);
+        
+        if (isActive) {
+            startNotifications();
+        } else {
+            stopNotifications();
+        }
+    });
+
+    // Cerrar notificación
+    const notificationClose = document.getElementById('notificationClose');
+    notificationClose.addEventListener('click', hideNotification);
+}
+
+// Cargar configuraciones guardadas
+function loadSettings() {
+    const darkMode = localStorage.getItem('darkMode') === 'true';
+    if (darkMode) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeToggle').classList.add('active');
+    }
+
+    const fontSize = localStorage.getItem('fontSize') || 'medium';
+    document.body.classList.add(`font-${fontSize}`);
+    document.getElementById('fontSizeSelect').value = fontSize;
+
+    const language = localStorage.getItem('language') || 'es';
+    document.getElementById('languageSelect').value = language;
+    changeLanguage(language);
+
+    const notifications = localStorage.getItem('notifications') !== 'false';
+    if (notifications) {
+        document.getElementById('notificationsToggle').classList.add('active');
+        startNotifications();
+    } else {
+        document.getElementById('notificationsToggle').classList.remove('active');
+    }
+}
+
+// Cambiar idioma
+function changeLanguage(lang) {
+    const elements = document.querySelectorAll('[data-es][data-en]');
+    elements.forEach(element => {
+        if (lang === 'es') {
+            element.textContent = element.getAttribute('data-es');
+        } else {
+            element.textContent = element.getAttribute('data-en');
+        }
+    });
+
+    const fontOptions = document.querySelectorAll('#fontSizeSelect option');
+    fontOptions.forEach(option => {
+        if (option.hasAttribute(`data-${lang}`)) {
+            option.textContent = option.getAttribute(`data-${lang}`);
+        }
+    });
+    
+    document.documentElement.setAttribute('lang', lang);
+}
+
+// Sistema de notificaciones
+let notificationInterval;
+const notifications = {
+    es: [
+        { icon: '💚', title: '¡Mantente activo!', message: 'Recuerda hacer una pausa y estirarte' },
+        { icon: '💧', title: 'Hidratación', message: 'Es hora de tomar agua. Tu cuerpo te lo agradecerá' },
+        { icon: '🏋️', title: 'Tip de salud', message: 'El ejercicio regular mejora tu bienestar' },
+        { icon: '🥗', title: 'Alimentación saludable', message: 'Una buena nutrición es clave para tu salud' },
+        { icon: '😴', title: 'Descanso', message: 'Dormir bien es fundamental para tu salud' },
+        { icon: '🧘', title: 'Relájate', message: 'Toma un momento para respirar profundamente' },
+        { icon: '📱', title: 'UpGrade te recuerda', message: 'Cuida tu postura mientras usas dispositivos' },
+        { icon: '🌟', title: '¡Sigue así!', message: 'Cada pequeño paso cuenta hacia un estilo de vida saludable' }
+    ],
+    en: [
+        { icon: '💚', title: 'Stay active!', message: 'Remember to take a break and stretch' },
+        { icon: '💧', title: 'Hydration', message: "It's time to drink water. Your body will thank you" },
+        { icon: '🏋️', title: 'Health tip', message: 'Regular exercise improves your wellbeing' },
+        { icon: '🥗', title: 'Healthy eating', message: 'Good nutrition is key to your health' },
+        { icon: '😴', title: 'Rest', message: 'Sleeping well is essential for your health' },
+        { icon: '🧘', title: 'Relax', message: 'Take a moment to breathe deeply' },
+        { icon: '📱', title: 'UpGrade reminds you', message: 'Take care of your posture while using devices' },
+        { icon: '🌟', title: 'Keep it up!', message: 'Every small step counts towards a healthy lifestyle' }
+    ]
+};
+
+function showNotification() {
+    const isActive = document.getElementById('notificationsToggle').classList.contains('active');
+    if (!isActive) return;
+
+    const language = localStorage.getItem('language') || 'es';
+    const notificationList = notifications[language];
+    const randomNotification = notificationList[Math.floor(Math.random() * notificationList.length)];
+
+    const toast = document.getElementById('notificationToast');
+    const icon = toast.querySelector('.notification-icon');
+    const title = toast.querySelector('.notification-title');
+    const message = toast.querySelector('.notification-message');
+
+    icon.textContent = randomNotification.icon;
+    title.textContent = randomNotification.title;
+    message.textContent = randomNotification.message;
+
+    toast.classList.add('show');
+
+    setTimeout(() => {
+        hideNotification();
+    }, 5000);
+}
+
+function hideNotification() {
+    const toast = document.getElementById('notificationToast');
+    toast.classList.remove('show');
+}
+
+function startNotifications() {
+    if (notificationInterval) {
+        clearInterval(notificationInterval);
+    }
+
+    setTimeout(showNotification, 5000);
+    notificationInterval = setInterval(showNotification, 120000);
+}
+
+function stopNotifications() {
+    if (notificationInterval) {
+        clearInterval(notificationInterval);
+        notificationInterval = null;
+    }
+    hideNotification();
+}
+
+// Atajos de teclado
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const settingsPanel = document.getElementById('settingsPanel');
+        if (settingsPanel && settingsPanel.classList.contains('active')) {
+            settingsPanel.classList.remove('active');
+            document.getElementById('settingsOverlay').classList.remove('active');
+        }
+    }
+    
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('settingsPanel').classList.add('active');
+        document.getElementById('settingsOverlay').classList.add('active');
+    }
+});
+
+// Smooth scroll para enlaces internos
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Animación de entrada para las secciones
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '0';
+            entry.target.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                entry.target.style.transition = 'all 0.6s ease';
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }, 100);
+            
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.policy-section').forEach(section => {
+    observer.observe(section);
+});
+
+// Inicializar configuraciones
+initializeSettings();
+</script>

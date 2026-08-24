@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade</title>
+    <link rel="stylesheet" href="Estilo-Ayuda.css">
+    <!-- CSS de configuración -->
+<link rel="stylesheet" href="settings-styles.css">
+
+<style>
+    /* ==================== SETTINGS PANEL ==================== */
+    .settings-btn-menu {
+        background: #36585d00;
+        border: none;
+        cursor: pointer;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(12, 78, 98, 0.3);
+        color: #3f8aa3;
+    }
+
+    .settings-btn-menu:hover {
+        transform: scale(1.1) rotate(90deg);
+    }
+
+    .settings-panel {
+    background: #f0f0f0;
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100vh;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow-y: auto;
+}
+
+.settings-panel.active {
+    right: 0;
+}
+
+/* Overlay */
+        /* ==================== SETTINGS PANEL ==================== */
+    .settings-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1000; opacity: 0; visibility: hidden;
+        transition: all .3s ease;
+    }
+    .settings-overlay.active { opacity: 1; visibility: visible; }
+
+    .settings-panel {
+        background: #f0f0f0;
+        position: fixed; top: 0; right: -400px;
+        width: 380px; height: 100vh;
+        box-shadow: -5px 0 30px rgba(0,0,0,.3);
+        z-index: 1001;
+        transition: right .4s cubic-bezier(.68,-.55,.265,1.55);
+        overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+    .settings-panel.active { right: 0; }
+
+    .settings-header {
+        background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+        color: #fff; padding: 24px 26px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-shrink: 0;
+    }
+    .settings-header h4 {
+        font-family: BebasNeue, 'Bebas Neue', sans-serif;
+        font-size: 40px; color: #fff;
+        letter-spacing: 1px; margin: 10;
+    }
+    .settings-close {
+        background: rgba(255,255,255,.2); border: none; color: #fff;
+        width: 33px; height: 33px; border-radius: 50%;
+        cursor: pointer; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .3s ease, transform .3s ease;
+    }
+    .settings-close:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+
+    .settings-content { padding: 24px 20px; flex: 1; }
+
+    .settings-group {
+        margin-bottom: 24px;
+        animation: slideIn .45s ease both;
+        opacity: 0;
+    }
+    .settings-group:nth-child(1){animation-delay:.08s}
+    .settings-group:nth-child(2){animation-delay:.16s}
+    .settings-group:nth-child(3){animation-delay:.24s}
+    .settings-group:nth-child(4){animation-delay:.32s}
+    @keyframes slideIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+    .settings-group-title {
+        font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+        font-size: 11px; font-weight: 700; color: #2D5F5D;
+        text-transform: uppercase; letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        display: flex; align-items: center; gap: 7px;
+    }
+    .settings-group-icon { font-size: 16px; }
+
+    .settings-option {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 14px; background: #f5f7f8;
+        border-radius: 11px; margin-bottom: 9px;
+        transition: background .2s ease, transform .2s ease;
+    }
+    .settings-option:hover { background: #eaecee; transform: translateX(4px); }
+    .settings-option-label { font-size: 14px; color: #666; font-weight: 500; }
+
+    .toggle-switch {
+        position: relative; width: 50px; height: 26px;
+        background: #ccc; border-radius: 30px; cursor: pointer;
+        transition: background .3s ease;
+    }
+    .toggle-switch.active { background: #3D9B8F; }
+    .toggle-slider {
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; background: #fff; border-radius: 50%;
+        transition: transform .3s ease; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
+
+    .custom-select { position: relative; width: 130px; }
+    .custom-select select {
+        width: 100%; padding: 7px 30px 7px 11px;
+        border: 2px solid #ddd; border-radius: 8px;
+        font-size: 13px; font-weight: 500; color: #333;
+        background: #fff; cursor: pointer;
+        transition: border-color .3s ease; appearance: none;
+    }
+    .custom-select select:hover { border-color: #3D9B8F; }
+    .custom-select select:focus { outline: none; border-color: #2D5F5D; box-shadow: 0 0 0 3px rgba(61,155,143,.1); }
+    .custom-select::after {
+        content: '▼'; position: absolute;
+        right: 10px; top: 50%; transform: translateY(-50%);
+        pointer-events: none; font-size: 10px; color: #888;
+    }
+
+    /* ==================== NOTIFICATION TOAST ==================== */
+    /* Notificación flotante */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            z-index: 999;
+            transform: translateX(-500px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3D9B8F 0%, #6BC5B8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            letter-spacing: 0.5;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D5F5D;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .notification-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+    /* ==================== DARK MODE ==================== */
+    body.dark-mode {
+        background: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode header {
+        background: #2a2a2a;
+    }
+
+    body.dark-mode nav a {
+        color: #ffffff;
+    }
+
+    body.dark-mode .Container {
+        background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
+    }
+
+    body.dark-mode .faq-container,
+    body.dark-mode .contact-container {
+        background: #2a2a2a;
+    }
+
+    body.dark-mode .faq-item {
+        background: #333;
+    }
+
+    body.dark-mode .faq-question {
+        background: linear-gradient(135deg, #2a2a2a 0%, #333 100%);
+    }
+
+    body.dark-mode .faq-question:hover {
+        background: linear-gradient(135deg, #333 0%, #3a3a3a 100%);
+    }
+
+    body.dark-mode .faq-question h3 {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .faq-answer p {
+        color: #b0b0b0;
+    }
+
+    body.dark-mode .faq-title,
+    body.dark-mode .contact-title {
+        color: #A8E6B8;
+    }
+
+    body.dark-mode .contact-pretitle {
+        color: #6BC5B8;
+    }
+
+    body.dark-mode .form-group label {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .form-group input,
+    body.dark-mode .form-group textarea {
+        background: #333;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .form-group input:focus,
+    body.dark-mode .form-group textarea:focus {
+        border-color: #6BC5B8;
+    }
+
+    body.dark-mode .success-message {
+        background: #2a2a2a;
+    }
+
+    body.dark-mode .success-text {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode footer {
+        background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
+    }
+
+    body.dark-mode .settings-panel {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .settings-option {
+        background: #333;
+    }
+
+    body.dark-mode .notification-toast {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .notification-title {
+        color: #6BC5B8;
+    }
+
+    body.dark-mode .notification-message {
+        color: #b0b0b0;
+    }
+
+    /* ==================== FONT SIZES ==================== */
+    body.font-small .banner-question { font-size: 50px; }
+    body.font-medium .banner-question { font-size: 70px; }
+    body.font-large .banner-question { font-size: 70px; }
+
+    body.font-small .faq-title { font-size: 35px; }
+    body.font-medium .faq-title { font-size: 50px; }
+    body.font-large .faq-title { font-size: 65px; }
+
+    body.font-small .contact-title { font-size: 32px; }
+    body.font-medium .contact-title { font-size: 45px; }
+    body.font-large .contact-title { font-size: 58px; }
+
+    body.font-small p { font-size: 14px; }
+    body.font-medium p { font-size: 16px; }
+    body.font-large p { font-size: 20px; }
+
+    body.font-small .faq-question h3 { font-size: 15px; }
+    body.font-medium .faq-question h3 { font-size: 18px; }
+    body.font-large .faq-question h3 { font-size: 22px; }
+
+        body.font-small a { font-size: 10px; }
+body.font-medium a { font-size: 17px; }
+body.font-large a { font-size: 21px; }
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .dropbtn {
+    .dropdown .dropbtn {
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #108d91;  /* ✅ MISMO COLOR QUE LOS DEMÁS LINKS */
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+}
+
+.dropdown .dropbtn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+    transition: width 0.3s ease;
+}
+
+.dropdown:hover .dropbtn {
+    color: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+}
+
+.dropdown:hover .dropbtn::after {
+    width: 100%;
+}
+
+/* Contenido desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0a2f3d;
+    min-width: 100%;  /* ✅ SE AJUSTA AL ANCHO DEL CONTENIDO */
+    width: max-content;  /* ✅ SE EXPANDE SEGÚN EL TEXTO */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 1000;
+    margin-top: 10px;
+    padding: 10px 0;
+    border: 1px solid rgba(63, 138, 163, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-content a {
+    color: #A8E6B8;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    white-space: nowrap;  /* ✅ EVITA QUE EL TEXTO SE PARTA */
+}
+
+.dropdown-content a:hover {
+    background: rgba(63, 138, 163, 0.2);
+    color: #92C7A3;
+    border-left: 3px solid #92C7A3;
+    padding-left: 25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border: none;
+        margin-top: 5px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        white-space: normal;  /* ✅ EN MÓVIL PERMITE SALTOS DE LÍNEA */
+    }
+}
+</style>
+</head>
+
+<body>
+    
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"      data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"      data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"      data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+  <div class="Container">
+         <!-- Decoraciones de fondo -->
+        <div class="deco deco-1"></div>
+        <div class="deco deco-2"></div>
+        
+        <!-- Partículas -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        
+        <!-- Contenido principal -->
+        <div class="banner-content">
+        <div class="banner-text-container">
+            <div class="banner-question-line">
+                <div class="banner-question" data-es="Tienes alguna" data-en="Do you have any">Tienes alguna</div>
+                <div class="banner-subtitle" data-es="duda?" data-en="questions?">duda?</div>
+            </div>
+            <div class="subtitle2" data-es="Aquí están tus respuestas" data-en="Here are your answers">Aquí están tus respuestas</div>
+        </div>
+        <img src="Assets/Dudas.png" alt="Phone">
+    </div>
+</div>
+
+    
+<div class="overlay" id="overlay"></div>
+
+     <div class="overlay" id="overlay"></div>
+
+    <!-- SECCIÓN FAQ -->
+    <div class="faq-container">
+        <h2 class="faq-title" data-es="Preguntas Frecuentes" data-en="Frequently Asked Questions">Preguntas Frecuentes</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3 data-es="¿Nuestros servicios son gratis?" data-en="Are our services free?">¿Nuestros servicios son gratis?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p data-es="Sí, ofrecemos una versión básica completamente gratuita de nuestro software. También contamos con planes premium con características avanzadas para quienes buscan maximizar su experiencia de bienestar y desarrollo personal." data-en="Yes, we offer a completely free basic version of our software. We also have premium plans with advanced features for those looking to maximize their wellness and personal development experience.">Sí, ofrecemos una versión básica completamente gratuita de nuestro software. También contamos con planes premium con características avanzadas para quienes buscan maximizar su experiencia de bienestar y desarrollo personal.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3 data-es="¿Nuestro software es preciso y confiable?" data-en="Is our software accurate and reliable?">¿Nuestro software es preciso y confiable?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p data-es="Absolutamente. Nuestro software está desarrollado utilizando las mejores prácticas de la industria y es constantemente actualizado. Trabajamos con expertos en salud, nutrición y tecnología para garantizar precisión y confiabilidad en todas nuestras funcionalidades." data-en="Absolutely. Our software is developed using industry best practices and is constantly updated. We work with experts in health, nutrition and technology to ensure accuracy and reliability in all our functionalities.">Absolutamente. Nuestro software está desarrollado utilizando las mejores prácticas de la industria y es constantemente actualizado. Trabajamos con expertos en salud, nutrición y tecnología para garantizar precisión y confiabilidad en todas nuestras funcionalidades.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3 data-es="¿Qué tipo de hábitos saludables puedo desarrollar?" data-en="What type of healthy habits can I develop?">¿Qué tipo de hábitos saludables puedo desarrollar?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p data-es="Con UpGrade puedes desarrollar hábitos de ejercicio, alimentación saludable, meditación, gestión del tiempo, hidratación, sueño reparador y mucho más. Nuestro sistema se adapta a tus objetivos personales y te guía paso a paso." data-en="With UpGrade you can develop habits of exercise, healthy eating, meditation, time management, hydration, restful sleep and much more. Our system adapts to your personal goals and guides you step by step.">Con UpGrade puedes desarrollar hábitos de ejercicio, alimentación saludable, meditación, gestión del tiempo, hidratación, sueño reparador y mucho más. Nuestro sistema se adapta a tus objetivos personales y te guía paso a paso.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3 data-es="¿Cómo protegen mis datos personales?" data-en="How do you protect my personal data?">¿Cómo protegen mis datos personales?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p data-es="La privacidad es nuestra prioridad. Utilizamos encriptación de nivel bancario para proteger toda tu información. Tus datos nunca se comparten con terceros y tienes control total sobre tu información en todo momento." data-en="Privacy is our priority. We use bank-level encryption to protect all your information. Your data is never shared with third parties and you have full control over your information at all times.">La privacidad es nuestra prioridad. Utilizamos encriptación de nivel bancario para proteger toda tu información. Tus datos nunca se comparten con terceros y tienes control total sobre tu información en todo momento.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                <h3 data-es="¿Puedo usar UpGrade en múltiples dispositivos?" data-en="Can I use UpGrade on multiple devices?">¿Puedo usar UpGrade en múltiples dispositivos?</h3>
+                <span class="faq-arrow">▼</span>
+            </div>
+            <div class="faq-answer">
+                <p data-es="¡Por supuesto! UpGrade está disponible en web, iOS y Android. Tu progreso se sincroniza automáticamente entre todos tus dispositivos, permitiéndote acceder a tus datos y continuar tu desarrollo desde cualquier lugar." data-en="Of course! UpGrade is available on web, iOS and Android. Your progress syncs automatically across all your devices, allowing you to access your data and continue your development from anywhere.">¡Por supuesto! UpGrade está disponible en web, iOS y Android. Tu progreso se sincroniza automáticamente entre todos tus dispositivos, permitiéndote acceder a tus datos y continuar tu desarrollo desde cualquier lugar.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIÓN CONTACTO -->
+    <div class="contact-container">
+    <h3 class="contact-pretitle" data-es="¿Sigues con dudas?" data-en="Still have questions?">¿Sigues con dudas?</h3>
+    <h2 class="contact-title" data-es="Contáctanos" data-en="Contact Us">Contáctanos</h2>
+    
+    <form id="contactForm">
+        <div class="form-group">
+            <label for="nombre" data-es="Nombre" data-en="Name">Nombre</label>
+            <input type="text" id="nombre" name="nombre" data-es-placeholder="Tu nombre completo" data-en-placeholder="Your full name" placeholder="Tu nombre completo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="correo" data-es="Correo Electrónico" data-en="Email">Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="tu@email.com" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mensaje" data-es="Mensaje" data-en="Message">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" data-es-placeholder="Escribe tu mensaje aquí..." data-en-placeholder="Write your message here..." placeholder="Escribe tu mensaje aquí..." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" data-es="Enviar Mensaje" data-en="Send Message">Enviar Mensaje</button>
+    </form>
+
+    <!-- Mensaje de éxito -->
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <div class="success-text" data-es="¡Mensaje Enviado!" data-en="Message Sent!">¡Mensaje Enviado!</div>
+        <div class="success-subtext" data-es="Te responderemos pronto" data-en="We'll respond soon">Te responderemos pronto</div>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-column">
+        <div class="footer-logo">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+            <span>UpGrade</span>
+        </div>
+        <p style="max-width:300px; line-height:1.4; font-size:15px;" data-es="Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral." data-en="We believe that wellbeing should be accessible to everyone, which is why we use technology as a bridge to inclusion and comprehensive development.">
+            Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la
+tecnología como puente hacia la inclusión y el desarrollo integral.
+        </p>
+        <div class="footer-socials">
+            <span>💚</span>
+            <span>🍎</span>
+            <span>🏋️‍♂️</span>
+            <span>🌿</span>
+        </div>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Servicios" data-en="Services">Servicios</h4>
+        <ul>
+            <li><a href="#" data-es="Software Innovadores" data-en="Innovative Software">Software Innovadores</a></li>
+            <li><a href="#" data-es="Innovación" data-en="Innovation">Innovación</a></li>
+            <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+            <li><a href="#" data-es="Intuición" data-en="Intuition">Intuición</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Corporación" data-en="Corporation">Corporación</h4>
+        <ul>
+            <li><a href="#" data-es="Nosotros" data-en="About Us">Nosotros</a></li>
+            <li><a href="#" data-es="Misión y Visión" data-en="Mission and Vision">Misión y Visión</a></li>
+            <li><a href="#" data-es="Equipo" data-en="Team">Equipo</a></li>
+            <li><a href="#" data-es="Contacto" data-en="Contact">Contacto</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-column">
+        <h4 data-es="Bienestar" data-en="Wellbeing">Bienestar</h4>
+        <ul>
+            <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+            <li><a href="#" data-es="Nutrición" data-en="Nutrition">Nutrición</a></li>
+            <li><a href="#" data-es="Ejercicio" data-en="Exercise">Ejercicio</a></li>
+            <li><a href="#" data-es="Salud Digital" data-en="Digital Health">Salud Digital</a></li>
+        </ul>
+    </div>
+
+    <div class="footer-bottom" data-es="© 2025 UpGrade. Promoviendo innovación y bienestar." data-en="© 2025 UpGrade. Promoting innovation and wellbeing.">
+        © 2025 UpGrade. Promoviendo innovación y bienestar.
+    </div>
+</footer>
+
+<div class="settings-overlay" id="settingsOverlay"></div>
+
+<div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+        <h4 data-es="Configuración" data-en="Settings">Configuración</h4>
+        <button class="settings-close" id="settingsCloseBtn">✕</button>
+    </div>
+
+    <div class="settings-content">
+        <!-- Modo oscuro -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span>🌙</span>
+                <span data-es="Apariencia" data-en="Appearance">Apariencia</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                <div class="toggle-switch" id="darkModeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tamaño de letra -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span>🔤</span>
+                <span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                <div class="custom-select">
+                    <select id="fontSizeSelect">
+                        <option value="small" data-es="Pequeño" data-en="Small">Pequeño</option>
+                        <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                        <option value="large" data-es="Grande" data-en="Large">Grande</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Idioma -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span>🌐</span>
+                <span data-es="Idioma" data-en="Language">Idioma</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                <div class="custom-select">
+                    <select id="languageSelect">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span>🔔</span>
+                <span data-es="Notificaciones" data-en="Notifications">Notificaciones</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                <div class="toggle-switch active" id="notificationsToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- NOTIFICATION TOAST -->
+<div class="notification-toast" id="notificationToast">
+    <div class="notification-icon">💚</div>
+    <div class="notification-content">
+        <div class="notification-title">¡Hola!</div>
+        <div class="notification-message">Bienvenido a UpGrade</div>
+    </div>
+    <button class="notification-close" id="notificationClose">✕</button>
+</div>
+
+<!-- JavaScript de configuración GLOBAL -->
+<script src="settings-global.js"></script>
+<script>
+
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                // Cerrar otros items abiertos
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains('active')) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                
+                // Toggle del item actual
+                item.classList.toggle('active');
+            });
+        });
+
+        // === FUNCIONALIDAD FORMULARIO ===
+        const contactForm = document.getElementById('contactForm');
+        const successMessage = document.getElementById('successMessage');
+        const overlay = document.getElementById('overlay');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Mostrar overlay y mensaje de éxito
+            overlay.classList.add('show');
+            successMessage.classList.add('show');
+            
+            // Limpiar formulario
+            contactForm.reset();
+            
+            // Ocultar mensaje después de 3 segundos
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+                overlay.classList.remove('show');
+            }, 3000);
+        });
+
+        // Cerrar mensaje al hacer clic en el overlay
+        overlay.addEventListener('click', () => {
+            successMessage.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+
+        // ==================== SETTINGS SYSTEM ====================
+        function initializeSettings() {
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const settingsOverlay = document.getElementById('settingsOverlay');
+            const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const fontSizeSelect = document.getElementById('fontSizeSelect');
+            const languageSelect = document.getElementById('languageSelect');
+            const notificationsToggle = document.getElementById('notificationsToggle');
+
+            loadSettings();
+
+            settingsBtn.addEventListener('click', () => {
+                settingsPanel.classList.add('active');
+                settingsOverlay.classList.add('active');
+            });
+
+            function closePanel() {
+                settingsPanel.classList.remove('active');
+                settingsOverlay.classList.remove('active');
+            }
+
+            settingsCloseBtn.addEventListener('click', closePanel);
+            settingsOverlay.addEventListener('click', closePanel);
+
+            darkModeToggle.addEventListener('click', () => {
+                darkModeToggle.classList.toggle('active');
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+            });
+
+            fontSizeSelect.addEventListener('change', (e) => {
+                document.body.classList.remove('font-small', 'font-medium', 'font-large');
+                document.body.classList.add(`font-${e.target.value}`);
+                localStorage.setItem('fontSize', e.target.value);
+            });
+
+            languageSelect.addEventListener('change', (e) => {
+                changeLanguage(e.target.value);
+                localStorage.setItem('language', e.target.value);
+            });
+
+            notificationsToggle.addEventListener('click', () => {
+                notificationsToggle.classList.toggle('active');
+                const isActive = notificationsToggle.classList.contains('active');
+                localStorage.setItem('notifications', isActive);
+                
+                if (isActive) {
+                    startNotifications();
+                } else {
+                    stopNotifications();
+                }
+            });
+
+            const notificationClose = document.getElementById('notificationClose');
+            notificationClose.addEventListener('click', hideNotification);
+        }
+
+        function loadSettings() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').classList.add('active');
+            }
+
+            const fontSize = localStorage.getItem('fontSize') || 'medium';
+            document.body.classList.add(`font-${fontSize}`);
+            document.getElementById('fontSizeSelect').value = fontSize;
+
+            const language = localStorage.getItem('language') || 'es';
+            document.getElementById('languageSelect').value = language;
+            changeLanguage(language);
+
+            const notifications = localStorage.getItem('notifications') !== 'false';
+            if (notifications) {
+                document.getElementById('notificationsToggle').classList.add('active');
+                startNotifications();
+            } else {
+                document.getElementById('notificationsToggle').classList.remove('active');
+            }
+        }
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-es][data-en]');
+            elements.forEach(element => {
+                if (lang === 'es') {
+                    element.textContent = element.getAttribute('data-es');
+                } else {
+                    element.textContent = element.getAttribute('data-en');
+                }
+            });
+
+            // Cambiar placeholders
+            const inputs = document.querySelectorAll('[data-es-placeholder][data-en-placeholder]');
+            inputs.forEach(input => {
+                if (lang === 'es') {
+                    input.placeholder = input.getAttribute('data-es-placeholder');
+                } else {
+                    input.placeholder = input.getAttribute('data-en-placeholder');
+                }
+            });
+
+            const fontOptions = document.querySelectorAll('#fontSizeSelect option');
+            fontOptions.forEach(option => {
+                if (option.hasAttribute(`data-${lang}`)) {
+                    option.textContent = option.getAttribute(`data-${lang}`);
+                }
+            });
+        }
+
+        // ==================== NOTIFICATION SYSTEM ====================
+        let notificationInterval;
+        const notifications = {
+            es: [
+                { icon: '💚', title: '¡Mantente activo!', message: 'Recuerda hacer una pausa y estirarte' },
+                { icon: '💧', title: 'Hidratación', message: 'Es hora de tomar agua. Tu cuerpo te lo agradecerá' },
+                { icon: '🏋️', title: 'Tip de salud', message: 'El ejercicio regular mejora tu bienestar' },
+                { icon: '🥗', title: 'Alimentación saludable', message: 'Una buena nutrición es clave para tu salud' },
+                { icon: '😴', title: 'Descanso', message: 'Dormir bien es fundamental para tu salud' },
+                { icon: '🧘', title: 'Relájate', message: 'Toma un momento para respirar profundamente' },
+                { icon: '📱', title: 'UpGrade te recuerda', message: 'Cuida tu postura mientras usas dispositivos' },
+                { icon: '🌟', title: '¡Sigue así!', message: 'Cada pequeño paso cuenta hacia un estilo de vida saludable' }
+            ],
+            en: [
+                { icon: '💚', title: 'Stay active!', message: 'Remember to take a break and stretch' },
+                { icon: '💧', title: 'Hydration', message: "It's time to drink water. Your body will thank you" },
+                { icon: '🏋️', title: 'Health tip', message: 'Regular exercise improves your wellbeing' },
+                { icon: '🥗', title: 'Healthy eating', message: 'Good nutrition is key to your health' },
+                { icon: '😴', title: 'Rest', message: 'Sleeping well is essential for your health' },
+                { icon: '🧘', title: 'Relax', message: 'Take a moment to breathe deeply' },
+                { icon: '📱', title: 'UpGrade reminds you', message: 'Take care of your posture while using devices' },
+                { icon: '🌟', title: 'Keep it up!', message: 'Every small step counts towards a healthy lifestyle' }
+            ]
+        };
+
+        function showNotification() {
+            const isActive = document.getElementById('notificationsToggle').classList.contains('active');
+            if (!isActive) return;
+
+            const language = localStorage.getItem('language') || 'es';
+            const notificationList = notifications[language];
+            const randomNotification = notificationList[Math.floor(Math.random() * notificationList.length)];
+
+            const toast = document.getElementById('notificationToast');
+            const icon = toast.querySelector('.notification-icon');
+            const title = toast.querySelector('.notification-title');
+            const message = toast.querySelector('.notification-message');
+
+            icon.textContent = randomNotification.icon;
+            title.textContent = randomNotification.title;
+            message.textContent = randomNotification.message;
+
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        function hideNotification() {
+            const toast = document.getElementById('notificationToast');
+            toast.classList.remove('show');
+        }
+
+        function startNotifications() {
+            if (notificationInterval) {
+                clearInterval(notificationInterval);
+            }
+
+            setTimeout(showNotification, 5000);
+            notificationInterval = setInterval(showNotification, 120000);
+        }
+
+        function stopNotifications() {
+            if (notificationInterval) {
+                clearInterval(notificationInterval);
+                notificationInterval = null;
+            }
+            hideNotification();
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const settingsPanel = document.getElementById('settingsPanel');
+                if (settingsPanel && settingsPanel.classList.contains('active')) {
+                    settingsPanel.classList.remove('active');
+                    document.getElementById('settingsOverlay').classList.remove('active');
+                }
+            }
+            
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('settingsPanel').classList.add('active');
+                document.getElementById('settingsOverlay').classList.add('active');
+            }
+        });
+
+        // ==================== INITIALIZE ====================
+        initializeSettings();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,2134 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpGrade - Corporación</title>
+    
+    <style>
+       /* ==================== FUENTES ==================== */
+        @font-face { font-family: Gildeon;  src: url(Gildeon.otf); }
+        @font-face { font-family: BebasNeue; src: url(BebasNeue-Regular.otf); }
+        @font-face { font-family: Nexa;     src: url(Nexa-Heavy.ttf); }
+
+        /* ==================== VARIABLES ==================== */
+        :root {
+            --c-primary:   #3f8aa3;
+            --c-accent:    #A8E6B8;
+            --c-accent2:   #92C7A3;
+            --c-green:     #6edab1;
+            --c-bg:        #1a6179;
+            --c-header:    #0f3d50;
+            --c-mid:       #0e4a5a;
+            --c-text:      #e0f2f1;
+            --c-muted:     rgba(255,255,255,0.75);
+            --radius:      20px;
+            --shadow:      0 20px 60px rgba(0,0,0,0.45);
+            --transition:  0.35s cubic-bezier(0.4,0,0.2,1);
+
+            /* Font sizes — controlados por settings */
+            --fs-h1: 80px;
+            --fs-h2: 56px;
+            --fs-h3: 22px;
+            --fs-p:  16px;
+            --fs-nav:15.5px;
+        }
+
+        body.font-small  { --fs-h1:56px; --fs-h2:40px; --fs-h3:17px; --fs-p:13px; --fs-nav:14px; }
+        body.font-medium { --fs-h1:80px; --fs-h2:56px; --fs-h3:22px; --fs-p:16px; --fs-nav:15.5px; }
+        body.font-large  { --fs-h1:96px; --fs-h2:68px; --fs-h3:27px; --fs-p:19px; --fs-nav:17px; }
+
+        /* ==================== RESET ==================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-y: scroll;
+            scrollbar-width: none;
+        }
+        html::-webkit-scrollbar { display: none; }
+
+        body {
+            background: var(--c-bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--c-text);
+            overflow-x: hidden;
+        }
+
+        /* ==================== DARK MODE ==================== */
+        body.dark-mode {
+            --c-bg:#121212; --c-header:#1a1a1a;
+            --c-accent:#cacaca; --c-accent2:#aaa; --c-green:#777;
+        }
+        body.dark-mode header                 { background:#1a1a1a; }
+        body.dark-mode header nav a,
+        body.dark-mode .dropdown .dropbtn     { color:#777; }
+        body.dark-mode .brand-name            { background:linear-gradient(135deg,#888,#bbb); -webkit-background-clip:text; background-clip:text; }
+        body.dark-mode .section-3d            { background:linear-gradient(100deg,#1a2a38,#0e3a40); }
+        body.dark-mode .section-ra            { background:linear-gradient(80deg,#162030,#1e3530); }
+        body.dark-mode .section-benefits      { background:linear-gradient(100deg,#1a2a38,#0e3a40); }
+        /* app section elements */
+        body.dark-mode .app-tag               { background:rgba(180,180,180,.07); border-color:rgba(180,180,180,.18); color:#999; }
+        body.dark-mode .app-title             { color:#c0c0c0; text-shadow:none; }
+        body.dark-mode .app-title::after      { background:linear-gradient(90deg,#555,transparent); }
+        body.dark-mode .app-description       { border-left-color:#555; color:rgba(255,255,255,.6); }
+        body.dark-mode .benefit-dot           { background:#666; box-shadow:none; }
+        body.dark-mode .benefit-item          { border-color:rgba(255,255,255,.05); }
+        body.dark-mode .benefit-item:hover    { background:rgba(255,255,255,.05); }
+        body.dark-mode .screenshot-card       { background:linear-gradient(145deg,#1e1e1e,#282828); border-color:rgba(255,255,255,.1); }
+        body.dark-mode .screenshot-label      { color:rgba(255,255,255,.35); }
+        body.dark-mode .benefits-title        { color:#c0c0c0; text-shadow:none; }
+        body.dark-mode .benefit-card          { background:linear-gradient(145deg,rgba(28,28,28,.9),rgba(38,38,38,.7)); border-color:rgba(255,255,255,.07); }
+        body.dark-mode .benefit-card h3       { color:#aaa; }
+        body.dark-mode .benefits-summary      { border-color:rgba(255,255,255,.07); }
+        /* settings */
+        body.dark-mode .settings-panel        { background:#222; }
+        body.dark-mode .settings-group-title  { color:#777; }
+        body.dark-mode .settings-option       { background:#2e2e2e; }
+        body.dark-mode .settings-option:hover { background:#383838; }
+        body.dark-mode .custom-select select  { background:#2e2e2e; color:#e0e0e0; border-color:#444; }
+        /* toast */
+        body.dark-mode .notification-toast    { background:#222; }
+        body.dark-mode .notification-title    { color:#999; }
+        body.dark-mode .notification-message  { color:#b0b0b0; }
+        /* footer */
+        body.dark-mode footer                 { background:linear-gradient(135deg,#0d0d0d,#181818); }
+        body.dark-mode .footer-logo span      { background:linear-gradient(135deg,#666,#999); -webkit-background-clip:text; background-clip:text; }
+        body.dark-mode .footer-column h4      { color:#777; }
+        body.dark-mode .footer-column ul li a { color:#666; }
+        body.dark-mode .footer-bottom         { color:#555; }
+
+        /* ==================== HEADER ==================== */
+      header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            background: var(--c-header);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+        }
+
+        .logo-container { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+        .logo-container a { text-decoration:none; }
+        header img { width:58px; height:75px; object-fit:contain; }
+
+        .brand-name {
+            font-family: Gildeon, sans-serif;
+            font-size: 34px;
+            background: linear-gradient(135deg,#3f8aa3 20%,#A8E6B8 55%,#8fc5d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            font-weight: bold;
+            position: relative;
+        }
+        .brand-name::after {
+            content:'';
+            position:absolute; bottom:-4px; left:0;
+            width:100%; height:2px;
+            background: linear-gradient(30deg,transparent,#00BCD4,transparent);
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%,100% { opacity:.5; filter:blur(1px); }
+            50%      { opacity:1; filter:blur(0); }
+        }
+
+
+/* NAV CENTRADO CON CONFIGURACIÓN A LA DERECHA */
+header nav {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+header nav a {
+    text-decoration: none;
+    color: #3f8aa3;
+    font-weight: 500;
+    font-size: 15.5px;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+header nav a:hover {
+    color: #3D9B8F;
+}
+
+header nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;
+    transition: width 0.3s ease;
+}
+
+header nav a:hover::after {
+    width: 100%;
+}
+
+   nav {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+}
+
+nav a {
+    text-align: center;
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #3D9B8F;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #4A90A4;
+    transition: width 0.3s ease;
+}
+
+nav a:hover {
+    color: #4A90A4;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header img {
+            width: 70px;
+            height: 90px;
+            max-height: 85px;
+        }
+
+    
+
+        header nav {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        header nav a {
+            font-size: 17px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #3f8aa3;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        header nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4A90A4;
+            transition: width 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #4A90A4;
+        }
+
+        header nav a:hover::after {
+            width: 100%;
+        }
+
+
+
+        .brand-name {
+            font-family: Gildeon, sans-serif;
+            font-size: 36px;
+            background: linear-gradient(135deg, #3f8aa3 20%, #A8E6B8 50%, #8fc5d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .brand-name {
+            font-family: Gildeon, sans-serif;
+            font-size: 36px;
+            background: linear-gradient(135deg, #3f8aa3 20%, #A8E6B8 50%, #8fc5d0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.5);
+            position: relative;
+        }
+
+        .brand-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(30deg, transparent, #00BCD4, transparent);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .settings-btn-menu {
+            background: #36585d00;
+            border: none;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(12, 78, 98, 0.3);
+        }
+
+        .settings-btn-menu:hover {
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        /* ==================== BANNER ==================== */
+        .Container {
+            width: 100%;            
+            height: 350px;
+            background: linear-gradient(90deg, #256377 50%, #256377 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-content {
+            margin-right: 400px;
+            z-index: 10;
+            text-align: center;
+            position: absolute;
+        }
+
+        .banner-question {
+            text-shadow: 1px 1px 20px rgba(237, 249, 248, 0.956);
+            font-family: Gildeon;
+            font-size: 90px;
+            color: #ffffff;
+            letter-spacing: -1px;
+        }
+
+        .banner-subtitle {
+            text-shadow: 1px 1px 20px rgba(75, 193, 183, 0.956);
+            font-family: 'Gildeon', sans-serif;
+            font-size: 70px;
+            background: linear-gradient(135deg, #A8E6B8 100%, #A8E6B8 50%, #92C7A3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 3px;
+        }
+
+        /* ==================== ABOUT US HERO ==================== */
+        .about-hero {
+            background: #1a5a6f;
+            padding: 100px 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+        }
+
+        .about-hero-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .about-hero-text h1 {
+            font-family: Gildeon, sans-serif;
+    font-size: 70px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+        }
+
+        .about-hero-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ffffff;
+        }
+
+        .about-hero-image {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .about-hero-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ==================== MISSION SECTION ==================== */
+        .mission-section {
+            background: #0f3d50;
+            padding: 100px 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+        }
+
+        .mission-image {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .mission-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .mission-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .mission-text h2 {
+            font-family: Gildeon, sans-serif;
+            width: 700px;
+            margin-left: -40px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+        }
+
+        .mission-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ffffff;
+            margin-left: -40px;
+            margin-bottom: 20px;
+        }
+
+        /* ==================== STORY SECTION ==================== */
+        .story-section {
+            background: #256377;
+            padding: 100px 80px;
+        }
+
+        .story-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .story-header h2 {
+            font-family: Gildeon, sans-serif;
+    font-size: 60px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+        }
+
+        .story-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+        }
+
+        .story-image {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .story-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .story-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .story-text p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        /* ==================== STATS SECTION ==================== */
+        .stats-section {
+            background: #0a556a;
+            padding: 80px;
+            text-align: center;
+        }
+
+        .stats-section h2 {
+            font-family: Gildeon, sans-serif;
+    font-size: 60px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            align-items: center;
+            text-align: center;
+        }
+
+        .stat-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #3f8aa3, #92C7A3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+        }
+
+        .stat-number {
+            font-family: Gildeon, sans-serif;
+            font-size: 32px;
+            color: #9c9c9c;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #c5c5c5;
+            margin-left: -40px;
+            margin-bottom: 20px;
+        }
+
+        .stat-link {
+            color: #061e28;
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .stat-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== VALUES SECTION ==================== */
+        .values-section {
+            background: #1a6179;
+            padding: 100px 80px;
+        }
+
+        .values-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .values-header h2 {
+            font-family: Gildeon, sans-serif;
+    font-size: 60px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+        }
+
+        .values-grid {
+            
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .value-card {
+            background: #0e3e4f;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .value-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .value-name {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .value-desc {
+            font-size: 15px;
+            color: #cecece;
+            line-height: 1.6;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+    background: linear-gradient(135deg, #0e3e4f 0%, #1a6179 100%);
+    color: #e0f2f1;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     margin-top: -30px;
+    padding: 40px 70px; /* ← más corto verticalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border-top: 2px solid rgba(146, 199, 163, 0.3);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.4);
+    position: relative;
+    overflow: hidden;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(63,138,163,0.15), transparent 70%);
+    animation: footerGlow 12s ease-in-out infinite alternate;
+}
+
+@keyframes footerGlow {
+    from { transform: scale(1); opacity: 0.7; }
+    to { transform: scale(1.2); opacity: 0.4; }
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 240px;
+    z-index: 2;
+    margin-bottom: 30px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+}
+
+.footer-logo img {
+    width: 60px;
+    height: 70px;
+}
+
+.footer-logo span {
+    font-family: Gildeon, sans-serif;
+    font-size: 34px;
+    background: linear-gradient(135deg, #3f8aa3 20%, #A8E6B8 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(0,188,212,0.4);
+}
+
+.footer-column h4 {
+    font-size: 24px; /* más grande */
+    color: #92C7A3;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.footer-column ul {
+    list-style: none;
+}
+
+.footer-column ul li {
+    margin-bottom: 2px;
+}
+
+.footer-column ul li a {
+    text-decoration: none;
+    color: #e0f2f1;
+    font-size: 18px; /* más grande */
+    transition: all 0.3s ease;
+}
+
+
+.footer-socials {
+    display: flex;
+    gap: 20px;
+    margin-top: 18px;
+    font-size: 24px;
+}
+
+.footer-socials span {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.footer-socials span:hover {
+    color: #92C7A3;
+    transform: scale(1.2);
+}
+
+.footer-bottom {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: #b8e6c3;
+}
+
+
+        /* ==================== PANEL DE CONFIGURACIÓN ==================== */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .settings-panel.active {
+            right: 0;
+        }
+
+       /* ==================== SETTINGS PANEL ==================== */
+    .settings-overlay {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,.5);
+        z-index: 1000; opacity: 0; visibility: hidden;
+        transition: all .3s ease;
+    }
+    .settings-overlay.active { opacity: 1; visibility: visible; }
+
+    .settings-panel {
+        background: #f0f0f0;
+        position: fixed; top: 0; right: -400px;
+        width: 380px; height: 100vh;
+        box-shadow: -5px 0 30px rgba(0,0,0,.3);
+        z-index: 1001;
+        transition: right .4s cubic-bezier(.68,-.55,.265,1.55);
+        overflow-y: auto;
+        display: flex; flex-direction: column;
+    }
+    .settings-panel.active { right: 0; }
+
+    .settings-header {
+        background: linear-gradient(135deg, #187b77 0%, #0a556a 100%);
+        color: #fff; padding: 24px 26px;
+        display: flex; justify-content: space-between; align-items: center;
+        flex-shrink: 0;
+    }
+    .settings-header h4 {
+        font-family: BebasNeue, 'Bebas Neue', sans-serif;
+        font-size: 40px; color: #fff;
+        letter-spacing: 1px; margin: 10;
+    }
+    .settings-close {
+        background: rgba(255,255,255,.2); border: none; color: #fff;
+        width: 33px; height: 33px; border-radius: 50%;
+        cursor: pointer; font-size: 16px;
+        display: flex; align-items: center; justify-content: center;
+        transition: background .3s ease, transform .3s ease;
+    }
+    .settings-close:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+
+    .settings-content { padding: 24px 20px; flex: 1; }
+
+    .settings-group {
+        margin-bottom: 24px;
+        animation: slideIn .45s ease both;
+        opacity: 0;
+    }
+    .settings-group:nth-child(1){animation-delay:.08s}
+    .settings-group:nth-child(2){animation-delay:.16s}
+    .settings-group:nth-child(3){animation-delay:.24s}
+    .settings-group:nth-child(4){animation-delay:.32s}
+    @keyframes slideIn { from{opacity:0;transform:translateX(14px)} to{opacity:1;transform:none} }
+
+    .settings-group-title {
+        font-family: 'Franklin Gothic Medium', Arial, sans-serif;
+        font-size: 11px; font-weight: 700; color: #2D5F5D;
+        text-transform: uppercase; letter-spacing: 1.2px;
+        margin-bottom: 10px;
+        display: flex; align-items: center; gap: 7px;
+    }
+    .settings-group-icon { font-size: 16px; }
+
+    .settings-option {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 12px 14px; background: #f5f7f8;
+        border-radius: 11px; margin-bottom: 9px;
+        transition: background .2s ease, transform .2s ease;
+    }
+    .settings-option:hover { background: #eaecee; transform: translateX(4px); }
+    .settings-option-label { font-size: 14px; color: #666; font-weight: 500; }
+
+    .toggle-switch {
+        position: relative; width: 50px; height: 26px;
+        background: #ccc; border-radius: 30px; cursor: pointer;
+        transition: background .3s ease;
+    }
+    .toggle-switch.active { background: #3D9B8F; }
+    .toggle-slider {
+        position: absolute; top: 3px; left: 3px;
+        width: 20px; height: 20px; background: #fff; border-radius: 50%;
+        transition: transform .3s ease; box-shadow: 0 2px 5px rgba(0,0,0,.2);
+    }
+    .toggle-switch.active .toggle-slider { transform: translateX(24px); }
+
+    .custom-select { position: relative; width: 130px; }
+    .custom-select select {
+        width: 100%; padding: 7px 30px 7px 11px;
+        border: 2px solid #ddd; border-radius: 8px;
+        font-size: 13px; font-weight: 500; color: #333;
+        background: #fff; cursor: pointer;
+        transition: border-color .3s ease; appearance: none;
+    }
+    .custom-select select:hover { border-color: #3D9B8F; }
+    .custom-select select:focus { outline: none; border-color: #2D5F5D; box-shadow: 0 0 0 3px rgba(61,155,143,.1); }
+    .custom-select::after {
+        content: '▼'; position: absolute;
+        right: 10px; top: 50%; transform: translateY(-50%);
+        pointer-events: none; font-size: 10px; color: #888;
+    }
+
+        /* Notificación flotante */
+        .notification-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            max-width: 400px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            z-index: 999;
+            transform: translateX(-500px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3D9B8F 0%, #6BC5B8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            letter-spacing: 0.5;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2D5F5D;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .notification-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        /* Modo oscuro */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode header {
+            background: #2a2a2a;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        body.dark-mode nav a {
+            color: #fff;
+        }
+
+        body.dark-mode .Container, .footer {
+            background: #1c1c1c;
+        }
+
+         body.dark-mode footer {
+            background: #1c1c1c;
+        }
+
+        body.dark-mode .settings-panel {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .settings-option {
+            background: #333;
+        }
+
+        body.dark-mode .notification-toast {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .notification-title {
+            color: #6BC5B8;
+        }
+
+        body.dark-mode .notification-message {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .about-hero,
+        body.dark-mode .story-section,
+        body.dark-mode .values-section {
+            background: #2a2a2a;
+        }
+
+        body.dark-mode .contact-hero {
+            
+            background: #1a1a1a;
+        }
+
+
+        body.dark-mode .contact-card {
+            
+            background: #2a2a2a;
+        }
+
+        body.dark-mode .impact-section {
+            background: #2a2a2a;
+        }
+
+        body.dark-mode .mission-section,
+        body.dark-mode .stats-section {
+            background: #1a1a1a;
+        }
+
+        body.dark-mode .about-hero-text h1,
+        body.dark-mode .mission-text h2,
+        body.dark-mode .story-header h2,
+        body.dark-mode .stats-section h2,
+        body.dark-mode .values-header h2 {
+            color: #A8E6B8;
+        }
+
+        body.dark-mode .about-hero-text p,
+        body.dark-mode .mission-text p,
+        body.dark-mode .story-text p {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode .about-card,
+        body.dark-mode .card {
+            background: #2a2a2a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .value-card {
+            color: #b0b0b0;
+            background: #1a1a1a;
+        }
+
+
+        body.font-small h1 { font-size: 45px; }
+        body.font-medium h1 { font-size: 55px; }
+        body.font-large h1 { font-size: 65px; }
+
+        body.font-small h2 { font-size: 45px; }
+        body.font-medium h2 { font-size: 60px; }
+        body.font-large h2 { font-size: 55px; }
+
+        body.font-small h3 { font-size: 25px; }
+        body.font-medium h3 { font-size: 30px; }
+        body.font-large h3 { font-size: 40px; }
+
+        body.font-small a { font-size: 10px; }
+body.font-medium a { font-size: 17px; }
+body.font-large a { font-size: 21px; }
+
+        body.font-small p { font-size: 12px; }
+        body.font-medium p { font-size: 18px; }
+        body.font-large p { font-size: 25px; }
+
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            header nav {
+                position: static;
+                transform: none;
+                width: 100%;
+                justify-content: center;
+                margin-top: 15px;
+                flex-wrap: wrap;
+            }
+
+            .about-hero,
+            .mission-section,
+            .story-content {
+                flex-direction: column;
+                padding: 60px 40px;
+            }
+
+            .mission-section {
+                flex-direction: column-reverse;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==================== TEAM SECTION ==================== */
+.team-section {
+    background: #3a3a3a;
+    padding: 40px 80px;
+}
+
+.team-section h2 {
+    font-family: Gildeon, sans-serif;
+    font-size: 70px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(168,230,184,0.3);
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.team-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.team-content {
+    order: 2;
+}
+
+.team-content p {
+    font-size: 20px;
+    color: #cccccc;
+    line-height: 1.9;
+    margin-bottom: 25px;
+}
+
+.team-image {
+    width: 100%;
+    height: 300px;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    order: 1;
+}
+
+.team-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.team-image:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 968px) {
+    .team-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .team-content {
+        order: 2;
+    }
+    
+    .team-image {
+        height: 400px;
+        order: 1;
+    }
+}
+/* ==================== IMPACT SECTION ==================== */
+.impact-section {
+    background: #0f3d50;
+    padding: 100px 80px;
+}
+
+.impact-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 80px;
+}
+
+.impact-text h2 {
+    font-family: Gildeon, sans-serif;
+    font-size: 60px;
+    color: #A8E6B8;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+    margin-bottom: 20px;
+}
+
+.impact-text p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+.impact-stats-mini {
+    display: flex;
+    gap: 50px;
+}
+
+.impact-stat-mini {
+    text-align: center;
+}
+
+.impact-number {
+    font-family: Gildeon, sans-serif;
+    font-size: 34px;
+    color: #92C7A3;
+    display: block;
+}
+
+.impact-label {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.impact-visual {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.impact-circle {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3f8aa3, #92C7A3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.impact-icon {
+    font-size: 90px;
+}
+
+/* ==================== TESTIMONIALS SECTION ==================== */
+.testimonials-section {
+    background: #256377;
+    padding: 100px 80px;
+}
+
+.testimonials-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.testimonials-header h2 {
+    font-family: Gildeon, sans-serif;
+    font-size: 60px;
+    color: #A8E6B8;
+    text-shadow: 0 0 25px rgba(146,199,163,0.5);
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background: #0e3e4f;
+    padding: 40px;
+    border-radius: 15px;
+    transition: 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.testimonial-stars {
+    font-size: 22px;
+    color: #A8E6B8;
+    margin-bottom: 15px;
+}
+
+.testimonial-text {
+    font-size: 16px;
+    color: #ffffff;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.testimonial-avatar {
+    font-size: 40px;
+}
+
+.testimonial-name {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.testimonial-location {
+    color: #cccccc;
+    font-size: 14px;
+}
+/* ==================== CONTACT SECTION (más horizontal) ==================== */
+
+.contact-hero {
+    background: linear-gradient(135deg, #0e5c73 0%, #1a7d9a 50%, #063b4c 100%);
+    padding: 100px 0;
+    text-align: center;
+    border-radius: 0 0 40px 40px;
+}
+
+.contact-hero h1 {
+    font-size: 60px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.contact-hero p {
+    font-size: 20px;
+    color: #e3f7ff;
+    margin: 0 0 40px 0;
+}
+
+.contact-box {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.contact-card {
+    background: #063b4c;
+    padding: 25px 40px;
+    border-radius: 25px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    min-width: 300px;
+    justify-content: left;
+}
+
+.contact-card span {
+    font-size: 30px;
+}
+
+.contact-card strong {
+    font-size: 20px;
+}
+
+/* MENÚ DESPLEGABLE */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .dropbtn {
+    font-size: 17px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #3f8aa3;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+.dropdown .dropbtn::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+    transition: width 0.3s ease;
+}
+
+.dropdown:hover .dropbtn {
+    color: #3D9B8F;  /* ✅ MISMO COLOR DE HOVER */
+}
+
+.dropdown:hover .dropbtn::after {
+    width: 100%;
+}
+
+/* Contenido desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0a2f3d;
+    min-width: 100%;  /* ✅ SE AJUSTA AL ANCHO DEL CONTENIDO */
+    width: max-content;  /* ✅ SE EXPANDE SEGÚN EL TEXTO */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 1000;
+    margin-top: 10px;
+    padding: 10px 0;
+    border: 1px solid rgba(63, 138, 163, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-content a {
+    color: #A8E6B8;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    white-space: nowrap;  /* ✅ EVITA QUE EL TEXTO SE PARTA */
+}
+
+.dropdown-content a:hover {
+    background: rgba(63, 138, 163, 0.2);
+    color: #92C7A3;
+    border-left: 3px solid #92C7A3;
+    padding-left: 25px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        border: none;
+        margin-top: 5px;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
+    .dropdown-content a {
+        white-space: normal;  /* ✅ EN MÓVIL PERMITE SALTOS DE LÍNEA */
+    }
+}
+
+.Container img {
+    width: 700px;
+    margin-left: 550px;
+    margin-top: -160px;
+    height: 600px;
+}
+
+.impact-visual img {
+    margin-left: 850px;
+    margin-top: -160px;
+    width: 600px;
+    height:559px;
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="Assets/Icono-empresa-Png.png" alt="Logo UpGrade">
+            <a href="Inicio-UP.html"><span class="brand-name">UpGrade</span></a>
+        </div>
+
+        <nav aria-label="Navegación principal">
+            <a href="Inicio-UP.html"      data-es="Inicio"      data-en="Home">Inicio</a>
+            <a href="Servicios.html"      data-es="Servicios"   data-en="Services">Servicios</a>
+            <a href="Artículos.html"      data-es="Artículos"   data-en="Articles">Artículos</a>
+            <div class="dropdown">
+                <a href="Corporacion.html" class="dropbtn" data-es="Corporación" data-en="Corporation">Corporación</a>
+                <div class="dropdown-content">
+                    <a href="normas-politicas.html" data-es="Normas y Políticas de la Empresa" data-en="Company Rules and Policies">Normas y Políticas de la Empresa</a>
+                </div>
+            </div>
+            <a href="realidad aumentada.html" data-es="Modelaje 3D"  data-en="3D Model">Modelaje 3D</a>
+            <a href="Ayuda.html"              data-es="Inquietudes"  data-en="Help">Inquietudes</a>
+        </nav>
+
+        <button class="settings-btn-menu" id="settingsBtn" aria-label="Abrir configuración">⚙️</button>
+    </header>
+
+    <div class="Container">
+        <div class="banner-content">
+            <div class="banner-question" data-es="¿Quiénes Somos?" data-en="Who We Are?">¿Quiénes Somos?</div>
+            <div class="banner-subtitle" data-es="Aquí lo sabrás" data-en="Find out here">Aquí lo sabrás</div>
+        </div>
+        <img src="Assets/corporacion.png" alt="Phone">
+    </div>
+
+    <!-- ABOUT US HERO -->
+    <section class="about-hero">
+        <div class="about-hero-text">
+            <h1 data-es="Sobre Nosotros" data-en="About Us">Sobre Nosotros</h1>
+            <p data-es="UpGrade es más que una empresa de tecnología. Somos un equipo apasionado dedicado a transformar la manera en que las personas gestionan su bienestar. Combinamos innovación tecnológica con un profundo compromiso humano para crear experiencias significativas." data-en="UpGrade is more than a technology company. We are a passionate team dedicated to transforming the way people manage their wellbeing. We combine technological innovation with a deep human commitment to create meaningful experiences.">
+                UpGrade es más que una empresa de tecnología. Somos un equipo apasionado dedicado a transformar la manera en que las personas gestionan su bienestar. Combinamos innovación tecnológica con un profundo compromiso humano para crear experiencias significativas.
+            </p>
+        </div>
+        <div class="about-hero-image">
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=400&fit=crop" alt="Team">
+        </div>
+    </section>
+
+    <!-- MISSION -->
+    <section class="mission-section">
+        <div class="mission-image">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" alt="Mission">
+        </div>
+        <div class="mission-text">
+            <h2 data-es="Compromiso" data-en="commitment">Compromiso</h2>
+            <p data-es="En nuestra empresa mantenemos un compromiso sólido con nuestros clientes, buscando siempre ofrecerles soluciones que realmente respondan a sus necesidades. No se trata solo de desarrollar software, sino de crear una experiencia que los acompañe en su bienestar diario." data-en="We believe that wellbeing is not a luxury, but a fundamental right. That's why we develop accessible, intuitive and inclusive solutions that allow anyone to take control of their physical, mental and emotional health.">
+               En nuestra empresa mantenemos un compromiso sólido con nuestros clientes, buscando siempre ofrecerles soluciones que realmente respondan a sus necesidades. No se trata solo de desarrollar software, sino de crear una experiencia que los acompañe en su bienestar diario.
+
+            </p>
+            <p data-es="Cada día trabajamos para hacer que el cambio positivo sea más fácil, más sostenible y más accesible para todos." data-en="Every day we work to make positive change easier, more sustainable and more accessible to everyone.">
+                Cada día trabajamos para hacer que el cambio positivo sea más fácil, más sostenible y más accesible para todos.
+            </p>
+        </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="story-section">
+        <div class="story-header">
+            <h2 data-es="Nuestra Historia" data-en="Our Story">Nuestra Historia</h2>
+        </div>
+        <div class="story-content">
+            <div class="story-image">
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600&h=400&fit=crop" alt="Story">
+            </div>
+            <div class="story-text">
+                <p data-es="En 2025, un grupo de estudiantes notaron un cambio en cómo las personas abordan su bienestar. Ya no era suficiente con aplicaciones simples o soluciones genéricas." data-en="In 2025, a group of students noticed a change in how people approach their well-being. Simple apps or generic solutions were no longer enough.">
+                    En 2025, un grupo de estudiantes notaron un cambio en cómo las personas abordan su bienestar. Ya no era suficiente con aplicaciones simples o soluciones genéricas.
+                </p>
+                <p data-es="Las personas necesitaban herramientas que realmente entendieran sus necesidades individuales, que los acompañaran en su journey personal y que hicieran el cambio accesible y sostenible. Así nació UpGrade." data-en="People needed tools that truly understood their individual needs, that accompanied them on their personal journey and that made change accessible and sustainable. That's how UpGrade was born.">
+                    Las personas necesitaban herramientas que realmente entendieran sus necesidades individuales, que los acompañaran en su journey personal y que hicieran el cambio accesible y sostenible. Así nació UpGrade.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+        <h2 data-es="Filosofía" data-en="Philosophy">Filosofía</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                
+                <div class="stat-label" data-es="Nuestra filosofía se fundamenta en promover un estilo de vida saludable que
+fortalezca el bienestar emocional, físico y social de cada persona. Aspiramos a
+que nuestros usuarios alcancen una vida saludable y plena.
+Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la
+tecnología como puente hacia la inclusión y el desarrollo integral." data-en="Our philosophy is based on promoting a healthy lifestyle that strengthens the emotional, physical, and social well-being of each person. We aspire for our users to achieve a healthy and fulfilling life. We believe that well-being should be accessible to everyone, which is why we use technology as a bridge to inclusion and holistic development.">Nuestra filosofía se fundamenta en promover un estilo de vida saludable que
+fortalezca el bienestar emocional, físico y social de cada persona. Aspiramos a
+que nuestros usuarios alcancen una vida saludable y plena.
+Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la
+tecnología como puente hacia la inclusión y el desarrollo integral.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="values-section">
+        <div class="values-header">
+            <h2 data-es="Nuestros Valores" data-en="Our Values">Nuestros Valores</h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card">
+               <div class="value-icon">❤️</div>
+                <div class="value-name" data-es="Empatía" data-en="Empathy">Empatía</div>
+                <div class="value-desc" data-es="Comprensión profunda de las necesidades del usuario" data-en="Deep understanding of user needs">Comprensión profunda de las necesidades del usuario</div>
+            </div>
+            <div class="value-card">
+    <div class="value-icon">🛡️</div>
+    <div class="value-name" data-es="Integridad" data-en="Integrity">Integridad</div>
+    <div class="value-desc" data-es="Actuamos con honestidad, ética y responsabilidad en cada acción" data-en="We act with honesty, ethics, and responsibility in every action">
+        Actuamos con honestidad, ética y responsabilidad en cada acción
+    </div>
+</div>
+
+<div class="value-card">
+    <div class="value-icon">🤝</div>
+    <div class="value-name" data-es="Solidaridad" data-en="Solidarity">Solidaridad</div>
+    <div class="value-desc" data-es="Apoyamos y ayudamos a otros para construir un mejor entorno" data-en="We support and help others to build a better environment">
+        Apoyamos y ayudamos a otros para construir un mejor entorno
+    </div>
+</div>
+
+        </section>
+
+        
+        
+    <!-- TEAM SECTION -->
+    <!-- TEAM SECTION -->
+    <section class="team-section">
+        <div class="team-container">
+            <div class="team-content">
+                <h2 data-es="Nuestro Equipo" data-en="Our Team">Nuestro Equipo</h2>
+                <p data-es="En UpGrade, creemos que la verdadera innovación nace de la pasión y el compromiso. Nuestro equipo multidisciplinario está compuesto por estudiantes que trabajan unidos con un objetivo común: transformar la forma en que las personas cuidan de su salud." data-en="Our multidisciplinary team is composed of exs who work together with a common goal: to transform the way people take care of their health.">
+                    En UpGrade, creemos que la verdadera innovación nace de la pasión y el compromiso. Nuestro equipo multidisciplinario está compuesto por estudiantes que trabajan unidos con un objetivo común: transformar la forma en que las personas cuidan de su salud.
+                </p>
+                <p data-es="Con más de 25 estudiantes dedicados, combinamos experiencia social de primer nivel con las últimas innovaciones en inteligencia artificial y desarrollo de software. Cada miembro de nuestro equipo aporta una perspectiva única, creando soluciones que no solo son tecnológicamente avanzadas, sino también profundamente humanas y accesibles." data-en="With more than 25 dedicated students, we combine top-tier social expertise with the latest innovations in artificial intelligence and software development. Each member of our team brings a unique perspective, creating solutions that are not only technologically advanced but also deeply human and accessible.">
+                    Con más de 25 estudiantes dedicados, combinamos experiencia social de primer nivel con las últimas innovaciones en inteligencia artificial y desarrollo de software. Cada miembro de nuestro equipo aporta una perspectiva única, creando soluciones que no solo son tecnológicamente avanzadas, sino también profundamente humanas y accesibles.
+                </p>
+            </div>
+            <div class="team-image">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=1000&fit=crop" alt="Equipo UpGrade">
+            </div>
+        </div>
+    </section>
+
+    <!-- IMPACT SECTION -->
+    <section class="impact-section">
+    <div class="impact-content">
+        <div class="impact-text">
+            <h2 data-es="Impacto Real" data-en="Real Impact">Impacto Real</h2>
+            <p data-es="Cada día, miles de personas utilizan UpGrade..." data-en="">
+                Cada día, miles de personas utilizan UpGrade para transformar sus vidas. Nuestras soluciones han ayudado a mejorar la salud física, mental y emocional de usuarios en toda Latinoamérica.
+            </p>
+
+            <div class="impact-stats-mini">
+                <div class="impact-stat-mini">
+                    <span class="impact-number">0%</span>
+                    <span class="impact-label">Satisfacción</span>
+                </div>
+
+                <div class="impact-stat-mini">
+                    <span class="impact-number">0⭐</span>
+                    <span class="impact-label">Calificación</span>
+                </div>
+
+                <div class="impact-stat-mini">
+                    <span class="impact-number">0%</span>
+                    <span class="impact-label">Mejora reportada</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="impact-visual">
+                <img src="Assets/impacto.png">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- CONTACT SECTION -->
+     <section class="contact-hero">
+    <h1>Contáctanos</h1>
+    <p>¿Tienes preguntas? Estamos aquí para ayudarte.<br>Respondemos en menos de 24 horas.</p>
+
+    <div class="contact-box">
+        <div class="contact-card">
+            <span>📧</span>
+            <div>
+                <strong>Email</strong><br>
+                contacto@upgrade.com
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <span>📱</span>
+            <div>
+                <strong>Teléfono</strong><br>
+                +1 (809) 555-1234
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+ <!-- FOOTER -->
+    <footer>
+        <div class="footer-column">
+            <div class="footer-logo">
+                <img src="Assets/Icono-empresa-Png.png" alt="Logo">
+                <span>UpGrade</span>
+            </div>
+            <!-- ✅ AQUÍ agregar data-es y data-en -->
+            <p style="max-width:300px; line-height:1.4; font-size:15px;" data-es="Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral." data-en="We believe that wellbeing should be accessible to everyone, which is why we use technology as a bridge to inclusion and comprehensive development.">
+                Creemos que el bienestar debe ser accesible para todos, por eso utilizamos la tecnología como puente hacia la inclusión y el desarrollo integral.
+            </p>
+            <div class="footer-socials">
+                <span>💚</span>
+                <span>🍎</span>
+                <span>🏋️‍♂️</span>
+                <span>🌿</span>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <!-- ✅ AQUÍ agregar data-es y data-en -->
+            <h4 data-es="Servicios" data-en="Services">Servicios</h4>
+            <ul>
+                <li><a href="#" data-es="Software Innovadores" data-en="Innovative Software">Software Innovadores</a></li>
+                <li><a href="#" data-es="Innovación" data-en="Innovation">Innovación</a></li>
+                <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Intuición" data-en="Intuition">Intuición</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <!-- ✅ AQUÍ agregar data-es y data-en -->
+            <h4 data-es="Corporación" data-en="Corporation">Corporación</h4>
+            <ul>
+                <li><a href="#" data-es="Nosotros" data-en="About Us">Nosotros</a></li>
+                <li><a href="#" data-es="Misión y Visión" data-en="Mission and Vision">Misión y Visión</a></li>
+                <li><a href="#" data-es="Equipo" data-en="Team">Equipo</a></li>
+                <li><a href="#" data-es="Contacto" data-en="Contact">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <!-- ✅ AQUÍ agregar data-es y data-en -->
+            <h4 data-es="Bienestar" data-en="Wellbeing">Bienestar</h4>
+            <ul>
+                <li><a href="#" data-es="Hábitos Saludables" data-en="Healthy Habits">Hábitos Saludables</a></li>
+                <li><a href="#" data-es="Nutrición" data-en="Nutrition">Nutrición</a></li>
+                <li><a href="#" data-es="Ejercicio" data-en="Exercise">Ejercicio</a></li>
+                <li><a href="#" data-es="Salud Digital" data-en="Digital Health">Salud Digital</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-bottom" data-es="© 2025 UpGrade. Promoviendo innovación y bienestar." data-en="© 2025 UpGrade. Promoting innovation and wellbeing.">
+            © 2025 UpGrade. Promoviendo innovación y bienestar.
+        </div>
+    </footer>
+
+<!-- J-- Script opcional para animaciones AOS (Animate On Scroll) -->
+<script>
+// Animaciones al hacer scroll (opcional - mejora la experiencia)
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Observar elementos
+    document.querySelectorAll('.app-title, .app-description, .screenshot-card, .phone-mockup').forEach(el => {
+        observer.observe(el);
+    });
+
+    // Efecto parallax suave en el teléfono
+    const phoneMockups = document.querySelectorAll('.phone-mockup');
+    
+    window.addEventListener('scroll', () => {
+        phoneMockups.forEach(phone => {
+            const rect = phone.getBoundingClientRect();
+            const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
+            
+            if (scrollPercent > 0 && scrollPercent < 1) {
+                const translateY = (scrollPercent - 0.5) * 30;
+                phone.style.transform = `translateY(${translateY}px) rotateZ(${translateY * 0.1}deg)`;
+            }
+        });
+    });
+
+    // Interactividad en las tarjetas
+    const screenshotCards = document.querySelectorAll('.screenshot-card');
+    
+    screenshotCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-15px) scale(1.08) rotateZ(2deg)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
+        });
+
+        // Efecto 3D al mover el mouse
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            this.style.transform = `translateY(-15px) scale(1.08) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+    });
+});
+</script>
+
+
+ <div class="settings-overlay" id="settingsOverlay"></div>
+
+<!-- Panel de configuración -->
+<div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+        <h4><span data-es="Configuración" data-en="Settings">Configuración</span></h4>
+        <button class="settings-close" id="settingsCloseBtn" aria-label="Cerrar">
+            ✕
+        </button>
+    </div>
+
+    <div class="settings-content">
+        <!-- Modo oscuro -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌙</span>
+                <span data-es="Apariencia" data-en="Appearance">Apariencia</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Modo Oscuro" data-en="Dark Mode">Modo Oscuro</span>
+                <div class="toggle-switch" id="darkModeToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tamaño de letra -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔤</span>
+                <span data-es="Tamaño de Letra" data-en="Font Size">Tamaño de Letra</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Tamaño" data-en="Size">Tamaño</span>
+                <div class="custom-select">
+                    <select id="fontSizeSelect">
+                        <option value="small" data-es="Pequeño" data-en="Small">Pequeño</option>
+                        <option value="medium" selected data-es="Mediano" data-en="Medium">Mediano</option>
+                        <option value="large" data-es="Grande" data-en="Large">Grande</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Idioma -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🌐</span>
+                <span data-es="Idioma" data-en="Language">Idioma</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Seleccionar idioma" data-en="Select language">Seleccionar idioma</span>
+                <div class="custom-select">
+                    <select id="languageSelect">
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones -->
+        <div class="settings-group">
+            <div class="settings-group-title">
+                <span class="settings-group-icon">🔔</span>
+                <span data-es="Notificaciones" data-en="Notifications">Notificaciones</span>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" data-es="Activar notificaciones" data-en="Enable notifications">Activar notificaciones</span>
+                <div class="toggle-switch active" id="notificationsToggle">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenedor de notificación -->
+<div class="notification-toast" id="notificationToast">
+    <div class="notification-icon">💚</div>
+    <div class="notification-content">
+        <div class="notification-title">¡Hola!</div>
+        <div class="notification-message">Bienvenido a UpGrade</div>
+    </div>
+    <button class="notification-close" id="notificationClose" aria-label="Cerrar">✕</button>
+</div>
+<!-- JavaScript de configuración GLOBAL -->
+
+    <script>
+    // Función para detectar cuando un elemento entra en la vista
+    function revealOnScroll() {
+        const elements = document.querySelectorAll('.scroll-animate, .scroll-fade-left, .scroll-fade-right, .scroll-scale, .card, .about-card, .download-section');
+        
+        const windowHeight = window.innerHeight;
+        const revealPoint = 150;
+        
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            
+            if (elementTop < windowHeight - revealPoint) {
+                element.classList.add('show');
+            }
+        });
+    }
+
+    window.addEventListener('load', revealOnScroll);
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // ==================== SISTEMA DE CONFIGURACIÓN ====================
+
+    function initializeSettings() {
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        const settingsCloseBtn = document.getElementById('settingsCloseBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const languageSelect = document.getElementById('languageSelect');
+        const notificationsToggle = document.getElementById('notificationsToggle');
+
+        // Cargar configuraciones guardadas
+        loadSettings();
+
+        // Abrir panel
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
+        });
+
+        // Cerrar panel
+        function closePanel() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        }
+
+        settingsCloseBtn.addEventListener('click', closePanel);
+        settingsOverlay.addEventListener('click', closePanel);
+
+        // Modo oscuro
+        darkModeToggle.addEventListener('click', () => {
+            darkModeToggle.classList.toggle('active');
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Tamaño de fuente
+        fontSizeSelect.addEventListener('change', (e) => {
+            document.body.classList.remove('font-small', 'font-medium', 'font-large');
+            document.body.classList.add(`font-${e.target.value}`);
+            localStorage.setItem('fontSize', e.target.value);
+        });
+
+        // Cambio de idioma
+        languageSelect.addEventListener('change', (e) => {
+            changeLanguage(e.target.value);
+            localStorage.setItem('language', e.target.value);
+        });
+
+        // Notificaciones
+        notificationsToggle.addEventListener('click', () => {
+            notificationsToggle.classList.toggle('active');
+            const isActive = notificationsToggle.classList.contains('active');
+            localStorage.setItem('notifications', isActive);
+            
+            if (isActive) {
+                startNotifications();
+            } else {
+                stopNotifications();
+            }
+        });
+
+        // Cerrar notificación
+        const notificationClose = document.getElementById('notificationClose');
+        notificationClose.addEventListener('click', hideNotification);
+    }
+
+    // Cargar configuraciones guardadas
+    function loadSettings() {
+        const darkMode = localStorage.getItem('darkMode') === 'true';
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').classList.add('active');
+        }
+
+        const fontSize = localStorage.getItem('fontSize') || 'medium';
+        document.body.classList.add(`font-${fontSize}`);
+        document.getElementById('fontSizeSelect').value = fontSize;
+
+        const language = localStorage.getItem('language') || 'es';
+        document.getElementById('languageSelect').value = language;
+        changeLanguage(language);
+
+        const notifications = localStorage.getItem('notifications') !== 'false';
+        if (notifications) {
+            document.getElementById('notificationsToggle').classList.add('active');
+            startNotifications();
+        } else {
+            document.getElementById('notificationsToggle').classList.remove('active');
+        }
+    }
+
+    // Cambiar idioma
+    function changeLanguage(lang) {
+        const elements = document.querySelectorAll('[data-es][data-en]');
+        elements.forEach(element => {
+            if (lang === 'es') {
+                element.textContent = element.getAttribute('data-es');
+            } else {
+                element.textContent = element.getAttribute('data-en');
+            }
+        });
+
+        const fontOptions = document.querySelectorAll('#fontSizeSelect option');
+        fontOptions.forEach(option => {
+            if (option.hasAttribute(`data-${lang}`)) {
+                option.textContent = option.getAttribute(`data-${lang}`);
+            }
+        });
+    }
+
+    // Sistema de notificaciones
+    let notificationInterval;
+    const notifications = {
+        es: [
+            { icon: '💚', title: '¡Mantente activo!', message: 'Recuerda hacer una pausa y estirarte' },
+            { icon: '💧', title: 'Hidratación', message: 'Es hora de tomar agua. Tu cuerpo te lo agradecerá' },
+            { icon: '🏋️', title: 'Tip de salud', message: 'El ejercicio regular mejora tu bienestar' },
+            { icon: '🥗', title: 'Alimentación saludable', message: 'Una buena nutrición es clave para tu salud' },
+            { icon: '😴', title: 'Descanso', message: 'Dormir bien es fundamental para tu salud' },
+            { icon: '🧘', title: 'Relájate', message: 'Toma un momento para respirar profundamente' },
+            { icon: '📱', title: 'UpGrade te recuerda', message: 'Cuida tu postura mientras usas dispositivos' },
+            { icon: '🌟', title: '¡Sigue así!', message: 'Cada pequeño paso cuenta hacia un estilo de vida saludable' }
+        ],
+        en: [
+            { icon: '💚', title: 'Stay active!', message: 'Remember to take a break and stretch' },
+            { icon: '💧', title: 'Hydration', message: "It's time to drink water. Your body will thank you" },
+            { icon: '🏋️', title: 'Health tip', message: 'Regular exercise improves your wellbeing' },
+            { icon: '🥗', title: 'Healthy eating', message: 'Good nutrition is key to your health' },
+            { icon: '😴', title: 'Rest', message: 'Sleeping well is essential for your health' },
+            { icon: '🧘', title: 'Relax', message: 'Take a moment to breathe deeply' },
+            { icon: '📱', title: 'UpGrade reminds you', message: 'Take care of your posture while using devices' },
+            { icon: '🌟', title: 'Keep it up!', message: 'Every small step counts towards a healthy lifestyle' }
+        ]
+    };
+
+    function showNotification() {
+        const isActive = document.getElementById('notificationsToggle').classList.contains('active');
+        if (!isActive) return;
+
+        const language = localStorage.getItem('language') || 'es';
+        const notificationList = notifications[language];
+        const randomNotification = notificationList[Math.floor(Math.random() * notificationList.length)];
+
+        const toast = document.getElementById('notificationToast');
+        const icon = toast.querySelector('.notification-icon');
+        const title = toast.querySelector('.notification-title');
+        const message = toast.querySelector('.notification-message');
+
+        icon.textContent = randomNotification.icon;
+        title.textContent = randomNotification.title;
+        message.textContent = randomNotification.message;
+
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            hideNotification();
+        }, 5000);
+    }
+
+    function hideNotification() {
+        const toast = document.getElementById('notificationToast');
+        toast.classList.remove('show');
+    }
+
+    function startNotifications() {
+        if (notificationInterval) {
+            clearInterval(notificationInterval);
+        }
+
+        setTimeout(showNotification, 5000);
+        notificationInterval = setInterval(showNotification, 120000);
+    }
+
+    function stopNotifications() {
+        if (notificationInterval) {
+            clearInterval(notificationInterval);
+            notificationInterval = null;
+        }
+        hideNotification();
+    }
+
+    // Atajos de teclado
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const settingsPanel = document.getElementById('settingsPanel');
+            if (settingsPanel && settingsPanel.classList.contains('active')) {
+                settingsPanel.classList.remove('active');
+                document.getElementById('settingsOverlay').classList.remove('active');
+            }
+        }
+        
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('settingsPanel').classList.add('active');
+            document.getElementById('settingsOverlay').classList.add('active');
+        }
+    });
+
+    // Inicializar configuraciones
+    initializeSettings();
+    </script>
+
+</body>
+</html>
